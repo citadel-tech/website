@@ -27,7 +27,7 @@ npm run deploy     # manual fallback deploy to gh-pages branch
 
 Automatic deploys run through GitHub Actions on every push to `main`.
 
-Live site: https://citadel-tech.github.io/
+Live site: https://citadel-tech.github.io/website/
 
 One-time GitHub setup:
 
