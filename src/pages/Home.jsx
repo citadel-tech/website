@@ -26,11 +26,14 @@ export default function Home() {
 
       <StatusBanner />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 pb-24">
-        <Hero />
-        <SwapFlowDiagram />
-        <RoleCards />
-        <QuickLinks />
+      <div className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(circle_at_18%_14%,rgba(0,255,102,0.16),transparent_28%),radial-gradient(circle_at_82%_10%,rgba(59,130,246,0.2),transparent_30%),radial-gradient(circle_at_50%_78%,rgba(247,147,26,0.1),transparent_26%)]" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-28">
+          <Hero />
+          <SwapFlowDiagram />
+          <RoleCards />
+          <QuickLinks />
+        </div>
       </div>
     </>
   )

@@ -50,19 +50,27 @@ const ITEMS = [
 export default function QuickLinks() {
   return (
     <section>
-      <p className="text-cream/30 text-xs font-body uppercase tracking-widest mb-4">Resources</p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="mb-5 flex items-end justify-between gap-4">
+        <div>
+          <p className="mb-2 text-xs font-mono uppercase tracking-[0.24em] text-orange/65">// network access</p>
+          <h2 className="font-display text-3xl font-semibold tracking-[0.08em] text-cream sm:text-4xl">
+            Jump straight into the ecosystem.
+          </h2>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {ITEMS.map(({ label, sub, href, icon }) => (
           <a
             key={label}
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group rounded-xl border border-blue/25 bg-blue/5 hover:bg-blue/10 hover:border-blue/40 transition-colors p-4 flex flex-col items-center text-center"
+            className="panel-grid panel-glow group flex flex-col items-center overflow-hidden border border-white/8 bg-[linear-gradient(145deg,rgba(5,12,15,0.92),rgba(8,12,24,0.92))] p-5 text-center transition duration-200 hover:-translate-y-1 hover:border-blue-l/28"
           >
-            <span className="mb-3 text-cream/50 group-hover:text-blue-l transition-colors">{icon}</span>
-            <span className="font-body font-medium text-sm text-cream/80 group-hover:text-cream transition-colors">{label}</span>
-            <span className="font-body text-xs mt-0.5 text-cream/40">{sub}</span>
+            <span className="mb-3 text-cream/38 transition-colors group-hover:text-orange">{icon}</span>
+            <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-cream/72 transition-colors group-hover:text-cream">{label}</span>
+            <span className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-cream/30 transition-colors group-hover:text-blue-l/62">{sub}</span>
           </a>
         ))}
       </div>

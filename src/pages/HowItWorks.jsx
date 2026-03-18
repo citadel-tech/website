@@ -3,7 +3,7 @@ import Collapsible from '../components/ui/Collapsible'
 
 function InlineCode({ children }) {
   return (
-    <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">{children}</code>
+    <code className="rounded border border-orange/20 bg-orange/10 px-1.5 py-0.5 font-mono text-xs text-orange">{children}</code>
   )
 }
 
@@ -73,28 +73,32 @@ export default function HowItWorks() {
         {/* ── Tier 1: Conceptual ── */}
         <section className="space-y-4">
           {CONCEPTS.map(({ icon, heading, body }) => (
-            <div key={heading} className="flex gap-5 border border-blue/20 rounded-xl p-5 bg-blue/5 hover:bg-blue/8 transition-colors">
-              <span className="text-2xl shrink-0 mt-0.5">{icon}</span>
+            <div
+              key={heading}
+              className="panel-glow flex gap-5 border border-white/10 bg-[linear-gradient(145deg,rgba(4,8,12,0.96),rgba(7,10,18,0.94))] p-5 transition-colors hover:border-blue-l/22"
+            >
+              <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 bg-black/25 text-xl">
+                {icon}
+              </span>
               <div>
-                <h2 className="font-display text-lg font-semibold text-cream mb-1.5">{heading}</h2>
-                <p className="text-cream/70 font-body text-sm leading-relaxed">{body}</p>
+                <h2 className="mb-1.5 font-display text-lg font-semibold tracking-[0.04em] text-cream">{heading}</h2>
+                <p className="font-body text-sm leading-relaxed text-cream/70">{body}</p>
               </div>
             </div>
           ))}
         </section>
 
-        {/* ── Swap flow diagram ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <p className="text-cream/30 text-xs font-body uppercase tracking-widest mb-5 text-center">Swap flow</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-0">
+        <section className="border-t border-white/8 pt-8">
+          <p className="mb-5 text-center text-xs font-mono uppercase tracking-[0.22em] text-blue-l/58">Swap flow</p>
+          <div className="panel-glow flex flex-col items-center justify-center gap-0 border border-white/8 bg-[linear-gradient(145deg,rgba(5,8,12,0.94),rgba(8,10,18,0.94))] px-4 py-6 sm:flex-row">
             {[
-              { label: 'Taker',   sub: 'sends 500k sat',    color: 'bg-blue/20 border-blue/40' },
+              { label: 'Taker',   sub: 'sends 500k sat',    color: 'bg-[rgba(8,14,26,0.92)] border-blue-l/45' },
               null,
-              { label: 'Maker 1', sub: 'hop 1',              color: 'bg-orange/10 border-orange/30' },
+              { label: 'Maker 1', sub: 'hop 1',              color: 'bg-[rgba(24,14,4,0.92)] border-orange/45' },
               null,
-              { label: 'Maker 2', sub: 'hop 2',              color: 'bg-orange/10 border-orange/30' },
+              { label: 'Maker 2', sub: 'hop 2',              color: 'bg-[rgba(24,14,4,0.92)] border-orange/45' },
               null,
-              { label: 'Taker',   sub: 'receives 438k sat', color: 'bg-blue/20 border-blue/40' },
+              { label: 'Taker',   sub: 'receives 438k sat', color: 'bg-[rgba(8,14,26,0.92)] border-blue-l/45' },
             ].map((item, i) =>
               item === null ? (
                 <div key={i} className="flex sm:items-center">
@@ -102,21 +106,21 @@ export default function HowItWorks() {
                   <span className="sm:hidden text-cream/30 text-lg py-1">↓</span>
                 </div>
               ) : (
-                <div key={item.label + i} className={`rounded-xl border px-5 py-4 text-center min-w-25 ${item.color}`}>
-                  <p className="font-display font-semibold text-cream text-sm">{item.label}</p>
-                  <p className="text-cream/50 text-xs font-body mt-0.5">{item.sub}</p>
+                <div key={item.label + i} className={`min-w-25 border px-5 py-4 text-center ${item.color}`}>
+                  <p className="font-display text-sm font-semibold tracking-[0.05em] text-cream">{item.label}</p>
+                  <p className="mt-0.5 text-xs font-body text-cream/56">{item.sub}</p>
                 </div>
               )
             )}
           </div>
-          <p className="text-center text-cream/30 text-xs font-body mt-3">
+          <p className="mt-3 text-center text-xs font-body text-cream/34">
             Different coins in ≠ different coins out · no shared on-chain ancestor
           </p>
         </section>
 
         {/* ── Tier 2: Technical (collapsible) ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <p className="text-cream/40 text-xs font-body uppercase tracking-widest mb-4">Technical Details</p>
+        <section className="border-t border-white/8 pt-8">
+          <p className="mb-4 text-xs font-mono uppercase tracking-[0.22em] text-cream/42">Technical Details</p>
           <Collapsible summary="Protocol internals — for builders and auditors">
 
             <TechSection heading="Taproot + Musig2">
@@ -124,7 +128,7 @@ export default function HowItWorks() {
                 Swap transactions use Taproot (P2TR) outputs with Musig2 key aggregation.
                 Each contract output has two spending paths:
               </p>
-              <div className="rounded-lg border border-blue/30 bg-[#0a1520] p-4 font-mono text-xs space-y-1">
+              <div className="border border-white/10 bg-[#0a1520] p-4 font-mono text-xs space-y-1">
                 <p className="text-cream/40"># P2TR output structure</p>
                 <p><span className="text-blue-l">Internal Key:</span> <span className="text-cream/80">MuSig2_KeyAgg(party_a_pubkey, party_b_pubkey)</span></p>
                 <p><span className="text-blue-l">Script Tree:</span></p>
@@ -260,7 +264,7 @@ export default function HowItWorks() {
         </section>
 
         {/* ── Footer links ── */}
-        <section className="border-t border-blue/20 pt-6 flex flex-wrap gap-4">
+        <section className="flex flex-wrap gap-4 border-t border-white/8 pt-6">
           <a href={LINKS.protocol_spec} target="_blank" rel="noopener noreferrer"
             className="text-blue-l hover:underline text-sm font-body">
             Full Protocol Specification ↗

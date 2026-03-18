@@ -2,6 +2,7 @@
   opacity: 0;
   animation: dotFade 1.8s ease-in-out infinite;
   animation-delay: var(--delay, 0s);
+  filter: drop-shadow(0 0 8px rgba(247, 147, 26, 0.4));
 }
 
 @keyframes dotFade {
