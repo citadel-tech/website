@@ -8,7 +8,7 @@ Marketing and documentation site for [Coinswap](https://github.com/citadel-tech/
 - Tailwind CSS v4
 - React Router v7
 - react-syntax-highlighter (code blocks)
-- Deployed via GitHub Pages (`gh-pages`)
+- Deployed via GitHub Pages
 
 ## Development
 
@@ -22,8 +22,18 @@ npm run dev
 ```bash
 npm run build      # production build → dist/
 npm run preview    # preview production build locally
-npm run deploy     # build + push to gh-pages branch
+npm run deploy     # manual fallback deploy to gh-pages branch
 ```
+
+Automatic deploys run through GitHub Actions on every push to `main`.
+
+Live site: https://citadel-tech.github.io/
+
+One-time GitHub setup:
+
+- Go to `Settings` -> `Pages`
+- Set `Source` to `GitHub Actions`
+- Keep the default workflow permissions enabled for Pages deployment
 
 ## Project Structure
 
