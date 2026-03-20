@@ -3,7 +3,7 @@ import Collapsible from '../components/ui/Collapsible'
 
 function InlineCode({ children }) {
   return (
-    <code className="rounded border border-orange/20 bg-orange/10 px-1.5 py-0.5 font-mono text-xs text-orange">{children}</code>
+    <code className="inline-code">{children}</code>
   )
 }
 
@@ -57,7 +57,7 @@ export default function HowItWorks() {
       <title>How It Works — CoinSwap</title>
       <meta name="description" content="Learn how CoinSwap breaks the Bitcoin transaction graph using atomic multi-hop swaps, Taproot + Musig2, fidelity bonds, and Tor-only networking." />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
 
         {/* ── Hero ── */}
         <section>
@@ -71,13 +71,10 @@ export default function HowItWorks() {
         </section>
 
         {/* ── Tier 1: Conceptual ── */}
-        <section className="space-y-4">
+        <section className="space-y-3">
           {CONCEPTS.map(({ icon, heading, body }) => (
-            <div
-              key={heading}
-              className="panel-glow flex gap-5 border border-white/10 bg-[linear-gradient(145deg,rgba(4,8,12,0.96),rgba(7,10,18,0.94))] p-5 transition-colors hover:border-blue-l/22"
-            >
-              <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 bg-black/25 text-xl">
+            <div key={heading} className="flex gap-4 border-t border-dotted border-black/15 pt-4">
+              <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center text-xl">
                 {icon}
               </span>
               <div>
@@ -88,15 +85,15 @@ export default function HowItWorks() {
           ))}
         </section>
 
-        <section className="border-t border-white/8 pt-8">
-          <p className="mb-5 text-center text-xs font-mono uppercase tracking-[0.22em] text-blue-l/58">Swap flow</p>
-          <div className="panel-glow flex flex-col items-center justify-center gap-0 border border-white/8 bg-[linear-gradient(145deg,rgba(5,8,12,0.94),rgba(8,10,18,0.94))] px-4 py-6 sm:flex-row">
+        <section className="section-rule">
+          <p className="mb-5 text-left text-sm font-mono uppercase tracking-[0.22em] text-cream/42">Swap flow</p>
+          <div className="flex flex-col items-center justify-center gap-0 px-0 py-2 sm:flex-row">
             {[
               { label: 'Taker',   sub: 'sends 500k sat',    color: 'bg-[rgba(8,14,26,0.92)] border-blue-l/45' },
               null,
-              { label: 'Maker 1', sub: 'hop 1',              color: 'bg-[rgba(24,14,4,0.92)] border-orange/45' },
+              { label: 'Maker 1', sub: 'hop 1',              color: 'bg-[rgba(0,0,0,0.04)] border-black/20' },
               null,
-              { label: 'Maker 2', sub: 'hop 2',              color: 'bg-[rgba(24,14,4,0.92)] border-orange/45' },
+              { label: 'Maker 2', sub: 'hop 2',              color: 'bg-[rgba(0,0,0,0.04)] border-black/20' },
               null,
               { label: 'Taker',   sub: 'receives 438k sat', color: 'bg-[rgba(8,14,26,0.92)] border-blue-l/45' },
             ].map((item, i) =>
@@ -108,19 +105,19 @@ export default function HowItWorks() {
               ) : (
                 <div key={item.label + i} className={`min-w-25 border px-5 py-4 text-center ${item.color}`}>
                   <p className="font-display text-sm font-semibold tracking-[0.05em] text-cream">{item.label}</p>
-                  <p className="mt-0.5 text-xs font-body text-cream/56">{item.sub}</p>
+                  <p className="mt-0.5 text-sm font-body text-cream/56">{item.sub}</p>
                 </div>
               )
             )}
           </div>
-          <p className="mt-3 text-center text-xs font-body text-cream/34">
+          <p className="mt-3 text-left text-sm font-body text-cream/40">
             Different coins in ≠ different coins out · no shared on-chain ancestor
           </p>
         </section>
 
         {/* ── Tier 2: Technical (collapsible) ── */}
-        <section className="border-t border-white/8 pt-8">
-          <p className="mb-4 text-xs font-mono uppercase tracking-[0.22em] text-cream/42">Technical Details</p>
+        <section className="section-rule">
+          <p className="mb-4 text-sm font-mono uppercase tracking-[0.22em] text-cream/42">Technical Details</p>
           <Collapsible summary="Protocol internals — for builders and auditors">
 
             <TechSection heading="Taproot + Musig2">
@@ -128,12 +125,12 @@ export default function HowItWorks() {
                 Swap transactions use Taproot (P2TR) outputs with Musig2 key aggregation.
                 Each contract output has two spending paths:
               </p>
-              <div className="border border-white/10 bg-[#0a1520] p-4 font-mono text-xs space-y-1">
+              <div className="border-l border-dotted border-black/20 pl-4 font-mono text-sm space-y-1">
                 <p className="text-cream/40"># P2TR output structure</p>
-                <p><span className="text-blue-l">Internal Key:</span> <span className="text-cream/80">MuSig2_KeyAgg(party_a_pubkey, party_b_pubkey)</span></p>
-                <p><span className="text-blue-l">Script Tree:</span></p>
-                <p className="pl-4"><span className="text-amber">├─ Hashlock:</span> <span className="text-cream/60">OP_SHA256 &lt;hash&gt; OP_EQUALVERIFY &lt;receiver&gt; OP_CHECKSIG</span></p>
-                <p className="pl-4"><span className="text-amber">└─ Timelock:</span> <span className="text-cream/60">&lt;locktime&gt; OP_CLTV OP_DROP &lt;sender&gt; OP_CHECKSIG</span></p>
+                <p><span className="text-cream">Internal Key:</span> <span className="text-cream/80">MuSig2_KeyAgg(party_a_pubkey, party_b_pubkey)</span></p>
+                <p><span className="text-cream">Script Tree:</span></p>
+                <p className="pl-4"><span className="text-cream">├─ Hashlock:</span> <span className="text-cream/60">OP_SHA256 &lt;hash&gt; OP_EQUALVERIFY &lt;receiver&gt; OP_CHECKSIG</span></p>
+                <p className="pl-4"><span className="text-cream">└─ Timelock:</span> <span className="text-cream/60">&lt;locktime&gt; OP_CLTV OP_DROP &lt;sender&gt; OP_CHECKSIG</span></p>
               </div>
               <p>
                 The <strong className="text-cream">happy path</strong> (cooperative) uses a MuSig2 key spend —
@@ -239,13 +236,13 @@ export default function HowItWorks() {
                 pays cumulative fees across all hops plus estimated mining fees for each maker's
                 funding transactions.
               </p>
-              <div className="rounded-lg border border-blue/30 bg-[#0a1520] p-4 font-mono text-xs space-y-1">
+              <div className="border-l border-dotted border-black/20 pl-4 font-mono text-sm space-y-1">
                 <p className="text-cream/40"># Real example (from test suite)</p>
-                <p><span className="text-cream/50">Send:</span>          <span className="text-orange">500,000 sat</span></p>
+                <p><span className="text-cream/50">Send:</span>          <span className="text-cream">500,000 sat</span></p>
                 <p><span className="text-cream/50">2 makers, 3 tx splits</span></p>
-                <p><span className="text-cream/50">Maker 1 cost:</span>  <span className="text-amber">36,500 sat</span></p>
-                <p><span className="text-cream/50">Maker 2 cost:</span>  <span className="text-amber">24,858 sat</span></p>
-                <p><span className="text-cream/50">Taker receives:</span><span className="text-green-400"> 438,642 sat</span></p>
+                <p><span className="text-cream/50">Maker 1 cost:</span>  <span className="text-cream">36,500 sat</span></p>
+                <p><span className="text-cream/50">Maker 2 cost:</span>  <span className="text-cream">24,858 sat</span></p>
+                <p><span className="text-cream/50">Taker receives:</span><span className="text-cream"> 438,642 sat</span></p>
               </div>
             </TechSection>
 
@@ -253,7 +250,7 @@ export default function HowItWorks() {
               <p>
                 The taker selects UTXOs using the{' '}
                 <a href={LINKS.rust_coinselect} target="_blank" rel="noopener noreferrer"
-                  className="text-blue-l hover:underline">rust-coinselect ↗</a>{' '}
+                  className="simple-link">rust-coinselect ↗</a>{' '}
                 library (BnB-based). The wallet tracks UTXO categories — regular, incoming swap,
                 outgoing swap, contract, fidelity — and locks non-spendable categories before
                 coin selection runs.
@@ -264,17 +261,17 @@ export default function HowItWorks() {
         </section>
 
         {/* ── Footer links ── */}
-        <section className="flex flex-wrap gap-4 border-t border-white/8 pt-6">
+        <section className="section-rule flex flex-wrap gap-4">
           <a href={LINKS.protocol_spec} target="_blank" rel="noopener noreferrer"
-            className="text-blue-l hover:underline text-sm font-body">
+            className="simple-link text-sm font-body">
             Full Protocol Specification ↗
           </a>
           <a href={LINKS.protocol_flow} target="_blank" rel="noopener noreferrer"
-            className="text-blue-l hover:underline text-sm font-body">
+            className="simple-link text-sm font-body">
             Protocol Flow (v1) ↗
           </a>
           <a href={LINKS.coinswap_repo} target="_blank" rel="noopener noreferrer"
-            className="text-blue-l hover:underline text-sm font-body">
+            className="simple-link text-sm font-body">
             Core implementation ↗
           </a>
         </section>

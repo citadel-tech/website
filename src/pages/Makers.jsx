@@ -80,9 +80,9 @@ const DEPLOY_TABS = [
     label: 'Native Build',
     content: (
       <div className="space-y-4">
-        <p className="text-cream/70 text-sm leading-relaxed font-body">
-          Build <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">makerd</code> and{' '}
-          <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">maker-cli</code> from
+        <p className="type-small text-cream/70 font-body">
+          Build <code className="inline-code">makerd</code> and{' '}
+          <code className="inline-code">maker-cli</code> from
           source. Requires Rust toolchain and a running Bitcoin Core node.
         </p>
         <CodeBlock code={CODE_BUILD} language="bash" />
@@ -94,15 +94,15 @@ const DEPLOY_TABS = [
     label: 'Docker (Recommended)',
     content: (
       <div className="space-y-4">
-        <p className="text-cream/70 text-sm leading-relaxed font-body">
+        <p className="type-small text-cream/70 font-body">
           One-command stack: bitcoind + Tor + makerd, all pre-configured and connected.
           The setup script handles interactive configuration of ports, RPC, and Tor.
         </p>
         <CodeBlock code={CODE_DOCKER} language="bash" />
-        <p className="text-cream/50 text-xs font-body">
+        <p className="type-meta text-cream/50 font-body">
           Repo:{' '}
           <a href={LINKS.coinswap_docker} target="_blank" rel="noopener noreferrer"
-            className="text-blue-l hover:underline">
+            className="simple-link">
             citadel-tech/coinswap-docker ↗
           </a>
         </p>
@@ -113,12 +113,12 @@ const DEPLOY_TABS = [
     label: 'Maker Dashboard',
     content: (
       <div className="space-y-4">
-        <p className="text-cream/70 text-sm leading-relaxed font-body">
+        <p className="type-small text-cream/70 font-body">
           A web interface to monitor balances, view swap history, and manage your node.
-          Runs alongside a running <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">makerd</code> instance.
+          Runs alongside a running <code className="inline-code">makerd</code> instance.
         </p>
         <a href={LINKS.maker_dashboard} target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-blue/10 border border-blue/30 text-blue-l text-sm font-body font-medium hover:bg-blue/20 transition-colors">
+          className="type-small simple-link inline-flex items-center gap-2 px-0 py-0 font-body font-medium">
           citadel-tech/maker-dashboard ↗
         </a>
       </div>
@@ -144,7 +144,7 @@ export default function Makers() {
       <title>Makers — CoinSwap</title>
       <meta name="description" content="Run a CoinSwap maker node. Post a fidelity bond, register on the directory, and earn fees passively while strengthening Bitcoin privacy for everyone." />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
 
         {/* ── Hero ── */}
         <section>
@@ -152,19 +152,19 @@ export default function Makers() {
             <Badge variant="orange">Live on Mutinynet</Badge>
             <Badge variant="amber">Mainnet: use with caution</Badge>
           </div>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold text-cream leading-tight mb-3">
+          <h1 className="type-page-title font-display font-bold text-cream mb-3">
             Earn Fees. Strengthen Privacy.
           </h1>
-          <p className="text-cream/60 text-lg font-body leading-relaxed max-w-2xl">
+          <p className="type-subtitle text-cream/60 font-body max-w-2xl">
             Run a maker node. Post a fidelity bond. Route swaps passively. You never touch user funds —
             the protocol is trustless by design.
           </p>
         </section>
 
         {/* ── What is a Maker ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-3">What is a Maker?</h2>
-          <p className="text-cream/70 font-body leading-relaxed max-w-2xl mb-4">
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-3">What is a Maker?</h2>
+          <p className="type-body text-cream/70 font-body max-w-2xl mb-4">
             Makers are always-on servers that route coinswaps for takers and collect fees.
             They follow the <strong className="text-cream">smart-client-dumb-server</strong> model —
             the taker handles protocol coordination while makers act as lightweight daemons responding
@@ -172,16 +172,16 @@ export default function Makers() {
             register with the directory, then your node runs passively: takers discover you, route
             swaps through you, and your balance grows.
           </p>
-          <div className="inline-block rounded-lg border border-blue/30 bg-blue/5 px-5 py-3">
-            <p className="text-cream font-body font-medium text-sm">
-              The model is: <span className="text-orange">install → fund → forget.</span>
+          <div className="inline-block border-l border-dotted border-black/20 pl-4">
+            <p className="type-small text-cream font-body font-medium">
+              The model is: <span className="text-cream">install → fund → forget.</span>
             </p>
           </div>
         </section>
 
         {/* ── Requirements ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-4">Requirements</h2>
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-4">Requirements</h2>
           <ul className="space-y-3">
             {[
               'A server with stable uptime (VPS or home server with reliable internet)',
@@ -192,8 +192,8 @@ export default function Makers() {
                 1,000 sats bond tx fee + 10,000 sats minimum swap liquidity (suggest 0.001 BTC total)
               </>,
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-cream/70 font-body text-sm leading-relaxed">
-                <span className="mt-0.5 w-5 h-5 rounded-full bg-orange/15 text-orange text-xs flex items-center justify-center shrink-0 font-semibold">{i + 1}</span>
+              <li key={i} className="type-small flex items-start gap-3 text-cream/70 font-body">
+                <span className="type-meta mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-black/15 font-semibold text-cream">{i + 1}</span>
                 <span>{item}</span>
               </li>
             ))}
@@ -201,11 +201,11 @@ export default function Makers() {
         </section>
 
         {/* ── Fidelity Bonds ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-3">How Fidelity Bonds Work</h2>
-          <p className="text-cream/70 font-body leading-relaxed max-w-2xl mb-4">
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-3">How Fidelity Bonds Work</h2>
+          <p className="type-body text-cream/70 font-body max-w-2xl mb-4">
             A fidelity bond is a Bitcoin UTXO time-locked for{' '}
-            <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">fidelity_timelock</code>{' '}
+            <code className="inline-code">fidelity_timelock</code>{' '}
             blocks (default ~3 months). The longer the lock and the larger the amount, the higher your
             <strong className="text-cream"> bond value</strong> — the reputation metric takers use to
             rank and select makers. Higher bond value = more swap traffic. Bonds raise the economic cost
@@ -213,13 +213,13 @@ export default function Makers() {
           </p>
           <ul className="space-y-2">
             {[
-              <><code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">makerd</code> creates the fidelity bond automatically when the wallet is funded</>,
-              <>Bond value decays as the timelock approaches expiry — <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">makerd</code> auto-renews before it drops too low</>,
-              <><code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">directoryd</code> verifies the fidelity proof before registering your <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">.onion</code> address</>,
-              <>Expired bonds can be redeemed using <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">maker-cli</code></>,
+              <><code className="inline-code">makerd</code> creates the fidelity bond automatically when the wallet is funded</>,
+              <>Bond value decays as the timelock approaches expiry — <code className="inline-code">makerd</code> auto-renews before it drops too low</>,
+              <><code className="inline-code">directoryd</code> verifies the fidelity proof before registering your <code className="inline-code">.onion</code> address</>,
+              <>Expired bonds can be redeemed using <code className="inline-code">maker-cli</code></>,
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-cream/70 font-body text-sm leading-relaxed">
-                <span className="mt-0.5 text-orange shrink-0">→</span>
+              <li key={i} className="type-small flex items-start gap-3 text-cream/70 font-body">
+                <span className="mt-0.5 shrink-0 text-cream">→</span>
                 <span>{item}</span>
               </li>
             ))}
@@ -227,38 +227,38 @@ export default function Makers() {
         </section>
 
         {/* ── Deployment ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-5">Deployment</h2>
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-5">Deployment</h2>
           <TabGroup tabs={DEPLOY_TABS} />
         </section>
 
         {/* ── Startup process ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-3">Startup Process</h2>
-          <p className="text-cream/70 font-body text-sm leading-relaxed mb-4">
-            On first run, <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">makerd</code> creates
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-3">Startup Process</h2>
+          <p className="type-small text-cream/70 font-body mb-4">
+            On first run, <code className="inline-code">makerd</code> creates
             a wallet, prints the mnemonic for backup, then waits for funding. Once you deposit coins, it
             automatically creates the fidelity bond transaction, waits for confirmation (~2 min on Mutinynet),
             and starts listening for swap requests.
           </p>
           <CodeBlock code={CODE_STARTUP_LOG} language="bash" />
-          <p className="text-cream/40 text-xs font-body mt-2">
+          <p className="type-meta text-cream/40 font-body mt-2">
             Back up the mnemonic immediately — it's only shown once.
           </p>
         </section>
 
         {/* ── maker-cli Reference ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-4">
-            <code className="font-mono text-orange text-2xl">maker-cli</code> Reference
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-4">
+            <code className="font-mono text-cream text-2xl">maker-cli</code> Reference
           </h2>
-          <p className="text-cream/60 font-body text-sm mb-3">
-            <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">maker-cli</code> is
-            the RPC client for <code className="font-mono text-orange bg-orange/10 px-1.5 py-0.5 rounded text-xs">makerd</code>.
+          <p className="type-small text-cream/60 font-body mb-3">
+            <code className="inline-code">maker-cli</code> is
+            the RPC client for <code className="inline-code">makerd</code>.
             It only responds after the server has fully completed setup (fidelity bond confirmed).
           </p>
           <CodeBlock code={CODE_CLI_REF} language="bash" />
-          <p className="text-cream/40 text-xs font-body mt-2">
+          <p className="text-cream/40 text-sm font-body mt-2">
             Default RPC port: <code className="font-mono">127.0.0.1:6103</code>. Override with <code className="font-mono">-p &lt;port&gt;</code>.
           </p>
         </section>
@@ -270,15 +270,15 @@ export default function Makers() {
             <table className="w-full text-sm font-body">
               <thead>
                 <tr className="border-b border-blue/30 bg-blue/10">
-                  <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-xs uppercase">Type</th>
-                  <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-xs uppercase">Description</th>
+                  <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Type</th>
+                  <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
                 </tr>
               </thead>
               <tbody>
                 {BALANCE_TYPES.map(({ type, desc }) => (
                   <tr key={type} className="border-b border-blue/10 last:border-0 hover:bg-white/2 transition-colors">
                     <td className="px-4 py-3">
-                      <code className="font-mono text-orange text-xs bg-orange/10 px-1.5 py-0.5 rounded">{type}</code>
+                      <code className="inline-code">{type}</code>
                     </td>
                     <td className="px-4 py-3 text-cream/70">{desc}</td>
                   </tr>
@@ -298,9 +298,9 @@ export default function Makers() {
               { label: 'Network port',   value: ':6102',                  note: 'Coinswap protocol — exposed via Tor hidden service' },
             ].map(({ label, value, note }) => (
               <div key={label} className="rounded-lg border border-blue/30 bg-blue/5 p-4">
-                <p className="text-cream/40 text-xs font-body uppercase tracking-widest mb-1">{label}</p>
-                <p className="font-mono text-orange text-sm mb-1">{value}</p>
-                <p className="text-cream/50 text-xs font-body">{note}</p>
+                <p className="text-cream/40 text-sm font-body uppercase tracking-widest mb-1">{label}</p>
+                <p className="font-mono text-cream text-sm mb-1">{value}</p>
+                <p className="text-cream/50 text-sm font-body">{note}</p>
               </div>
             ))}
           </div>
@@ -309,7 +309,7 @@ export default function Makers() {
 
         {/* ── Mutinynet ── */}
         <section className="border-t border-blue/20 pt-8">
-          <div className="rounded-xl border border-amber/20 bg-amber/5 p-5">
+          <div className="border-t border-dotted border-black/15 pt-5">
             <div className="flex items-start gap-4">
               <span className="text-2xl">⚡</span>
               <div>
@@ -323,11 +323,11 @@ export default function Makers() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a href={LINKS.mutinynet} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber/10 border border-amber/30 text-amber text-sm font-body font-medium hover:bg-amber/20 transition-colors">
+                    className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
                     Explorer ↗
                   </a>
                   <a href={LINKS.mutinynet_faucet} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber/10 border border-amber/30 text-amber text-sm font-body font-medium hover:bg-amber/20 transition-colors">
+                    className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
                     Faucet ↗
                   </a>
                 </div>

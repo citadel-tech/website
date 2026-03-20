@@ -14,9 +14,9 @@ const CARDS = [
       'Desktop GUI or CLI',
     ],
     cta: { label: './get_started_as_taker', to: '/takers' },
-    borderClass: 'border-blue-l/20 hover:border-blue-l/40',
-    promptColor: 'text-blue-l',
-    tagColor: 'text-blue-l border-blue-l/30',
+    borderClass: 'border-white/10 hover:border-white/25',
+    promptColor: 'text-cream/70',
+    tagColor: 'text-cream/70 border-white/20',
   },
   {
     role: 'Maker',
@@ -30,9 +30,9 @@ const CARDS = [
       'Docker or native binary',
     ],
     cta: { label: './run_a_maker_node', to: '/makers' },
-    borderClass: 'border-orange/20 hover:border-orange/40',
-    promptColor: 'text-orange',
-    tagColor: 'text-orange border-orange/30',
+    borderClass: 'border-white/10 hover:border-white/25',
+    promptColor: 'text-cream/70',
+    tagColor: 'text-cream/70 border-white/20',
   },
 ]
 
@@ -41,41 +41,38 @@ export default function RoleCards() {
     <section>
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-xs font-mono uppercase tracking-[0.24em] text-blue-l/55">// choose your runtime</p>
-          <h2 className="font-display text-3xl font-semibold tracking-[0.08em] text-cream sm:text-4xl">
+          <p className="section-label mb-2">// choose your runtime</p>
+          <h2 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">
             Two entry points. One protocol.
           </h2>
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-8 sm:grid-cols-2">
         {CARDS.map(({ role, prompt, tagline, description, highlights, cta, borderClass, promptColor, tagColor }) => (
           <div
             key={role}
-            className={`panel-grid panel-glow scan-lines flex flex-col overflow-hidden border bg-[linear-gradient(145deg,rgba(5,12,15,0.92),rgba(7,12,24,0.92))] p-7 transition duration-200 hover:-translate-y-1 ${borderClass}`}
+            className={`section-rule flex flex-col ${borderClass}`}
           >
-            <div className="mb-5 flex items-center gap-2 border-b border-white/8 pb-3">
-              <span className="w-2 h-2 rounded-full bg-green/40" />
-              <span className="w-2 h-2 rounded-full bg-orange/40" />
-              <span className="w-2 h-2 rounded-full bg-blue-l/40" />
-              <span className={`ml-2 font-mono text-xs uppercase tracking-[0.16em] ${promptColor}`}>{prompt}</span>
+            <div className="mb-3 flex items-center gap-2 pb-1">
+              <span className={`type-meta ml-2 font-mono uppercase tracking-[0.14em] ${promptColor}`}>{prompt}</span>
             </div>
 
-            <div className="mb-4 flex items-center gap-3">
+            <div className="mb-3 flex items-center gap-3">
               <div>
-                <span className={`mb-2 inline-block border px-2.5 py-1 text-[11px] font-mono uppercase tracking-[0.18em] ${tagColor}`}>
+                <span className={`type-meta mb-2 inline-block font-mono uppercase tracking-[0.16em] ${tagColor}`}>
                   [{tagline}]
                 </span>
-                <h3 className="font-display text-2xl font-semibold tracking-[0.08em] text-cream">{role}</h3>
+                <h3 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">{role}</h3>
               </div>
             </div>
 
-            <p className="mb-5 text-sm leading-relaxed text-cream/55 font-body">{description}</p>
+            <p className="type-body mb-4 text-cream/55 font-body">{description}</p>
 
-            <ul className="mb-7 flex-1 space-y-2">
+            <ul className="mb-5 flex-1 space-y-1.5">
               {highlights.map(h => (
-                <li key={h} className="flex items-center gap-2 text-sm font-mono text-cream/50">
-                  <span className="text-green shrink-0">&gt;</span>
+                <li key={h} className="type-small flex items-center gap-2 font-mono text-cream/50">
+                  <span className="shrink-0 text-cream">&gt;</span>
                   {h}
                 </li>
               ))}

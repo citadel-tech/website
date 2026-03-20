@@ -13,12 +13,12 @@ export default function Button({
   className = '',
   ...props
 }) {
-  const base = 'inline-flex items-center justify-center gap-2 border font-mono font-bold uppercase tracking-[0.18em] transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-l/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black'
+  const base = 'inline-flex items-center justify-center gap-2 border font-mono font-medium uppercase tracking-[0.14em] text-white transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f2e8]'
 
   const variants = {
-    primary: 'border-green bg-green text-black shadow-[0_0_28px_rgba(0,255,102,0.16)] hover:-translate-y-0.5 hover:bg-[#35ff84] hover:shadow-[0_0_40px_rgba(0,255,102,0.2)] active:translate-y-0',
-    outline: 'border-orange/60 bg-orange/6 text-orange hover:-translate-y-0.5 hover:border-orange hover:bg-orange/12 hover:shadow-[0_0_30px_rgba(247,147,26,0.14)] active:translate-y-0',
-    ghost:   'border-blue-l/20 bg-blue-l/6 text-blue-l hover:border-blue-l/40 hover:bg-blue-l/12 hover:text-cream active:bg-blue-l/18',
+    primary: 'border-black bg-black !text-white hover:bg-black/85 active:bg-black/90',
+    outline: 'border-black bg-black !text-white hover:bg-black/85 active:bg-black/90',
+    ghost:   'border-black bg-black !text-white hover:bg-black/85 active:bg-black/90',
   }
 
   const sizes = {

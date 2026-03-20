@@ -3,13 +3,13 @@
 @import "tailwindcss";
 
 :root {
-  --navy:   #010101;
-  --blue:   #0a1020;
-  --blue-l: #3b82f6;
-  --orange: #f7931a;
-  --green:  #00ff66;
-  --cream:  #edf3ff;
-  --amber:  #fbbf24;
+  --navy:   #f7f2e8;
+  --blue:   #ebe4d8;
+  --blue-l: #111111;
+  --orange: #111111;
+  --green:  #111111;
+  --cream:  #111111;
+  --amber:  #111111;
 }
 
 @theme inline {
@@ -28,6 +28,7 @@
 
 html {
   background: var(--navy);
+  color-scheme: light;
 }
 
 body {
@@ -37,12 +38,10 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 17px;
   -webkit-font-smoothing: antialiased;
-  background-image:
-    radial-gradient(circle at top left, rgba(0, 255, 102, 0.09), transparent 22%),
-    radial-gradient(circle at 82% 22%, rgba(59, 130, 246, 0.12), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.08), transparent 22%),
-    linear-gradient(180deg, #030303 0%, #02060d 54%, #010101 100%);
-  background-attachment: fixed;
+  background:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.018) 0, rgba(0, 0, 0, 0.018) 1px, transparent 1px, transparent 120px),
+    radial-gradient(circle at 14% 12%, rgba(0, 0, 0, 0.05), transparent 28%),
+    linear-gradient(180deg, #f8f3e9 0%, #f3ecdf 48%, #ede4d3 100%);
 }
 
 body::before {
@@ -51,11 +50,13 @@ body::before {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 102, 0.035) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(circle at center, black, transparent 92%);
-  opacity: 0.24;
+    linear-gradient(rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(0, 0, 0, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.022) 1px, transparent 1px);
+  background-size: 36px 36px, 36px 36px, 144px 144px, 144px 144px;
+  background-position: 0 0, 0 0, -1px -1px, -1px -1px;
+  opacity: 0.4;
 }
 
 #root {
@@ -72,23 +73,12 @@ a {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  overflow: hidden;
-}
-
-.motion-background__canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.92;
 }
 
 .motion-background__veil {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 50% 40%, rgba(10, 26, 38, 0.04), rgba(1, 1, 1, 0.42) 68%),
-    linear-gradient(180deg, rgba(1, 1, 1, 0.02), rgba(1, 1, 1, 0.16));
+  background: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -123,29 +113,11 @@ a {
 .glitch {
   position: relative;
   display: inline-block;
-  text-shadow:
-    0 0 18px rgba(0, 255, 102, 0.14),
-    0 0 28px rgba(59, 130, 246, 0.12);
+  text-shadow: none;
 }
 .glitch::before,
 .glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.glitch::before {
-  color: #00ff66;
-  animation: glitch-1 4s infinite linear;
-  opacity: 0.6;
-}
-.glitch::after {
-  color: #f7931a;
-  animation: glitch-2 4s infinite linear;
-  animation-delay: 0.1s;
-  opacity: 0.4;
+  content: none;
 }
 
 .panel-grid {
@@ -153,21 +125,11 @@ a {
 }
 
 .panel-grid::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(59, 130, 246, 0.05), transparent 18%),
-    linear-gradient(90deg, rgba(0, 255, 102, 0.025), transparent 35%);
-  opacity: 0.45;
+  content: none;
 }
 
 .panel-glow {
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.035),
-    0 0 22px rgba(0, 255, 102, 0.04),
-    0 0 40px rgba(59, 130, 246, 0.035);
+  box-shadow: none;
 }
 
 .scan-lines {
@@ -175,17 +137,103 @@ a {
 }
 
 .scan-lines::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.02) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  mix-blend-mode: soft-light;
-  opacity: 0.1;
+  content: none;
+}
+
+.section-rule {
+  border-top: 1px dotted rgba(23, 23, 23, 0.28);
+  padding-top: 1.5rem;
+}
+
+.type-hero {
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: 0.98;
+}
+
+.type-page-title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.02;
+}
+
+.type-section-title {
+  font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+  line-height: 1.15;
+}
+
+.type-subtitle {
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+.type-body {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.type-small {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.type-meta {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.48);
+}
+
+.inline-code {
+  border: 1px solid rgba(23, 23, 23, 0.14);
+  background: rgba(23, 23, 23, 0.04);
+  padding: 0.1rem 0.35rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: #171717;
+}
+
+.simple-link {
+  color: #171717;
+  text-decoration: underline;
+  text-decoration-color: rgba(23, 23, 23, 0.25);
+  text-underline-offset: 0.18em;
+}
+
+.simple-link:hover {
+  text-decoration-color: rgba(23, 23, 23, 0.6);
+}
+
+.simple-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.simple-table thead tr {
+  border-bottom: 1px dotted rgba(23, 23, 23, 0.28);
+}
+
+.simple-table th {
+  padding: 0.8rem 0;
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.48);
+}
+
+.simple-table td {
+  padding: 0.95rem 0;
+  border-bottom: 1px dotted rgba(23, 23, 23, 0.18);
+  color: rgba(23, 23, 23, 0.78);
+  vertical-align: top;
+}
+
+.simple-table tbody tr:last-child td {
+  border-bottom: 0;
 }

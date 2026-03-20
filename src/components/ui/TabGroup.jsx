@@ -11,24 +11,22 @@ export default function TabGroup({ tabs, defaultIndex = 0 }) {
 
   return (
     <div>
-      {/* Tab bar */}
-      <div className="flex gap-1 border-b border-blue/30 mb-4">
+      <div className="mb-4 flex gap-5 border-b border-dotted border-black/15">
         {tabs.map((tab, i) => (
           <button
             key={tab.label}
             onClick={() => setActive(i)}
-            className={`px-4 py-2 text-sm font-body font-medium rounded-t-md transition-colors -mb-px border-b-2 ${
+            className={`-mb-px border-b px-0 py-2 text-sm font-body font-medium transition-colors ${
               active === i
-                ? 'text-orange border-orange bg-orange/5'
-                : 'text-cream/50 border-transparent hover:text-cream hover:border-cream/20'
-            }`}
+                ? 'border-black/35 text-black'
+                : 'border-transparent text-black/50 hover:border-black/20 hover:text-black'
+              }`}
           >
             {tab.label}
           </button>
         ))}
       </div>
 
-      {/* Panel */}
       <div>{tabs[active].content}</div>
     </div>
   )

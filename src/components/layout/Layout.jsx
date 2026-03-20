@@ -5,10 +5,10 @@ import MotionBackground from './MotionBackground'
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-navy flex flex-col relative isolate">
+    <div className="relative isolate flex min-h-screen flex-col bg-navy text-black">
       <MotionBackground />
       <Header />
-      <main className="flex-1 relative z-10">
+      <main className="relative z-10 flex-1">
         <Outlet />
       </main>
       <Footer />

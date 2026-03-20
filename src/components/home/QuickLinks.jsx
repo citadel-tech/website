@@ -52,25 +52,31 @@ export default function QuickLinks() {
     <section>
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-xs font-mono uppercase tracking-[0.24em] text-orange/65">// network access</p>
-          <h2 className="font-display text-3xl font-semibold tracking-[0.08em] text-cream sm:text-4xl">
+          <p className="section-label mb-2">// network access</p>
+          <h2 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">
             Jump straight into the ecosystem.
           </h2>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 rounded-2xl border border-black/12 bg-white/20 p-3 shadow-[0_14px_40px_rgba(0,0,0,0.05)] backdrop-blur-sm sm:grid-cols-4 sm:gap-4 sm:p-4">
         {ITEMS.map(({ label, sub, href, icon }) => (
           <a
             key={label}
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="panel-grid panel-glow group flex flex-col items-center overflow-hidden border border-white/8 bg-[linear-gradient(145deg,rgba(5,12,15,0.92),rgba(8,12,24,0.92))] p-5 text-center transition duration-200 hover:-translate-y-1 hover:border-blue-l/28"
+            className="group flex min-h-[8.5rem] flex-col items-start justify-between rounded-xl border border-black/10 bg-[rgba(255,255,255,0.18)] p-4 text-left transition-all duration-200 hover:-translate-y-1 hover:border-black/20 hover:bg-white/30 hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
           >
-            <span className="mb-3 text-cream/38 transition-colors group-hover:text-orange">{icon}</span>
-            <span className="font-mono text-sm font-medium uppercase tracking-[0.14em] text-cream/72 transition-colors group-hover:text-cream">{label}</span>
-            <span className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-cream/30 transition-colors group-hover:text-blue-l/62">{sub}</span>
+            <span className="inline-flex rounded-lg border border-black/10 bg-black/[0.04] p-2 text-cream/45 transition-colors group-hover:border-black/15 group-hover:text-cream">
+              {icon}
+            </span>
+            <span className="type-small mt-4 font-mono font-medium uppercase tracking-[0.12em] text-cream/80 transition-colors group-hover:text-cream">
+              {label}
+            </span>
+            <span className="type-meta mt-1 font-mono uppercase tracking-[0.08em] text-cream/38 transition-colors group-hover:text-cream/72">
+              {sub}
+            </span>
           </a>
         ))}
       </div>

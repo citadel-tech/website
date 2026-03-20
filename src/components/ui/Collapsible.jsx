@@ -11,12 +11,12 @@ export default function Collapsible({ summary, children, defaultOpen = false }) 
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <div className="border border-blue/30 rounded-lg overflow-hidden">
+    <div className="overflow-hidden border-t border-dotted border-black/15">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-5 py-4 text-left bg-blue/5 hover:bg-blue/10 transition-colors"
+        className="flex w-full items-center justify-between px-0 py-4 text-left transition-colors"
       >
-        <span className="font-display font-semibold text-cream text-base">{summary}</span>
+        <span className="text-base font-display font-semibold text-black">{summary}</span>
         <svg
           width="18"
           height="18"
@@ -24,14 +24,14 @@ export default function Collapsible({ summary, children, defaultOpen = false }) 
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
-          className={`text-cream/40 transition-transform duration-200 shrink-0 ${open ? 'rotate-180' : ''}`}
+          className={`shrink-0 text-black/40 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </button>
 
       {open && (
-        <div className="px-5 py-5 border-t border-blue/20 space-y-6">
+        <div className="space-y-6 border-t border-dotted border-black/15 px-0 py-5">
           {children}
         </div>
       )}

@@ -65,9 +65,9 @@ const ECOSYSTEM = [
 ]
 
 const LANG_COLORS = {
-  Rust:       'text-orange',
-  TypeScript: 'text-blue-l',
-  Docker:     'text-sky-400',
+  Rust:       'text-cream',
+  TypeScript: 'text-cream',
+  Docker:     'text-cream',
   Markdown:   'text-cream/50',
 }
 
@@ -121,42 +121,42 @@ export default function AppsTools() {
       <title>Apps & Tools — CoinSwap</title>
       <meta name="description" content="Explore the CoinSwap ecosystem: taker app, maker dashboard, Docker stacks, FFI bindings, and the coin selection library." />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
         {/* ── Hero ── */}
         <section>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold text-cream leading-tight mb-4">
+          <h1 className="type-page-title font-display font-bold text-cream mb-4">
             Apps & Tools
           </h1>
-          <p className="text-cream/60 text-lg font-body leading-relaxed max-w-2xl">
+          <p className="type-subtitle text-cream/60 font-body max-w-2xl">
             The CoinSwap ecosystem — everything from the core protocol to desktop apps,
             Docker stacks, and developer libraries.
           </p>
         </section>
 
         {/* ── Ecosystem table ── */}
-        <section className="border-t border-blue/20 pt-12">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-6">Ecosystem</h2>
-          <div className="overflow-x-auto rounded-xl border border-blue/30">
-            <table className="w-full text-sm font-body">
+        <section className="section-rule pt-6">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-6">Ecosystem</h2>
+          <div className="overflow-x-auto">
+            <table className="simple-table text-sm font-body">
               <thead>
-                <tr className="border-b border-blue/30 bg-blue/10">
-                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-xs uppercase">Repo</th>
-                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-xs uppercase">Description</th>
-                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-xs uppercase hidden sm:table-cell">Lang</th>
-                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-xs uppercase hidden md:table-cell">Tags</th>
-                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-xs uppercase"></th>
+                <tr>
+                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Repo</th>
+                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
+                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase hidden sm:table-cell">Lang</th>
+                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase hidden md:table-cell">Tags</th>
+                  <th className="px-5 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase"></th>
                 </tr>
               </thead>
               <tbody>
                 {ECOSYSTEM.map(({ name, desc, lang, tags, href }) => (
-                  <tr key={name} className="border-b border-blue/10 last:border-0 hover:bg-white/2 transition-colors">
+                  <tr key={name}>
                     <td className="px-5 py-4 whitespace-nowrap">
-                      <span className="font-mono text-orange text-xs">{name}</span>
+                      <span className="font-mono text-cream text-sm">{name}</span>
                     </td>
                     <td className="px-5 py-4 text-cream/65 leading-relaxed">{desc}</td>
                     <td className="px-5 py-4 hidden sm:table-cell">
-                      <span className={`text-xs font-mono ${LANG_COLORS[lang] ?? 'text-cream/40'}`}>{lang}</span>
+                      <span className={`text-sm font-mono ${LANG_COLORS[lang] ?? 'text-cream/40'}`}>{lang}</span>
                     </td>
                     <td className="px-5 py-4 hidden md:table-cell">
                       <div className="flex flex-wrap gap-1.5">
@@ -170,7 +170,7 @@ export default function AppsTools() {
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-l hover:underline text-xs font-body whitespace-nowrap"
+                        className="simple-link text-sm font-body whitespace-nowrap"
                       >
                         GitHub ↗
                       </a>
@@ -183,14 +183,14 @@ export default function AppsTools() {
         </section>
 
         {/* ── Contributing ── */}
-        <section className="border-t border-blue/20 pt-12">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-6">Get Involved</h2>
-          <div className="grid sm:grid-cols-3 gap-5">
+        <section className="section-rule pt-6">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-6">Get Involved</h2>
+          <div className="grid gap-6 sm:grid-cols-3">
             {CONTRIBUTE_ITEMS.map(({ icon, heading, body, href, label }) => (
               <Card key={heading} className="flex flex-col">
                 <span className="text-2xl mb-3">{icon}</span>
-                <h3 className="font-display font-semibold text-cream text-base mb-2">{heading}</h3>
-                <p className="text-cream/60 font-body text-sm leading-relaxed flex-1 mb-5">{body}</p>
+                <h3 className="text-lg font-display font-semibold text-cream mb-2">{heading}</h3>
+                <p className="type-small text-cream/60 font-body flex-1 mb-5">{body}</p>
                 <Button
                   as="a"
                   href={href}
@@ -198,7 +198,7 @@ export default function AppsTools() {
                   rel="noopener noreferrer"
                   variant="ghost"
                   size="sm"
-                  className="w-full justify-center border border-blue/25 hover:border-blue/40"
+                  className="w-full justify-center"
                 >
                   {label} ↗
                 </Button>
@@ -208,8 +208,8 @@ export default function AppsTools() {
         </section>
 
         {/* ── GitHub org ── */}
-        <section className="border-t border-blue/20 pt-10 text-center">
-          <p className="text-cream/40 font-body text-sm mb-4">All repositories live under the Citadel Tech GitHub org.</p>
+        <section className="section-rule pt-5 text-center">
+          <p className="type-small text-cream/40 font-body mb-4">All repositories live under the Citadel Tech GitHub org.</p>
           <Button
             as="a"
             href={LINKS.github_org}
