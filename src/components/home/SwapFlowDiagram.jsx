@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const SVG_W = 860
 const SVG_H = 470
-const SVG_DISPLAY_W = SVG_W + 128
+const SVG_DISPLAY_W = SVG_W + 420
 const CENTER_X = 430
 const CENTER_Y = 232
-const TRIANGLE_R = 178
-const ROUTE_RING_R = 58
-const NODE_W = 118
-const NODE_H = 68
+const TRIANGLE_R = 224
+const ROUTE_RING_R = 76
+const NODE_W = 126
+const NODE_H = 72
 const FUNDING_TXIDS = [
   '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b',
   '9f3c7ab412e8d50f6a9c33d1be74a8f021cde56b97aa4efc8d102bb7ce51af44',
@@ -80,15 +80,81 @@ const FLOW_DOT_CYCLE_DURATION = FLOW_DOT_STEP_DURATION * SEGMENT_PATHS.length
 
 const GUIDE_POINTS = NODES.map(node => `${node.x},${node.y}`).join(' ')
 const ROUTE_ARROW_START = polarToPoint(CENTER_X, CENTER_Y, ROUTE_RING_R, 274)
-const ROUTE_ARROW_END = polarToPoint(CENTER_X, CENTER_Y, ROUTE_RING_R, 86)
-const ROUTE_ARROW_PATH = [
+const ROUTE_ARROW_START_ANGLE = 274
+const ROUTE_ARROW_BODY_END_ANGLE = 430
+const ROUTE_ARROW_TANGENT_ANGLE = 434
+const ROUTE_ARROW_BODY_END = polarToPoint(CENTER_X, CENTER_Y, ROUTE_RING_R, ROUTE_ARROW_BODY_END_ANGLE)
+const ROUTE_ARROW_BODY_PATH = [
   `M ${ROUTE_ARROW_START.x} ${ROUTE_ARROW_START.y}`,
-  `A ${ROUTE_RING_R} ${ROUTE_RING_R} 0 0 1 ${ROUTE_ARROW_END.x} ${ROUTE_ARROW_END.y}`,
+  `A ${ROUTE_RING_R} ${ROUTE_RING_R} 0 0 1 ${ROUTE_ARROW_BODY_END.x} ${ROUTE_ARROW_BODY_END.y}`,
 ].join(' ')
 
-const HOP_CALLOUT_SIZE = { width: 182, height: 72 }
+function buildRouteArrowHead() {
+  const tangentPoint = polarToPoint(CENTER_X, CENTER_Y, ROUTE_RING_R, ROUTE_ARROW_TANGENT_ANGLE)
+  const dx = tangentPoint.x - ROUTE_ARROW_BODY_END.x
+  const dy = tangentPoint.y - ROUTE_ARROW_BODY_END.y
+  const length = Math.hypot(dx, dy) || 1
+  const tx = dx / length
+  const ty = dy / length
+  const nx = -ty
+  const ny = tx
+
+  const tip = {
+    x: ROUTE_ARROW_BODY_END.x + tx * 24,
+    y: ROUTE_ARROW_BODY_END.y + ty * 24,
+  }
+  const left = {
+    x: ROUTE_ARROW_BODY_END.x - tx * 4 + nx * 10,
+    y: ROUTE_ARROW_BODY_END.y - ty * 4 + ny * 10,
+  }
+  const right = {
+    x: ROUTE_ARROW_BODY_END.x - tx * 4 - nx * 10,
+    y: ROUTE_ARROW_BODY_END.y - ty * 4 - ny * 10,
+  }
+
+  return [
+    `M ${left.x} ${left.y}`,
+    `L ${tip.x} ${tip.y}`,
+    `L ${right.x} ${right.y}`,
+    `Z`,
+  ].join(' ')
+}
+
+const ROUTE_ARROW_HEAD = buildRouteArrowHead()
+
+const HOP_CALLOUT_SIZE = { width: 190, height: 74 }
 const HOP2_CALLOUT_OFFSET = 22
 const HOP2_CONNECTOR_GAP = 12
+
+const POINTERS = [
+  {
+    label: 'Customize your swap as per need.',
+    description: 'Tune the route shape and swap flow to match the exact use case.',
+  },
+  {
+    label: 'Shred old transaction history.',
+    description: 'Break shared ancestry so inputs and outputs do not remain linked.',
+  },
+  {
+    label: 'Swap to payment. Break Link between sender & receiver.',
+    description: 'Use swaps to break sender and receiver linkage in a clean transfer.',
+  },
+  {
+    label: 'Consolidate or split UTXOs via swaps.',
+    description: 'Coming soon: reshape UTXO sets while swapping.',
+    soon: true,
+  },
+  {
+    label: 'eCash mint interoperability.',
+    description: 'Coming soon: connect with eCash mint flows.',
+    soon: true,
+  },
+  {
+    label: 'Lightning and other integrations.',
+    description: 'Coming soon: extend into Lightning and more integrations.',
+    soon: true,
+  },
+]
 
 function trimMiddle(value, head = 12) {
   if (value.length <= head + 3) {
@@ -163,6 +229,7 @@ function interpolatePoint(from, to, progress) {
 
 export default function SwapFlowDiagram() {
   const [flowDotPoint, setFlowDotPoint] = useState(() => SEGMENT_PATHS[0].from)
+  const segmentPathRefs = useRef([])
 
   useEffect(() => {
     let frameId = 0
@@ -179,9 +246,15 @@ export default function SwapFlowDiagram() {
         SEGMENT_PATHS.length - 1
       )
       const segmentProgress = (elapsedSeconds % FLOW_DOT_STEP_DURATION) / FLOW_DOT_STEP_DURATION
-      const segment = SEGMENT_PATHS[segmentIndex]
+      const path = segmentPathRefs.current[segmentIndex]
 
-      setFlowDotPoint(interpolatePoint(segment.from, segment.to, segmentProgress))
+      if (path) {
+        const length = path.getTotalLength()
+        setFlowDotPoint(path.getPointAtLength(length * segmentProgress))
+      } else {
+        const segment = SEGMENT_PATHS[segmentIndex]
+        setFlowDotPoint(interpolatePoint(segment.from, segment.to, segmentProgress))
+      }
       frameId = window.requestAnimationFrame(animate)
     }
 
@@ -192,18 +265,24 @@ export default function SwapFlowDiagram() {
 
   return (
     <section className="section-rule px-0 py-0">
-      <p className="mb-3 text-left text-sm font-mono uppercase tracking-[0.24em] text-cream/50">
-        Swap Flow
-      </p>
+      <div className="mb-3 flex items-end justify-between gap-4">
+          <div>
+            <p className="section-label mb-2">// protocol layer</p>
+            <h2 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">
+            Customizable Swap Flow
+            </h2>
+          </div>
+        </div>
 
-      <div className="overflow-x-auto px-0 py-1">
-        <svg
-          viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-          width="100%"
-          style={{ maxWidth: SVG_DISPLAY_W, display: 'block', margin: '0 auto' }}
-          aria-label="CoinSwap triangle flow: taker routes funds through two makers and returns with unrelated coins"
-          role="img"
-        >
+      <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_467px] lg:items-start">
+        <div className="overflow-x-auto pl-0 pr-0 py-1">
+          <svg
+            viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+            width="100%"
+            style={{ maxWidth: SVG_DISPLAY_W, display: 'block', margin: '0 auto' }}
+            aria-label="CoinSwap triangle flow: taker routes funds through two makers and returns with unrelated coins"
+            role="img"
+          >
           <defs>
             <linearGradient id="taker-fill" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#101c38" />
@@ -220,6 +299,11 @@ export default function SwapFlowDiagram() {
             <linearGradient id="maker-accent" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#fbbf24" />
               <stop offset="100%" stopColor="#d48d08" />
+            </linearGradient>
+            <linearGradient id="route-arrow-fill" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#fff2a8" stopOpacity="1" />
+              <stop offset="28%" stopColor="#f8c94a" stopOpacity="0.95" />
+              <stop offset="100%" stopColor="#e7b32d" stopOpacity="0.82" />
             </linearGradient>
             <filter id="node-shadow" x="-30%" y="-30%" width="160%" height="180%">
               <feDropShadow dx="0" dy="10" stdDeviation="10" floodColor="#000000" floodOpacity="0.22" />
@@ -244,13 +328,22 @@ export default function SwapFlowDiagram() {
             strokeDasharray="6 8"
           />
 
-          {SEGMENTS.map(segment => {
+          {SEGMENTS.map((segment, segmentIndex) => {
             const { id, hopIndex, txid, from, to } = segment
             const callout = buildHopCallout(segment)
             const displayTxid = trimMiddle(txid)
 
             return (
               <g key={id}>
+                <path
+                  ref={el => {
+                    segmentPathRefs.current[segmentIndex] = el
+                  }}
+                  d={`M ${from.x} ${from.y} L ${to.x} ${to.y}`}
+                  fill="none"
+                  stroke="transparent"
+                  strokeWidth="1"
+                />
                 <line
                   x1={from.x}
                   y1={from.y}
@@ -364,12 +457,21 @@ export default function SwapFlowDiagram() {
 
           <g aria-hidden="true">
             <path
-              d={ROUTE_ARROW_PATH}
+              d={ROUTE_ARROW_BODY_PATH}
+              transform={`rotate(90 ${CENTER_X} ${CENTER_Y})`}
               fill="none"
-              stroke="url(#maker-accent)"
-              strokeWidth="2.6"
+              stroke="url(#route-arrow-fill)"
+              strokeWidth="6.5"
               strokeLinecap="round"
-              markerEnd="url(#route-arrowhead)"
+              strokeLinejoin="round"
+            />
+            <path
+              d={ROUTE_ARROW_HEAD}
+              transform={`rotate(90 ${CENTER_X} ${CENTER_Y})`}
+              fill="url(#route-arrow-fill)"
+              stroke="rgba(255, 242, 168, 0.28)"
+              strokeWidth="0.7"
+              strokeLinejoin="round"
             />
           </g>
 
@@ -472,28 +574,27 @@ export default function SwapFlowDiagram() {
             Swap Route
           </text>
 
-          <text
-            x={SVG_W / 2}
-            y={SVG_H - 6}
-            textAnchor="middle"
-            fill="#EDF3FF"
-            fillOpacity="0.35"
-            fontSize="10"
-            fontFamily="'Inter', sans-serif"
-          >
-            DIFFERENT COINS IN != DIFFERENT COINS OUT · NO SHARED ON-CHAIN ANCESTOR
-          </text>
         </svg>
+        </div>
+
+        <aside className="rounded-2xl border border-black/10 bg-white/15 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm">
+          <h3 className="mb-3 font-display text-[1.18rem] font-semibold tracking-[0.04em] text-cream">
+            Usecases
+          </h3>
+
+          <ul className="space-y-2">
+            {POINTERS.map(({ label, description, soon }) => (
+              <li key={label} className="flex items-start gap-2 rounded-lg border border-black/8 bg-white/12 px-2.5 py-2">
+                <span className="mt-[0.35rem] h-1.5 w-1.5 shrink-0 rounded-full bg-cream/70" />
+                <p className="text-[0.85rem] leading-snug text-cream/80">
+                  {label}
+                  {soon ? ' (coming soon)' : ''}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </aside>
       </div>
-      <p
-        className="-mt-1 text-center text-[19.2px] font-bold leading-none tracking-[0.03em] text-[#000000]"
-        style={{
-          fontFamily: "'Chakra Petch', sans-serif",
-          WebkitTextStroke: '0.8px rgba(237,243,255,0.9)',
-        }}
-      >
-        Standrad Multi-hop Swap
-      </p>
     </section>
   )
 }

@@ -5,9 +5,8 @@ const CARDS = [
   {
     role: 'Taker',
     prompt: './taker --swap',
-    tagline: 'swap privately',
     description:
-      'Send one set of coins, receive a different set with no shared on-chain history. Choose your hops, set your amount, let the protocol do the rest.',
+      'Request swaps from the marketplace. Design your swaps, set fee rates, select makers, manage UTXOs, and let the protocol do the rest.',
     highlights: [
       'Minimum 2 makers per swap',
       'Tor required — .onion routing',
@@ -21,9 +20,8 @@ const CARDS = [
   {
     role: 'Maker',
     prompt: './makerd --start',
-    tagline: 'earn fees passively',
     description:
-      'Run an always-on node. Post a fidelity bond. Route swaps for takers and earn fees — without ever custodying user funds.',
+      'Light weight minimal maintenance liquidity server earning fees. Create and manage fidelity bonds. Act as a bridge between layers.',
     highlights: [
       'Fidelity bond = reputation',
       'Auto-renewing bond lifecycle',
@@ -43,13 +41,13 @@ export default function RoleCards() {
         <div>
           <p className="section-label mb-2">// choose your runtime</p>
           <h2 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">
-            Two entry points. One protocol.
+            Two Roles, One Protocol
           </h2>
         </div>
       </div>
 
       <div className="grid gap-8 sm:grid-cols-2">
-        {CARDS.map(({ role, prompt, tagline, description, highlights, cta, borderClass, promptColor, tagColor }) => (
+        {CARDS.map(({ role, prompt, description, highlights, cta, borderClass, promptColor }) => (
           <div
             key={role}
             className={`section-rule flex flex-col ${borderClass}`}
@@ -60,9 +58,6 @@ export default function RoleCards() {
 
             <div className="mb-3 flex items-center gap-3">
               <div>
-                <span className={`type-meta mb-2 inline-block font-mono uppercase tracking-[0.16em] ${tagColor}`}>
-                  [{tagline}]
-                </span>
                 <h3 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">{role}</h3>
               </div>
             </div>

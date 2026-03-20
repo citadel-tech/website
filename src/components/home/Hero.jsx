@@ -7,8 +7,8 @@ export default function Hero() {
   const { tag, url } = useLatestRelease()
 
   return (
-    <section className="relative pt-8 pb-4">
-      <div className="px-0 py-6 text-left lg:py-10">
+    <section className="relative pt-8 pb-0">
+      <div className="px-0 py-4 text-left lg:py-8">
         <div className="relative">
           {tag && (
             <a
@@ -23,54 +23,48 @@ export default function Hero() {
             </a>
           )}
 
-          <p className="type-small mb-4 font-mono tracking-[0.16em] text-cream/55">
-            &gt; ./coinswap --privacy-level=max --hops=2
-          </p>
-
           <h1
             className="type-hero glitch mb-4 max-w-5xl font-display font-semibold tracking-[0.03em] text-cream"
-            data-text="Swap into signal."
+            data-text="An Actually Decentralised Atomic-Swap Marketplace"
           >
-            Swap into <span className="text-cream">signal</span>.
-            <br />
-            Route with <span className="text-cream">Bitcoin-native privacy</span>.
+            An Actually Decentralised Atomic-Swap Marketplace
           </h1>
 
-          <p className="type-subtitle mb-7 max-w-3xl text-cream/58">
-            <span className="font-mono text-cream/50">// </span>
-            CoinSwap breaks the transaction graph at the protocol level. Atomic, multi-hop swaps
-            over Tor — no custodian, no trust, no shared history.
-          </p>
-
-          <div className="mb-7 flex flex-wrap items-center gap-3">
-            <Button as={Link} to="/takers" variant="primary" size="lg">
-              ./start_swapping
-            </Button>
-            <Button
-              as="a"
-              href={LINKS.coinswap_repo}
+          <p className="type-subtitle mb-5 max-w-4xl text-cream/58">
+            <span className="font-mono text-cream/50"></span>
+            The CoinSwap Protocol creates a sybil-resistant, decentralized swap market hosted in
+            the Bitcoin blockchain and discoverable over Nostr, enabling trustless atomic swaps
+            over Bitcoin and other protocols.
+            <br />
+            The protocol was first conceptualised by{' '}
+            <a
+              href="https://bitcointalk.org/index.php?topic=321228.0"
               target="_blank"
               rel="noopener noreferrer"
-              variant="outline"
-              size="lg"
+              className="simple-link"
             >
-              ./view_github
-            </Button>
-          </div>
+              Greg Maxwell
+            </a>
+            , and later prototyped by{' '}
+            <span className="inline-block whitespace-nowrap">
+              <a
+                href="https://github.com/bitcoin-teleport/teleport-transactions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="simple-link"
+              >
+                Chris Belcher
+              </a>
+            </span>.
+          </p>
 
-          <div className="grid max-w-4xl gap-4 border-t border-dotted border-black/15 pt-4 text-left sm:grid-cols-3">
-            <div className="font-mono">
-              <span className="type-meta mr-3 uppercase tracking-[0.18em] text-cream/55">privacy mode</span>
-              <span className="text-lg font-bold text-cream">multi-hop</span>
-            </div>
-            <div className="font-mono">
-              <span className="type-meta mr-3 uppercase tracking-[0.18em] text-cream/55">transport</span>
-              <span className="text-lg font-bold text-cream">Tor only</span>
-            </div>
-            <div className="font-mono">
-              <span className="type-meta mr-3 uppercase tracking-[0.18em] text-cream/55">trust model</span>
-              <span className="text-lg font-bold text-cream">non-custodial</span>
-            </div>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <Button as="a" href={LINKS.taker_app} target="_blank" rel="noopener noreferrer" variant="primary" size="lg">
+              ./TAKER_APP
+            </Button>
+            <Button as="a" href={LINKS.maker_dashboard} target="_blank" rel="noopener noreferrer" variant="outline" size="lg">
+              ./MAKER_DASHBOARD
+            </Button>
           </div>
         </div>
       </div>

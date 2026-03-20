@@ -9,7 +9,7 @@ export default function StatusBanner() {
             <span className="relative flex h-1.5 w-1.5">
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#fbbf24] shadow-[0_0_10px_rgba(251,191,36,0.65)]" />
             </span>
-            STATUS: LIVE
+            STATUS: LIVE ON MUTINYNET
           </span>
 
           <a

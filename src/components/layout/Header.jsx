@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { NavLink, Link, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
+import CoinSwapLogo from '../brand/CoinSwapLogo'
 
 const NAV_LINKS = [
   { to: '/',             label: 'home' },
@@ -24,13 +25,14 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-dotted border-black/15 bg-[#f7f2e8]/95 backdrop-blur-sm">
       <div className="max-w-6xl mx-auto flex min-h-[4.5rem] items-center justify-between px-3 sm:px-4 lg:px-5">
 
-        <NavLink to="/" className="group flex items-center">
+        <NavLink to="/" className="group flex items-center gap-3">
+          <CoinSwapLogo className="h-10 w-10 shrink-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.12)]" />
           <span className="leading-none">
             <span className="block text-[1.85rem] font-display font-semibold tracking-[0.04em] text-black sm:text-[2rem]">
-              <span className="text-black">coinswap</span>
+              <span className="text-black">CoinSwap</span>
             </span>
-            <span className="type-meta block font-mono uppercase tracking-[0.18em] text-black/42">
-              privacy over pathing
+            <span className="mt-2 block text-[0.58rem] font-mono uppercase tracking-[0.18em] text-black/42">
+              Make Bitcoin Fungible Again
             </span>
           </span>
         </NavLink>
@@ -42,10 +44,10 @@ export default function Header() {
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `py-2 text-sm uppercase tracking-[0.12em] font-mono transition duration-200 hover:scale-105 ${
+                `py-2 text-sm font-mono font-semibold uppercase tracking-[0.12em] transition duration-200 hover:scale-105 underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
                   isActive
-                    ? 'text-black underline decoration-black/35 underline-offset-[0.35em]'
-                    : 'text-black/55 hover:text-black'
+                    ? 'text-black decoration-black/45'
+                    : 'text-black/55 hover:text-black hover:decoration-black/30'
                 }`
               }
             >
@@ -53,15 +55,6 @@ export default function Header() {
             </NavLink>
           ))}
         </nav>
-
-        <div className="hidden md:block">
-          <Link
-            to="/takers"
-            className="inline-flex items-center border border-black/20 px-4 py-2.5 font-mono text-sm font-medium uppercase tracking-[0.14em] text-black transition duration-200 hover:bg-black/4"
-          >
-            ./get_started
-          </Link>
-        </div>
 
         <button
           onClick={() => setOpen(o => !o)}
@@ -93,22 +86,16 @@ export default function Header() {
                 to={to}
                 end={to === '/'}
                 className={({ isActive }) =>
-                  `px-0 py-3 text-sm uppercase tracking-[0.12em] font-mono transition-transform transition-colors hover:scale-105 ${
+                  `px-0 py-3 text-sm font-mono font-semibold uppercase tracking-[0.12em] transition-transform transition-colors hover:scale-105 underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
                     isActive
-                      ? 'text-black underline decoration-black/35 underline-offset-[0.35em]'
-                      : 'text-black/55 hover:text-black'
+                      ? 'text-black decoration-black/45'
+                      : 'text-black/55 hover:text-black hover:decoration-black/30'
                   }`
                 }
               >
                 {label}
               </NavLink>
             ))}
-            <Link
-              to="/takers"
-              className="mt-3 inline-flex items-center justify-center border border-black/20 px-4 py-3 text-center font-mono text-sm font-medium uppercase tracking-[0.14em] text-black transition duration-200 hover:bg-black/4"
-            >
-              ./get_started
-            </Link>
           </nav>
         </div>
       )}

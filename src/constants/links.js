@@ -6,7 +6,7 @@ export const LINKS = {
   github_org:       "https://github.com/citadel-tech",
   coinswap_repo:    "https://github.com/citadel-tech/coinswap",
   taker_app:        "https://github.com/citadel-tech/taker-app",
-  maker_dashboard:  "https://github.com/citadel-tech/maker-dashboard",
+  maker_dashboard:  "https://github.com/citadel-tech/maker-dasboard",
   coinswap_docker:  "https://github.com/citadel-tech/coinswap-docker",
   coinswap_ffi:     "https://github.com/citadel-tech/coinswap-ffi",
   mill_io:          "https://github.com/citadel-tech/mill-io",
