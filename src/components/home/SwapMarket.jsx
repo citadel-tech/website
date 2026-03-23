@@ -9,7 +9,7 @@ const CARDS = [
     label: 'Discovery',
     value: 'Market Hosted on Bitcoin + Nostr',
     description:
-      'The market is hosted on Bitcoin Blockchain at the most minimal footprint. The market is also discoverable via Nostr. Removing reliance on any central server',
+      'The market is hosted on Bitcoin Blockchain at the most minimal footprint. The market is also discoverkerlable via Nostr. Removing reliance on any central server',
   },
   {
     label: 'Settlement',
@@ -40,7 +40,7 @@ const CARDS = [
 export default function SwapMarket() {
   return (
     <section>
-      <div className="mb-3 flex items-end justify-between gap-4">
+      <div className="mb-5 flex items-end justify-between gap-4">
         <div>
           <p className="section-label mb-2">// market layer</p>
           <h2 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">

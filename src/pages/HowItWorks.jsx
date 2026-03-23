@@ -1,277 +1,403 @@
 import { LINKS } from '../constants/links'
-import Collapsible from '../components/ui/Collapsible'
+import CodeBlock from '../components/ui/CodeBlock'
 
-function InlineCode({ children }) {
-  return (
-    <code className="inline-code">{children}</code>
-  )
-}
+const CONTRACT_TEMPLATE = `P2TR Output:
+├── Internal Key: MuSig2_KeyAgg(sender_pk, receiver_pk)
+├── Script Tree:
+│   ├── Hashlock: OP_SHA256
+│   │             <hash>
+│   │             OP_EQUALVERIFY
+│   │             <receiver_pk>
+│   │             OP_CHECKSIG
+│   └── Timelock: <locktime>
+│                 OP_CLTV
+│                 OP_DROP
+│                 <sender_pk>
+│                 OP_CHECKSIG
+└── TapTweak: merkle root of script tree`
 
-function TechSection({ heading, children }) {
-  return (
-    <div>
-      <h3 className="font-display text-base font-semibold text-cream mb-3">{heading}</h3>
-      <div className="text-cream/70 font-body text-sm leading-relaxed space-y-3">{children}</div>
-    </div>
-  )
-}
+const MESSAGE_FLOW = `PHASE 1 - DISCOVERY AND NEGOTIATION
+1. Taker  -> Maker1 : GetOffer
+2. Maker1 -> Taker  : RespOffer
+3. Taker  -> Maker2 : GetOffer
+4. Maker2 -> Taker  : RespOffer
+5. Taker  -> Maker1 : SwapDetails
+6. Maker1 -> Taker  : AckResponse::ACK
+7. Taker  -> Maker2 : SwapDetails
+8. Maker2 -> Taker  : AckResponse::ACK
 
-// ─── Conceptual cards ─────────────────────────────────────────────────────────
+PHASE 2 - CONTRACT CREATION
+9.  Taker broadcasts the first contract transaction
+10. Taker  -> Maker1 : SendersContract
+11. Maker1 -> Taker  : SenderContractFromMaker
+12. Taker  -> Maker2 : SendersContract
+13. Maker2 -> Taker  : SenderContractFromMaker
 
-const CONCEPTS = [
+PHASE 3 - PRIVATE KEY HANDOVER AND SWEEPING
+14. Taker  -> Maker1 : PrivateKeyHandover
+15. Maker1 -> Taker  : PrivateKeyHandover
+16. Taker  -> Maker2 : PrivateKeyHandover
+17. Maker2 -> Taker  : PrivateKeyHandover
+18. Swap completes successfully`
+
+const FEE_FORMULA = `coinswap_fee =
+  base_fee
+  + (swap_amount * amount_relative_fee_pct) / 100
+  + (swap_amount * refund_locktime * time_relative_fee_pct) / 100`
+
+const V2_HIGHLIGHTS = [
   {
-    icon: '🔍',
-    heading: 'The Problem',
-    body: 'Every Bitcoin transaction is recorded permanently on a public blockchain. Chain-analysis firms and surveillance tools trace the flow of funds: who paid whom, how much, and when. This transaction graph cannot be modified after the fact.',
+    label: 'Single contract',
+    heading: 'Each hop is one Taproot output',
+    body:
+      'V2 folds the multisig and HTLC logic into a single P2TR contract output. That cuts failure overhead, reduces coordination, and keeps the on-chain shape tighter than the older two-transaction design.',
   },
   {
-    icon: '🔀',
-    heading: 'The Solution',
-    body: (
-      <>
-        Coinswap breaks the transaction graph at the protocol level. You lock coins on one side; you
-        receive <em>different</em> coins on the other — with no shared on-chain ancestor. No custodian
-        holds your funds at any point. The swap is{' '}
-        <strong className="text-cream">atomic</strong>: either it completes fully, or all funds are
-        returned via timelocked HTLC refund contracts.
-      </>
-    ),
+    label: 'MuSig2 key path',
+    heading: 'Successful swaps look like ordinary Taproot spends',
+    body:
+      'On the happy path, adjacent parties cooperate with a MuSig2 key-path spend, so the hashlock and timelock scripts stay hidden. Script branches only appear when someone has to recover or force completion.',
   },
   {
-    icon: '🌐',
-    heading: 'Multi-Hop Routing',
-    body: 'Coinswaps are routed through multiple independent makers in a cyclic flow (Taker → Maker0 → Maker1 → Taker). Each hop independently breaks the transaction trail. The service providers are invisible to each other — only the taker (acting as relay) knows the full path.',
-  },
-  {
-    icon: '🔒',
-    heading: 'What "Atomic" Means',
-    body: 'The swap uses cryptographic HTLC contracts. If anything goes wrong at any stage, timelocked refund transactions allow every participant to recover their funds unilaterally — no maker can steal your coins, no taker can steal a maker\'s coins. The math enforces it.',
+    label: 'Forward-only finish',
+    heading: 'Completion is a key handover, not a long signing dance',
+    body:
+      'After setup, every participant passes the private key for their outgoing contract to the next hop. The receiver then has both keys for the incoming contract and can complete a cooperative spend locally.',
   },
 ]
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+const PHASES = [
+  {
+    step: '01',
+    heading: 'Discovery and route selection',
+    body:
+      'The taker asks makers for current terms with GetOffer, receives fee and fidelity data in RespOffer, then proposes amount, transaction count, and timelock with SwapDetails. Makers accept or reject with AckResponse.',
+  },
+  {
+    step: '02',
+    heading: 'Taproot contract setup',
+    body:
+      'The taker builds a cycle such as Taker -> Maker0 -> Maker1 -> Taker. Every hop uses the same hash but its own adjacent keys and staggered locktime. Contract details are relayed with SendersContract and SenderContractFromMaker.',
+  },
+  {
+    step: '03',
+    heading: 'Private key handover and sweep',
+    body:
+      'Once all contracts are live, each party forwards the secret key for its outgoing hop. The next receiver now controls both keys for the incoming MuSig2 contract and sweeps it without more interactive signing rounds.',
+  },
+  {
+    step: '04',
+    heading: 'Recovery if anyone stalls',
+    body:
+      'If cooperation breaks down, the receiver can fall back to the hashlock path when the preimage is known, and the sender can reclaim funds later through the timelock path. Staggered locktimes preserve atomicity across the route.',
+  },
+]
+
+const PRIVACY_POINTS = [
+  'The taker coordinates the route, while each maker only sees its own adjacent hop and the taker connection.',
+  'On successful completion, the chain sees ordinary Taproot key-path spends instead of an exposed swap script tree.',
+  'The protocol supports splitting value across multiple transactions, which makes amount-correlation attacks harder than a single equal-value transfer.',
+]
+
+const GUARANTEES = [
+  'Non-custodial: nobody hands coins to a trusted intermediary.',
+  'Atomic: the route completes end-to-end or each participant has a unilateral recovery path.',
+  'Sybil-resistant: maker offers include fidelity proofs, so fake liquidity requires real locked bitcoin.',
+]
+
+function InlineCode({ children }) {
+  return <code className="inline-code">{children}</code>
+}
+
+function DeepDiveSection({ heading, children }) {
+  return (
+    <div>
+      <h3 className="mb-3 font-display text-base font-semibold text-cream">{heading}</h3>
+      <div className="space-y-3 font-body text-sm leading-relaxed text-cream/70">{children}</div>
+    </div>
+  )
+}
 
 export default function HowItWorks() {
   return (
     <>
       <title>How It Works — CoinSwap</title>
-      <meta name="description" content="Learn how CoinSwap breaks the Bitcoin transaction graph using atomic multi-hop swaps, Taproot + Musig2, fidelity bonds, and Tor-only networking." />
+      <meta
+        name="description"
+        content="A concise walkthrough of the CoinSwap v2 protocol: taker-driven route discovery, Taproot contract setup, MuSig2 key-path spends, and atomic recovery paths."
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
-
-        {/* ── Hero ── */}
         <section>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold text-cream leading-tight mb-3">
-            How It Works
+          <p className="section-label mb-3">Protocol V2</p>
+          <h1 className="type-page-title font-display font-bold text-cream mb-3">
+            How CoinSwap V2 Actually Runs
           </h1>
-          <p className="text-cream/60 text-lg font-body leading-relaxed max-w-2xl">
-            CoinSwap is an atomic, multi-hop Bitcoin swap protocol. Funds move in a cyclic flow through
-            independent makers over Tor — no custodian, no shared history, no trust required.
+          <p className="type-subtitle text-cream/60 font-body max-w-3xl">
+            CoinSwap v2 is a taker-coordinated, multi-hop atomic swap protocol built around Taproot
+            contracts and MuSig2. You route value through independent makers, receive different
+            coins back, and keep a recovery path if anyone disappears mid-swap.
           </p>
         </section>
 
-        {/* ── Tier 1: Conceptual ── */}
-        <section className="space-y-3">
-          {CONCEPTS.map(({ icon, heading, body }) => (
-            <div key={heading} className="flex gap-4 border-t border-dotted border-black/15 pt-4">
-              <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center text-xl">
-                {icon}
-              </span>
-              <div>
-                <h2 className="mb-1.5 font-display text-lg font-semibold tracking-[0.04em] text-cream">{heading}</h2>
-                <p className="font-body text-sm leading-relaxed text-cream/70">{body}</p>
+        <section className="section-rule">
+          <div className="grid gap-4 lg:grid-cols-3">
+            {V2_HIGHLIGHTS.map(({ label, heading, body }) => (
+              <div key={heading} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+                <p className="mb-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-cream/45">
+                  {label}
+                </p>
+                <h2 className="mb-2 font-display text-xl font-semibold text-cream">{heading}</h2>
+                <p className="type-small font-body text-cream/68">{body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="section-rule">
+          <div className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr]">
+            <div>
+              <p className="section-label mb-3">Route Shape</p>
+              <h2 className="type-section-title font-display font-semibold text-cream mb-3">
+                The taker builds a cycle, then relays every hop
+              </h2>
+              <p className="type-body font-body text-cream/70 max-w-2xl mb-4">
+                Makers do not talk to each other directly. The taker gathers offers, chooses the
+                route, and relays protocol messages between adjacent parties. That keeps maker
+                software simple and limits what any single maker can learn about the full swap.
+              </p>
+              <div className="border border-dotted border-black/20 bg-[#fbf8f2] px-4 py-5 font-mono text-sm text-black/80">
+                <p>Taker -&gt; Maker0 -&gt; Maker1 -&gt; ... -&gt; Taker</p>
+                <p className="mt-2 text-black/55">same hash across all hops, different keys and locktimes per hop</p>
               </div>
             </div>
-          ))}
-        </section>
 
-        <section className="section-rule">
-          <p className="mb-5 text-left text-sm font-mono uppercase tracking-[0.22em] text-cream/42">Swap flow</p>
-          <div className="flex flex-col items-center justify-center gap-0 px-0 py-2 sm:flex-row">
-            {[
-              { label: 'Taker',   sub: 'sends 500k sat',    color: 'bg-[rgba(8,14,26,0.92)] border-blue-l/45' },
-              null,
-              { label: 'Maker 1', sub: 'hop 1',              color: 'bg-[rgba(0,0,0,0.04)] border-black/20' },
-              null,
-              { label: 'Maker 2', sub: 'hop 2',              color: 'bg-[rgba(0,0,0,0.04)] border-black/20' },
-              null,
-              { label: 'Taker',   sub: 'receives 438k sat', color: 'bg-[rgba(8,14,26,0.92)] border-blue-l/45' },
-            ].map((item, i) =>
-              item === null ? (
-                <div key={i} className="flex sm:items-center">
-                  <span className="hidden sm:block text-cream/30 text-lg px-2">→</span>
-                  <span className="sm:hidden text-cream/30 text-lg py-1">↓</span>
-                </div>
-              ) : (
-                <div key={item.label + i} className={`min-w-25 border px-5 py-4 text-center ${item.color}`}>
-                  <p className="font-display text-sm font-semibold tracking-[0.05em] text-cream">{item.label}</p>
-                  <p className="mt-0.5 text-sm font-body text-cream/56">{item.sub}</p>
-                </div>
-              )
-            )}
+            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+              <p className="section-label mb-3">Core Guarantees</p>
+              <div className="space-y-3">
+                {GUARANTEES.map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <span className="mt-1 text-cream">+</span>
+                    <p className="type-small font-body text-cream/68">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <p className="mt-3 text-left text-sm font-body text-cream/40">
-            Different coins in ≠ different coins out · no shared on-chain ancestor
-          </p>
         </section>
 
-        {/* ── Tier 2: Technical (collapsible) ── */}
         <section className="section-rule">
-          <p className="mb-4 text-sm font-mono uppercase tracking-[0.22em] text-cream/42">Technical Details</p>
-          <Collapsible summary="Protocol internals — for builders and auditors">
-
-            <TechSection heading="Taproot + Musig2">
-              <p>
-                Swap transactions use Taproot (P2TR) outputs with Musig2 key aggregation.
-                Each contract output has two spending paths:
-              </p>
-              <div className="border-l border-dotted border-black/20 pl-4 font-mono text-sm space-y-1">
-                <p className="text-cream/40"># P2TR output structure</p>
-                <p><span className="text-cream">Internal Key:</span> <span className="text-cream/80">MuSig2_KeyAgg(party_a_pubkey, party_b_pubkey)</span></p>
-                <p><span className="text-cream">Script Tree:</span></p>
-                <p className="pl-4"><span className="text-cream">├─ Hashlock:</span> <span className="text-cream/60">OP_SHA256 &lt;hash&gt; OP_EQUALVERIFY &lt;receiver&gt; OP_CHECKSIG</span></p>
-                <p className="pl-4"><span className="text-cream">└─ Timelock:</span> <span className="text-cream/60">&lt;locktime&gt; OP_CLTV OP_DROP &lt;sender&gt; OP_CHECKSIG</span></p>
+          <p className="section-label mb-3">Lifecycle</p>
+          <h2 className="type-section-title font-display font-semibold text-cream mb-5">
+            The protocol in four phases
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {PHASES.map(({ step, heading, body }) => (
+              <div key={step} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+                <p className="mb-2 font-mono text-sm text-cream/45">{step}</p>
+                <h3 className="mb-2 font-display text-xl font-semibold text-cream">{heading}</h3>
+                <p className="type-small font-body text-cream/68">{body}</p>
               </div>
-              <p>
-                The <strong className="text-cream">happy path</strong> (cooperative) uses a MuSig2 key spend —
-                a single Schnorr signature that appears on-chain as an ordinary P2TR spend, indistinguishable
-                from a regular wallet transaction. The <strong className="text-cream">recovery path</strong> uses
-                script spend (hashlock or timelock) only when a party misbehaves.
-              </p>
-            </TechSection>
-
-            <TechSection heading="Protocol Phases (1 Taker + 2 Makers)">
-              <ol className="list-decimal list-inside space-y-2 text-cream/60">
-                <li><strong className="text-cream">Discovery (8 messages)</strong> — Taker fetches offers from makers, negotiates swap amount, maker count, and timelock</li>
-                <li><strong className="text-cream">Contract Creation (4 messages)</strong> — Cyclic P2TR contracts: Taker→Maker0→Maker1→Taker, each funded and broadcast on-chain</li>
-                <li><strong className="text-cream">Private Key Handover (4 messages)</strong> — Each party sends their outgoing contract private key forward. Receivers independently perform MuSig2 aggregation and sweep their incoming contract</li>
-              </ol>
-              <p>
-                The protocol uses a <strong className="text-cream">smart-client-dumb-server</strong> model.
-                The taker handles all coordination and protocol validation; makers act as lightweight daemons
-                responding to messages. This makes maker software easy to run on constrained hardware.
-              </p>
-            </TechSection>
-
-            <TechSection heading="Private Key Handover (Sweeping)">
-              <p>
-                After all contracts are on-chain, parties exchange their <em>outgoing</em> contract private keys
-                in a forward flow. Each receiver then performs MuSig2 locally:
-              </p>
-              <ol className="list-decimal list-inside space-y-1 text-cream/60">
-                <li>Taker sends its outgoing key to Maker0</li>
-                <li>Maker0 aggregates Taker's key + its own, sweeps the Taker→Maker0 contract, then sends Maker0's outgoing key to Taker</li>
-                <li>Taker relays Maker0's key to Maker1; Maker1 sweeps Maker0→Maker1 and returns its key</li>
-                <li>Taker uses Maker1's key to sweep the final Maker1→Taker contract</li>
-              </ol>
-              <p>
-                No nonce exchange or partial-signature coordination is needed between parties — each independently
-                generates nonces and aggregates. This reduces from the classic 16-round protocol to just 4
-                key-handover messages.
-              </p>
-            </TechSection>
-
-            <TechSection heading="Fidelity Bonds">
-              <p>
-                Makers lock Bitcoin in time-locked UTXOs before registering with{' '}
-                <InlineCode>directoryd</InlineCode>. The longer the lock and larger the amount, the
-                higher the bond value — a reputation score that takers use to rank makers. This raises
-                the economic cost of Sybil attacks: a fake maker network requires real, locked capital.
-              </p>
-              <ol className="list-decimal list-inside space-y-1 text-cream/60">
-                <li>Maker creates timelocked UTXO (bond)</li>
-                <li><InlineCode>directoryd</InlineCode> verifies fidelity proof before registering the <InlineCode>.onion</InlineCode> address</li>
-                <li>Bond value decays as timelock approaches expiry</li>
-                <li><InlineCode>makerd</InlineCode> auto-creates a new bond when the old one expires</li>
-                <li>Expired bonds redeemed via <InlineCode>maker-cli</InlineCode></li>
-              </ol>
-            </TechSection>
-
-            <TechSection heading="Directory Server (directoryd)">
-              <p>
-                <InlineCode>directoryd</InlineCode> is a lightweight tracker — not a router. Makers
-                register their Tor <InlineCode>.onion</InlineCode> address along with a signed fidelity
-                proof. Takers query it to discover available makers and their offers (fee rates, min/max
-                swap sizes, bond value). The directory does not route traffic or see swap contents.
-              </p>
-              <p>
-                This introduces a centralization vector: if the directory goes offline, takers cannot
-                discover makers. Decentralized peer discovery via gossip protocol is an open research
-                problem for future versions.
-              </p>
-            </TechSection>
-
-            <TechSection heading="Tor-Only Networking">
-              <p>
-                All maker communication happens over Tor hidden services. The taker connects via a local
-                SOCKS5 proxy (default <InlineCode>127.0.0.1:9050</InlineCode>). In production, clearnet
-                connections to makers are not supported — this prevents IP-level correlation of swap
-                participants even if the protocol's cryptographic layer were compromised.
-              </p>
-            </TechSection>
-
-            <TechSection heading="Refund Safety (Timelock Structure)">
-              <p>Refund contracts use a layered locktime structure that ensures each participant in the chain can broadcast their refund before the previous participant's window opens:</p>
-              <ul className="list-disc list-inside space-y-1 text-cream/60">
-                <li>Base locktime: <InlineCode>REFUND_LOCKTIME = 20 blocks</InlineCode></li>
-                <li>Per-hop increment: <InlineCode>REFUND_LOCKTIME_STEP = 20 blocks</InlineCode></li>
-                <li>With 2 makers: taker refund locktime = 20 + (2 × 20) = <strong className="text-cream">60 blocks</strong></li>
-              </ul>
-            </TechSection>
-
-            <TechSection heading="Message Protocol">
-              <p>
-                Taker-to-maker messages are CBOR-encoded over TCP. The taker prefixes each message with
-                a <InlineCode>0x01</InlineCode> byte to distinguish taker connections from other traffic.
-                Core messages: <InlineCode>GetOffer</InlineCode> / <InlineCode>RespOffer</InlineCode>,{' '}
-                <InlineCode>SendersContract</InlineCode> / <InlineCode>ReceiversContract</InlineCode>,{' '}
-                <InlineCode>PrivateKeyHandover</InlineCode>.
-              </p>
-            </TechSection>
-
-            <TechSection heading="Swap Fee Calculation">
-              <p>
-                Each maker sets their own <InlineCode>base_fee</InlineCode> (fixed, sats) and{' '}
-                <InlineCode>amount_relative_fee_pct</InlineCode> (% of forwarded amount). The taker
-                pays cumulative fees across all hops plus estimated mining fees for each maker's
-                funding transactions.
-              </p>
-              <div className="border-l border-dotted border-black/20 pl-4 font-mono text-sm space-y-1">
-                <p className="text-cream/40"># Real example (from test suite)</p>
-                <p><span className="text-cream/50">Send:</span>          <span className="text-cream">500,000 sat</span></p>
-                <p><span className="text-cream/50">2 makers, 3 tx splits</span></p>
-                <p><span className="text-cream/50">Maker 1 cost:</span>  <span className="text-cream">36,500 sat</span></p>
-                <p><span className="text-cream/50">Maker 2 cost:</span>  <span className="text-cream">24,858 sat</span></p>
-                <p><span className="text-cream/50">Taker receives:</span><span className="text-cream"> 438,642 sat</span></p>
-              </div>
-            </TechSection>
-
-            <TechSection heading="Coin Selection">
-              <p>
-                The taker selects UTXOs using the{' '}
-                <a href={LINKS.rust_coinselect} target="_blank" rel="noopener noreferrer"
-                  className="simple-link">rust-coinselect ↗</a>{' '}
-                library (BnB-based). The wallet tracks UTXO categories — regular, incoming swap,
-                outgoing swap, contract, fidelity — and locks non-spendable categories before
-                coin selection runs.
-              </p>
-            </TechSection>
-
-          </Collapsible>
+            ))}
+          </div>
         </section>
 
-        {/* ── Footer links ── */}
+        <section className="section-rule">
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="section-label mb-3">Contract Anatomy</p>
+              <h2 className="type-section-title font-display font-semibold text-cream mb-3">
+                One Taproot contract holds both the happy path and the recovery logic
+              </h2>
+              <p className="type-body font-body text-cream/70 mb-4">
+                Every hop is a single P2TR output with a MuSig2 internal key and two script leaves.
+                The receiver can force completion with the hashlock if needed, while the sender can
+                recover after the CLTV deadline. When things go right, neither script is revealed.
+              </p>
+              <CodeBlock
+                code={CONTRACT_TEMPLATE}
+                language="text"
+                className="w-full"
+                wrapLongLines
+              />
+            </div>
+
+            <div className="space-y-4">
+              <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+                <h3 className="mb-2 font-display text-lg font-semibold text-cream">
+                  Why the private key handover matters
+                </h3>
+                <p className="type-small font-body text-cream/68">
+                  V2 ends the swap by transferring the outgoing contract secret key forward. The next
+                  hop can then derive the cooperative spend for its incoming contract locally instead
+                  of waiting through a longer multi-round signing exchange.
+                </p>
+              </div>
+              <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+                <h3 className="mb-2 font-display text-lg font-semibold text-cream">
+                  Why Taproot lowers recovery cost vs V1
+                </h3>
+                <p className="type-small font-body text-cream/68">
+                  V1 used a separate funding transaction plus a separate contract transaction for
+                  each hop. V2 collapses that into one Taproot contract output, so an aborted swap
+                  has fewer on-chain transactions to publish and unwind.
+                </p>
+                <p className="type-small font-body text-cream/68">
+                  That means cheaper failure handling, cheaper recovery transactions, and fewer
+                  protocol round trips before the swap can either complete or fall back safely.
+                </p>
+              </div>
+              <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+                <h3 className="mb-2 font-display text-lg font-semibold text-cream">
+                  What stays consistent across the route
+                </h3>
+                <p className="type-small font-body text-cream/68">
+                  The swap uses one hash for the full route, but each hop has its own adjacent
+                  pubkeys and locktime. Those locktimes are staggered so refund windows open in the
+                  correct order if recovery becomes necessary.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-rule">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div>
+              <p className="section-label mb-3">Privacy Model</p>
+              <h2 className="type-section-title font-display font-semibold text-cream mb-3">
+                Privacy comes from route separation and ordinary-looking spends
+              </h2>
+              <div className="space-y-3">
+                {PRIVACY_POINTS.map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <span className="mt-1 text-cream">+</span>
+                    <p className="type-small font-body text-cream/68">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+              <p className="section-label mb-3">Maker Selection</p>
+              <h2 className="font-display text-xl font-semibold text-cream mb-3">
+                Offers include fees, size limits, locktime bounds, and fidelity proof
+              </h2>
+              <p className="type-small font-body text-cream/68 mb-3">
+                The taker does not blindly pick any maker. Each <InlineCode>RespOffer</InlineCode>{' '}
+                carries pricing terms plus a verifiable fidelity proof. That bond makes Sybil attacks
+                expensive because fake market share requires real bitcoin locked for time.
+              </p>
+              <p className="type-small font-body text-cream/68">
+                Once the taker chooses a route, it proposes the swap amount, number of transaction
+                splits, and refund timelock with <InlineCode>SwapDetails</InlineCode>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-rule">
+          <p className="section-label mb-4">Builder Notes</p>
+          <div className="space-y-6">
+            <DeepDiveSection heading="Message set">
+              <p>
+                The v2 diagram uses a tight seven-message vocabulary:{' '}
+                <InlineCode>GetOffer</InlineCode>, <InlineCode>RespOffer</InlineCode>,{' '}
+                <InlineCode>SwapDetails</InlineCode>, <InlineCode>AckResponse</InlineCode>,{' '}
+                <InlineCode>SendersContract</InlineCode>,{' '}
+                <InlineCode>SenderContractFromMaker</InlineCode>, and{' '}
+                <InlineCode>PrivateKeyHandover</InlineCode>. For a 1 taker + 2 maker route, the
+                image shows the exact sequence below.
+              </p>
+              <p>
+                This is the cooperative happy-path flow from the image. Recovery still relies on the
+                hashlock and timelock branches, but those fallback spends are not drawn as separate
+                network messages in the v2 diagram.
+              </p>
+              <CodeBlock code={MESSAGE_FLOW} language="text" />
+            </DeepDiveSection>
+
+            <DeepDiveSection heading="Fee model">
+              <p>
+                Makers quote three pricing components in the spec: a fixed base fee, an amount-based
+                fee, and a time-based fee that scales with refund locktime. The taker also pays the
+                mining fees required to fund the route.
+              </p>
+              <CodeBlock code={FEE_FORMULA} language="text" />
+            </DeepDiveSection>
+
+            <DeepDiveSection heading="Failure handling">
+              <p>
+                The swap stays atomic because every participant has a fallback. If someone vanishes
+                after setup, funds are not left in limbo forever: receivers can use the hashlock
+                branch once the preimage is available, and senders eventually reclaim via the
+                timelock branch.
+              </p>
+              <p>
+                The security docs also call out abort scenarios explicitly. A taker that disappears
+                after setup can still recover later, while makers that drop early can be excluded from
+                future route selection.
+              </p>
+            </DeepDiveSection>
+
+            <DeepDiveSection heading="Fidelity bonds">
+              <p>
+                A maker proves skin in the game with a time-locked bitcoin bond. The bond data,
+                certificate hash, and signature are bundled into the fidelity proof returned during
+                offer discovery. Takers verify that proof before trusting the offer book.
+              </p>
+              <p>
+                In practical terms, the maker locks bitcoin into a timelocked output and ties that
+                bond to its network identity with a signed certificate. The proof includes the bond
+                outpoint, locked amount, locktime, pubkey, and certificate expiry, plus a signature
+                from the same key that controls the bond.
+              </p>
+              <p>
+                The maker&apos;s Tor address is also announced in the same fidelity transaction via an
+                <InlineCode>OP_RETURN</InlineCode> output. That matters because it means the market
+                can be rediscovered directly from the blockchain: anyone can scan chain data, find
+                fidelity announcements, recover maker addresses, and rebuild the offer universe
+                without depending on a central directory snapshot.
+              </p>
+              <p>
+                The point is not just reputation. Fidelity bonds are a Sybil-resistance mechanism:
+                if an attacker wants to appear as many independent makers, they must lock up real
+                capital behind each identity. The spec&apos;s bond-value model also rewards putting
+                more capital behind one strong maker instead of splitting the same coins across many
+                weaker ones.
+              </p>
+              <p>
+                Bond value also changes over time. Longer locktimes increase value, while an expired
+                or nearly expired bond becomes less persuasive to takers. That gives honest makers an
+                incentive to roll bonds forward before they decay too far.
+              </p>
+            </DeepDiveSection>
+          </div>
+        </section>
+
         <section className="section-rule flex flex-wrap gap-4">
-          <a href={LINKS.protocol_spec} target="_blank" rel="noopener noreferrer"
-            className="simple-link text-sm font-body">
-            Full Protocol Specification ↗
+          <a
+            href={LINKS.protocol_v2}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="simple-link text-sm font-body"
+          >
+            Protocol v2 spec ↗
           </a>
-          <a href={LINKS.protocol_flow} target="_blank" rel="noopener noreferrer"
-            className="simple-link text-sm font-body">
-            Protocol Flow (v1) ↗
+          <a
+            href={LINKS.protocol_spec}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="simple-link text-sm font-body"
+          >
+            Full specification repo ↗
           </a>
-          <a href={LINKS.coinswap_repo} target="_blank" rel="noopener noreferrer"
-            className="simple-link text-sm font-body">
+          <a
+            href={LINKS.coinswap_repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="simple-link text-sm font-body"
+          >
             Core implementation ↗
           </a>
         </section>

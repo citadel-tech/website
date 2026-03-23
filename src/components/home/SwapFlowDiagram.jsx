@@ -9,6 +9,7 @@ const TRIANGLE_R = 224
 const ROUTE_RING_R = 76
 const NODE_W = 126
 const NODE_H = 72
+const VERTICAL_MAKER_LINK_GAP = 10
 const FUNDING_TXIDS = [
   '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b',
   '9f3c7ab412e8d50f6a9c33d1be74a8f021cde56b97aa4efc8d102bb7ce51af44',
@@ -64,10 +65,10 @@ const SEGMENTS = NODES.map((node, index) => {
     hopIndex,
     txid: FUNDING_TXIDS[index],
     from: useVerticalMakerLink
-      ? { x: node.x, y: node.y + NODE_H / 2 }
+      ? { x: node.x, y: node.y + NODE_H / 2 + VERTICAL_MAKER_LINK_GAP }
       : cornerPoint(node, next, NODE_W, NODE_H),
     to: useVerticalMakerLink
-      ? { x: next.x, y: next.y - NODE_H / 2 }
+      ? { x: next.x, y: next.y - NODE_H / 2 - VERTICAL_MAKER_LINK_GAP }
       : cornerPoint(next, node, NODE_W, NODE_H),
   }
 })
@@ -132,15 +133,15 @@ const POINTERS = [
     description: 'Tune the route shape and swap flow to match the exact use case.',
   },
   {
-    label: 'Shred old transaction history.',
+    label: 'Shred old transaction history. Advanced UTXO sanitization.',
     description: 'Break shared ancestry so inputs and outputs do not remain linked.',
   },
   {
-    label: 'Swap to payment. Break Link between sender & receiver.',
+    label: 'Swap Payments. Decoupling Sender and Receiver history.',
     description: 'Use swaps to break sender and receiver linkage in a clean transfer.',
   },
   {
-    label: 'Consolidate or split UTXOs via swaps.',
+    label: 'Consolidate or Split UTXOs via swaps.',
     description: 'Coming soon: reshape UTXO sets while swapping.',
     soon: true,
   },
@@ -588,7 +589,7 @@ export default function SwapFlowDiagram() {
                 <span className="mt-[0.35rem] h-1.5 w-1.5 shrink-0 rounded-full bg-cream/70" />
                 <p className="text-[0.85rem] leading-snug text-cream/80">
                   {label}
-                  {soon ? ' (coming soon)' : ''}
+                  {soon ? ' (Coming Soon)' : ''}
                 </p>
               </li>
             ))}

@@ -4,7 +4,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 // Minimal dark theme using design tokens
 const theme = {
   'code[class*="language-"]': {
-    color: '#F5F5F5',
+    color: '#edf3ff',
     fontFamily: "'JetBrains Mono', monospace",
     fontSize: '0.875rem',
     lineHeight: '1.6',
@@ -16,18 +16,18 @@ const theme = {
     padding: 0,
     overflow: 'auto',
   },
-  comment:   { color: '#7a7a7a' },
-  punctuation: { color: '#b4b4b4' },
-  property:  { color: '#f5f5f5' },
-  string:    { color: '#d8d8d8' },
-  number:    { color: '#ededed' },
-  keyword:   { color: '#ffffff' },
-  operator:  { color: '#b4b4b4' },
-  function:  { color: '#f0f0f0' },
-  'class-name': { color: '#ffffff' },
+  comment:   { color: '#6f8c76' },
+  punctuation: { color: '#9bb0c5' },
+  property:  { color: '#edf3ff' },
+  string:    { color: '#fbbf24' },
+  number:    { color: '#f7931a' },
+  keyword:   { color: '#00ff66' },
+  operator:  { color: '#9bb0c5' },
+  function:  { color: '#7ec8ff' },
+  'class-name': { color: '#edf3ff' },
 }
 
-export default function CodeBlock({ code, language = 'bash' }) {
+export default function CodeBlock({ code, language = 'bash', className = '', wrapLongLines = false }) {
   const [copied, setCopied] = useState(false)
 
   function handleCopy() {
@@ -38,12 +38,12 @@ export default function CodeBlock({ code, language = 'bash' }) {
   }
 
   return (
-    <div className="relative overflow-hidden border border-dotted border-black/20 bg-[#fbf8f2]">
-      <div className="flex items-center justify-between border-b border-dotted border-black/15 px-4 py-2">
-        <span className="text-black/45 text-sm font-mono uppercase tracking-widest">{language}</span>
+    <div className={`relative overflow-hidden border border-dotted border-[#00ff66]/24 bg-[#05080d] ${className}`}>
+      <div className="flex items-center justify-between border-b border-dotted border-[#00ff66]/18 bg-[linear-gradient(90deg,rgba(0,255,102,0.05),rgba(247,147,26,0.03))] px-4 py-2">
+        <span className="text-[#00ff66]/78 text-sm font-mono uppercase tracking-widest">{language}</span>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 text-sm font-body text-black/45 transition-colors hover:text-black"
+          className="flex items-center gap-1.5 text-sm font-body text-[#edf3ff]/55 transition-colors hover:text-[#edf3ff]"
         >
           {copied ? (
             <>
@@ -65,7 +65,7 @@ export default function CodeBlock({ code, language = 'bash' }) {
       </div>
 
       <div className="p-4 overflow-x-auto">
-        <SyntaxHighlighter language={language} style={theme} PreTag="div">
+        <SyntaxHighlighter language={language} style={theme} PreTag="div" wrapLongLines={wrapLongLines}>
           {code}
         </SyntaxHighlighter>
       </div>

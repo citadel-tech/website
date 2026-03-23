@@ -14,6 +14,7 @@ export const LINKS = {
 
   // Docs & spec
   protocol_spec:    "https://github.com/citadel-tech/Coinswap-Protocol-Specification",
+  protocol_v2:      "https://github.com/citadel-tech/Coinswap-Protocol-Specification/tree/main/v2%20protocol",
   protocol_flow:    "https://github.com/citadel-tech/Coinswap-Protocol-Specification/blob/main/v1/3_protocol-flow.md",
   releases:         "https://github.com/citadel-tech/coinswap/releases",
   contributing:     "https://github.com/citadel-tech/coinswap/blob/master/CONTRIBUTING.md",

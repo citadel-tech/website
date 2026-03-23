@@ -29,15 +29,17 @@ export default function Footer() {
 
         <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
           <div>
-            <div className="mb-3 flex items-center gap-3">
-              <CoinSwapLogo className="h-12 w-12 shrink-0 drop-shadow-[0_8px_24px_rgba(0,0,0,0.2)]" />
-              <p className="text-[1.9rem] font-display font-semibold tracking-[0.08em]">
-                <span className="text-black">CoinSwap</span>
-              </p>
-            </div>
-            <p className="type-small max-w-xs text-black/48 font-body">
-              Decentralised atomic swap marketplace.
-            </p>
+            <Link to="/" className="group flex items-center gap-3">
+              <CoinSwapLogo className="h-10 w-10 shrink-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.12)]" />
+              <span className="leading-none">
+                <span className="block text-[1.85rem] font-display font-semibold tracking-[0.04em] text-black sm:text-[2rem]">
+                  <span className="text-black">CoinSwap</span>
+                </span>
+                <span className="mt-2 block text-[0.58rem] font-mono uppercase tracking-[0.18em] text-black/42">
+                  Make Bitcoin Fungible Again
+                </span>
+              </span>
+            </Link>
           </div>
 
           <div>

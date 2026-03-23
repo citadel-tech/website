@@ -1,5 +1,3 @@
-import { LINKS } from '../../constants/links'
-
 export default function StatusBanner() {
   return (
     <div className="border-b border-dotted border-black/15 bg-gradient-to-r from-black/[0.04] via-white/25 to-black/[0.04]">
@@ -11,15 +9,6 @@ export default function StatusBanner() {
             </span>
             STATUS: LIVE ON MUTINYNET
           </span>
-
-          <a
-            href={LINKS.mutinynet}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border border-black/12 bg-white/35 px-3 py-1.5 text-cream/72 shadow-[0_0_0_1px_rgba(255,255,255,0.24),0_12px_30px_rgba(0,0,0,0.06)] transition-all hover:-translate-y-px hover:border-black/25 hover:bg-white/55 hover:text-cream"
-          >
-            mutinynet.com ↗
-          </a>
 
           <span className="inline-flex items-center gap-1.5 border border-black/15 bg-black/[0.045] px-3 py-1.5 text-cream shadow-[0_0_0_1px_rgba(255,255,255,0.24),0_10px_28px_rgba(0,0,0,0.06)]">
             <svg
