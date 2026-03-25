@@ -4,10 +4,13 @@ import SwapMarket from '../components/home/SwapMarket'
 import SwapFlowDiagram from '../components/home/SwapFlowDiagram'
 import RoleCards from '../components/home/RoleCards'
 import QuickLinks from '../components/home/QuickLinks'
+import { useLatestRelease } from '../hooks/useLatestRelease'
 
 const OG_IMAGE = 'https://coinswap.network/og.png' // placeholder — replace when asset exists
 
 export default function Home() {
+  const { tag, url } = useLatestRelease()
+
   return (
     <>
       {/* SEO */}
@@ -25,13 +28,13 @@ export default function Home() {
       <meta name="twitter:description" content="Non-custodial, atomic, multi-hop Bitcoin swaps over Tor." />
       <meta name="twitter:image"      content={OG_IMAGE} />
 
-      <StatusBanner />
+      <StatusBanner releaseTag={tag} releaseUrl={url} />
 
       <div className="relative overflow-hidden">
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-7 pb-16">
+        <div className="site-shell relative space-y-7 pb-16">
           <Hero />
-          <SwapMarket />
           <SwapFlowDiagram />
+          <SwapMarket />
           <RoleCards />
           <QuickLinks />
         </div>

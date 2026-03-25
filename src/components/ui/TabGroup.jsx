@@ -16,7 +16,7 @@ export default function TabGroup({ tabs, defaultIndex = 0 }) {
           <button
             key={tab.label}
             onClick={() => setActive(i)}
-            className={`-mb-px border-b px-0 py-2 text-sm font-body font-medium transition-colors ${
+            className={`type-ui -mb-px border-b px-0 py-2 font-body font-medium transition-colors ${
               active === i
                 ? 'border-black/35 text-black'
                 : 'border-transparent text-black/50 hover:border-black/20 hover:text-black'

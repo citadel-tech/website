@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { to: '/how-it-works', label: 'how-it-works' },
   { to: '/takers',       label: 'takers' },
   { to: '/makers',       label: 'makers' },
-  { to: '/apps',         label: 'apps' },
+  { to: '/docs',         label: 'docs' },
 ]
 
 export default function Header() {
@@ -23,31 +23,31 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-dotted border-black/15 bg-[#f7f2e8]/95 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto flex min-h-[4.5rem] items-center justify-between px-3 sm:px-4 lg:px-5">
+      <div className="site-shell flex min-h-[4.5rem] items-center justify-between gap-6">
 
         <NavLink to="/" className="group flex items-center gap-3">
           <CoinSwapLogo className="h-10 w-10 shrink-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.12)]" />
           <span className="leading-none">
-            <span className="block text-[1.85rem] font-display font-semibold tracking-[0.04em] text-black sm:text-[2rem]">
+            <span className="type-brand block font-display font-semibold tracking-[0.04em] text-black">
               <span className="text-black">CoinSwap</span>
             </span>
-            <span className="mt-2 block text-[0.58rem] font-mono uppercase tracking-[0.18em] text-black/42">
+            <span className="type-caption mt-2 block font-mono uppercase tracking-[0.18em] text-black/42">
               Make Bitcoin Fungible Again
             </span>
           </span>
         </NavLink>
 
-        <nav className="hidden md:flex flex-1 items-center justify-between px-8 lg:px-10">
+        <nav className="hidden md:flex flex-1 items-center justify-end gap-8 lg:gap-10 xl:gap-12">
           {NAV_LINKS.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `py-2 text-sm font-mono font-semibold uppercase tracking-[0.12em] transition duration-200 hover:scale-105 underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
+                `type-ui inline-flex rounded-lg px-3 py-2 font-mono font-semibold uppercase tracking-[0.12em] transition duration-200 hover:-translate-y-0.5 hover:bg-[#f7931a]/12 hover:shadow-[0_16px_34px_rgba(247,147,26,0.22)] underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
                   isActive
                     ? 'text-black decoration-black/45'
-                    : 'text-black/55 hover:text-black hover:decoration-black/30'
+                    : 'text-black/55 hover:text-black hover:decoration-[#f7931a]'
                 }`
               }
             >
@@ -79,17 +79,17 @@ export default function Header() {
 
       {open && (
         <div className="md:hidden border-t border-dotted border-black/15 bg-[#f7f2e8]">
-          <nav className="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-2">
+          <nav className="site-shell flex flex-col gap-2 py-4">
             {NAV_LINKS.map(({ to, label }) => (
               <NavLink
                 key={to}
                 to={to}
                 end={to === '/'}
                 className={({ isActive }) =>
-                  `px-0 py-3 text-sm font-mono font-semibold uppercase tracking-[0.12em] transition-transform transition-colors hover:scale-105 underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
+                  `type-ui inline-flex rounded-lg px-3 py-3 font-mono font-semibold uppercase tracking-[0.12em] transition duration-200 hover:-translate-y-0.5 hover:bg-[#f7931a]/12 hover:shadow-[0_16px_34px_rgba(247,147,26,0.22)] underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
                     isActive
                       ? 'text-black decoration-black/45'
-                      : 'text-black/55 hover:text-black hover:decoration-black/30'
+                      : 'text-black/55 hover:text-black hover:decoration-[#f7931a]'
                   }`
                 }
               >

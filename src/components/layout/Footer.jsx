@@ -19,7 +19,7 @@ const EXTERNAL = [
 export default function Footer() {
   return (
     <footer className="mt-auto border-t border-dotted border-black/15 bg-transparent">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="site-shell py-8">
 
         <p className="type-small mb-5 font-mono text-black/35">
           <span className="text-black/60">user@coinswap</span>
@@ -32,10 +32,10 @@ export default function Footer() {
             <Link to="/" className="group flex items-center gap-3">
               <CoinSwapLogo className="h-10 w-10 shrink-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.12)]" />
               <span className="leading-none">
-                <span className="block text-[1.85rem] font-display font-semibold tracking-[0.04em] text-black sm:text-[2rem]">
+                <span className="type-brand block font-display font-semibold tracking-[0.04em] text-black">
                   <span className="text-black">CoinSwap</span>
                 </span>
-                <span className="mt-2 block text-[0.58rem] font-mono uppercase tracking-[0.18em] text-black/42">
+                <span className="type-caption mt-2 block font-mono uppercase tracking-[0.18em] text-black/42">
                   Make Bitcoin Fungible Again
                 </span>
               </span>
@@ -43,11 +43,11 @@ export default function Footer() {
           </div>
 
           <div>
-          <p className="mb-3 text-sm font-mono uppercase tracking-[0.2em] text-black/45">// routes</p>
+          <p className="type-ui mb-3 font-mono uppercase tracking-[0.2em] text-black/45">// routes</p>
             <ul className="space-y-2">
               {INTERNAL.map(({ to, label }) => (
                 <li key={to}>
-                  <Link to={to} className="text-[15px] font-mono text-black/52 transition-colors hover:text-black">
+                  <Link to={to} className="type-small font-mono text-black/52 transition-colors hover:text-black">
                     &gt; {label}
                   </Link>
                 </li>
@@ -56,7 +56,7 @@ export default function Footer() {
           </div>
 
           <div>
-          <p className="mb-3 text-sm font-mono uppercase tracking-[0.2em] text-black/45">// external</p>
+          <p className="type-ui mb-3 font-mono uppercase tracking-[0.2em] text-black/45">// external</p>
             <ul className="space-y-2">
               {EXTERNAL.map(({ href, label }) => (
                 href && (
@@ -65,7 +65,7 @@ export default function Footer() {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[15px] font-mono text-black/52 transition-colors hover:text-black"
+                      className="type-small font-mono text-black/52 transition-colors hover:text-black"
                     >
                       &gt; {label} ↗
                     </a>
@@ -77,7 +77,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-2 border-t border-dotted border-black/15 pt-4 sm:flex-row">
-          <p className="text-sm font-mono text-black/28">
+          <p className="type-ui font-mono text-black/28">
             // Built by Citadel Tech. Open source under MIT.
           </p>
         </div>

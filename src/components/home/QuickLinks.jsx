@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom'
 import { LINKS } from '../../constants/links'
 
 const ITEMS = [
   {
-    label: 'GitHub',
+    label: 'Core Lib',
     sub: 'citadel-tech/coinswap',
     href: LINKS.coinswap_repo,
     icon: (
@@ -12,7 +13,7 @@ const ITEMS = [
     ),
   },
   {
-    label: 'Protocol Spec',
+    label: 'Protocol Specs',
     sub: 'Coinswap-Protocol-Specification',
     href: LINKS.protocol_spec,
     icon: (
@@ -26,12 +27,27 @@ const ITEMS = [
     ),
   },
   {
-    label: 'Mutinynet',
-    sub: 'Signet testnet explorer',
-    href: LINKS.mutinynet,
+    label: 'Docs',
+    sub: 'Local documentation',
+    to: '/docs',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" width="22" height="22">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="8" y1="13" x2="16" y2="13" />
+        <line x1="8" y1="17" x2="14" y2="17" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Deep Wiki',
+    sub: 'AI-generated docs',
+    href: LINKS.deep_wiki,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" width="22" height="22">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
       </svg>
     ),
   },
@@ -49,36 +65,51 @@ const ITEMS = [
 
 export default function QuickLinks() {
   return (
-    <section>
+    <section className="mt-10">
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
-          <p className="section-label mb-2">// network access</p>
+          <p className="section-label mb-2">// Cypherpunk&apos;s Den</p>
           <h2 className="type-section-title font-display font-semibold tracking-[0.04em] text-cream">
-            Jump straight into the ecosystem.
+            Jump into the weeds
           </h2>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 rounded-2xl border border-black/12 bg-white/20 p-3 shadow-[0_14px_40px_rgba(0,0,0,0.05)] backdrop-blur-sm sm:grid-cols-4 sm:gap-4 sm:p-4">
-        {ITEMS.map(({ label, sub, href, icon }) => (
-          <a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex min-h-[8.5rem] flex-col items-start justify-between rounded-xl border border-black/10 bg-[rgba(255,255,255,0.18)] p-4 text-left transition-all duration-200 hover:-translate-y-1 hover:border-black/20 hover:bg-white/30 hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
-          >
-            <span className="inline-flex rounded-lg border border-black/10 bg-black/[0.04] p-2 text-cream/45 transition-colors group-hover:border-black/15 group-hover:text-cream">
-              {icon}
-            </span>
-            <span className="type-small mt-4 font-mono font-medium uppercase tracking-[0.12em] text-cream/80 transition-colors group-hover:text-cream">
-              {label}
-            </span>
-            <span className="type-meta mt-1 font-mono uppercase tracking-[0.08em] text-cream/38 transition-colors group-hover:text-cream/72">
-              {sub}
-            </span>
-          </a>
-        ))}
+      <div className="grid grid-cols-2 gap-3 rounded-2xl border border-black/12 bg-white/20 p-3 shadow-[0_14px_40px_rgba(0,0,0,0.05)] backdrop-blur-sm sm:grid-cols-3 sm:gap-4 sm:p-4 lg:grid-cols-5">
+        {ITEMS.map(({ label, sub, href, to, icon }) => {
+          const className =
+            'group flex min-h-[8.5rem] flex-col items-start justify-between rounded-xl border border-black/10 bg-[rgba(255,255,255,0.18)] p-4 text-left transition-all duration-200 hover:-translate-y-1 hover:border-[#f7931a]/60 hover:bg-white/30 hover:shadow-[0_18px_42px_rgba(247,147,26,0.32)]'
+
+          const content = (
+            <>
+              <span className="inline-flex rounded-lg border border-black/10 bg-black/[0.04] p-2 text-cream/45 transition-colors group-hover:border-black/15 group-hover:text-cream">
+                {icon}
+              </span>
+              <span className="type-small mt-4 font-mono font-medium uppercase tracking-[0.12em] text-cream/80 transition-colors group-hover:text-cream">
+                {label}
+              </span>
+              <span className="type-meta mt-1 font-mono uppercase tracking-[0.08em] text-cream/38 transition-colors group-hover:text-cream/72">
+                {sub}
+              </span>
+            </>
+          )
+
+          return to ? (
+            <Link key={label} to={to} className={className}>
+              {content}
+            </Link>
+          ) : (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={className}
+            >
+              {content}
+            </a>
+          )
+        })}
       </div>
     </section>
   )

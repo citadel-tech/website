@@ -16,7 +16,7 @@ export default function Collapsible({ summary, children, defaultOpen = false }) 
         onClick={() => setOpen(o => !o)}
         className="flex w-full items-center justify-between px-0 py-4 text-left transition-colors"
       >
-        <span className="text-base font-display font-semibold text-black">{summary}</span>
+        <span className="type-card-title font-display font-semibold text-black">{summary}</span>
         <svg
           width="18"
           height="18"

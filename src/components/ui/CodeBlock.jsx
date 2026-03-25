@@ -40,10 +40,10 @@ export default function CodeBlock({ code, language = 'bash', className = '', wra
   return (
     <div className={`relative overflow-hidden border border-dotted border-[#00ff66]/24 bg-[#05080d] ${className}`}>
       <div className="flex items-center justify-between border-b border-dotted border-[#00ff66]/18 bg-[linear-gradient(90deg,rgba(0,255,102,0.05),rgba(247,147,26,0.03))] px-4 py-2">
-        <span className="text-[#00ff66]/78 text-sm font-mono uppercase tracking-widest">{language}</span>
+        <span className="type-ui text-[#00ff66]/78 font-mono uppercase tracking-widest">{language}</span>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 text-sm font-body text-[#edf3ff]/55 transition-colors hover:text-[#edf3ff]"
+          className="type-ui flex items-center gap-1.5 font-body text-[#edf3ff]/55 transition-colors hover:text-[#edf3ff]"
         >
           {copied ? (
             <>

@@ -12,7 +12,7 @@ const CARDS = [
       'Tor required — .onion routing',
       'Desktop GUI or CLI',
     ],
-    cta: { label: './get_started_as_taker', to: '/takers' },
+    cta: { label: './Taker --SWAP', to: '/takers' },
     borderClass: 'border-white/10 hover:border-white/25',
     promptColor: 'text-cream/70',
     tagColor: 'text-cream/70 border-white/20',
@@ -27,7 +27,7 @@ const CARDS = [
       'Auto-renewing bond lifecycle',
       'Docker or native binary',
     ],
-    cta: { label: './run_a_maker_node', to: '/makers' },
+    cta: { label: './Maker --RUN', to: '/makers' },
     borderClass: 'border-white/10 hover:border-white/25',
     promptColor: 'text-cream/70',
     tagColor: 'text-cream/70 border-white/20',
@@ -73,7 +73,13 @@ export default function RoleCards() {
               ))}
             </ul>
 
-            <Button as={Link} to={cta.to} variant="outline" className="w-full justify-center">
+            <Button
+              as={Link}
+              to={cta.to}
+              variant="outline"
+              size="lg"
+              className="self-start w-fit hover:shadow-[0_16px_34px_rgba(247,147,26,0.34),0_0_26px_rgba(247,147,26,0.2)] hover:-translate-y-0.5"
+            >
               {cta.label}
             </Button>
           </div>

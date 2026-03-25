@@ -112,8 +112,8 @@ function InlineCode({ children }) {
 function DeepDiveSection({ heading, children }) {
   return (
     <div>
-      <h3 className="mb-3 font-display text-base font-semibold text-cream">{heading}</h3>
-      <div className="space-y-3 font-body text-sm leading-relaxed text-cream/70">{children}</div>
+      <h3 className="type-card-title mb-3 font-display font-semibold text-cream">{heading}</h3>
+      <div className="type-small space-y-3 font-body text-cream/70">{children}</div>
     </div>
   )
 }
@@ -127,13 +127,13 @@ export default function HowItWorks() {
         content="A concise walkthrough of the CoinSwap v2 protocol: taker-driven route discovery, Taproot contract setup, MuSig2 key-path spends, and atomic recovery paths."
       />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
+      <div className="site-shell py-8 space-y-7">
         <section>
-          <p className="section-label mb-3">Protocol V2</p>
+          <p className="section-label mb-3">// Protocol V2</p>
           <h1 className="type-page-title font-display font-bold text-cream mb-3">
             How CoinSwap V2 Actually Runs
           </h1>
-          <p className="type-subtitle text-cream/60 font-body max-w-3xl">
+          <p className="type-subtitle text-cream/60 font-body max-w-4xl">
             CoinSwap v2 is a taker-coordinated, multi-hop atomic swap protocol built around Taproot
             contracts and MuSig2. You route value through independent makers, receive different
             coins back, and keep a recovery path if anyone disappears mid-swap.
@@ -144,10 +144,10 @@ export default function HowItWorks() {
           <div className="grid gap-4 lg:grid-cols-3">
             {V2_HIGHLIGHTS.map(({ label, heading, body }) => (
               <div key={heading} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="mb-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-cream/45">
+                <p className="type-caption mb-2 font-mono uppercase tracking-[0.18em] text-cream/45">
                   {label}
                 </p>
-                <h2 className="mb-2 font-display text-xl font-semibold text-cream">{heading}</h2>
+                <h2 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h2>
                 <p className="type-small font-body text-cream/68">{body}</p>
               </div>
             ))}
@@ -157,7 +157,7 @@ export default function HowItWorks() {
         <section className="section-rule">
           <div className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr]">
             <div>
-              <p className="section-label mb-3">Route Shape</p>
+              <p className="section-label mb-3">// Route Shape</p>
               <h2 className="type-section-title font-display font-semibold text-cream mb-3">
                 The taker builds a cycle, then relays every hop
               </h2>
@@ -166,14 +166,14 @@ export default function HowItWorks() {
                 route, and relays protocol messages between adjacent parties. That keeps maker
                 software simple and limits what any single maker can learn about the full swap.
               </p>
-              <div className="border border-dotted border-black/20 bg-[#fbf8f2] px-4 py-5 font-mono text-sm text-black/80">
+              <div className="type-ui border border-dotted border-black/20 bg-[#fbf8f2] px-4 py-5 font-mono text-black/80">
                 <p>Taker -&gt; Maker0 -&gt; Maker1 -&gt; ... -&gt; Taker</p>
                 <p className="mt-2 text-black/55">same hash across all hops, different keys and locktimes per hop</p>
               </div>
             </div>
 
             <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-              <p className="section-label mb-3">Core Guarantees</p>
+              <p className="section-label mb-3">// Core Guarantees</p>
               <div className="space-y-3">
                 {GUARANTEES.map((item) => (
                   <div key={item} className="flex items-start gap-3">
@@ -187,15 +187,15 @@ export default function HowItWorks() {
         </section>
 
         <section className="section-rule">
-          <p className="section-label mb-3">Lifecycle</p>
+          <p className="section-label mb-3">// Lifecycle</p>
           <h2 className="type-section-title font-display font-semibold text-cream mb-5">
             The protocol in four phases
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {PHASES.map(({ step, heading, body }) => (
               <div key={step} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="mb-2 font-mono text-sm text-cream/45">{step}</p>
-                <h3 className="mb-2 font-display text-xl font-semibold text-cream">{heading}</h3>
+                <p className="type-meta mb-2 font-mono text-cream/45">{step}</p>
+                <h3 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h3>
                 <p className="type-small font-body text-cream/68">{body}</p>
               </div>
             ))}
@@ -205,7 +205,7 @@ export default function HowItWorks() {
         <section className="section-rule">
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <p className="section-label mb-3">Contract Anatomy</p>
+              <p className="section-label mb-3">// Contract Anatomy</p>
               <h2 className="type-section-title font-display font-semibold text-cream mb-3">
                 One Taproot contract holds both the happy path and the recovery logic
               </h2>
@@ -224,7 +224,7 @@ export default function HowItWorks() {
 
             <div className="space-y-4">
               <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <h3 className="mb-2 font-display text-lg font-semibold text-cream">
+                <h3 className="type-card-title mb-2 font-display font-semibold text-cream">
                   Why the private key handover matters
                 </h3>
                 <p className="type-small font-body text-cream/68">
@@ -234,7 +234,7 @@ export default function HowItWorks() {
                 </p>
               </div>
               <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <h3 className="mb-2 font-display text-lg font-semibold text-cream">
+                <h3 className="type-card-title mb-2 font-display font-semibold text-cream">
                   Why Taproot lowers recovery cost vs V1
                 </h3>
                 <p className="type-small font-body text-cream/68">
@@ -248,7 +248,7 @@ export default function HowItWorks() {
                 </p>
               </div>
               <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <h3 className="mb-2 font-display text-lg font-semibold text-cream">
+                <h3 className="type-card-title mb-2 font-display font-semibold text-cream">
                   What stays consistent across the route
                 </h3>
                 <p className="type-small font-body text-cream/68">
@@ -264,7 +264,7 @@ export default function HowItWorks() {
         <section className="section-rule">
           <div className="grid gap-6 lg:grid-cols-2">
             <div>
-              <p className="section-label mb-3">Privacy Model</p>
+              <p className="section-label mb-3">// Privacy Model</p>
               <h2 className="type-section-title font-display font-semibold text-cream mb-3">
                 Privacy comes from route separation and ordinary-looking spends
               </h2>
@@ -279,8 +279,8 @@ export default function HowItWorks() {
             </div>
 
             <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-              <p className="section-label mb-3">Maker Selection</p>
-              <h2 className="font-display text-xl font-semibold text-cream mb-3">
+              <p className="section-label mb-3">// Maker Selection</p>
+              <h2 className="type-card-title font-display font-semibold text-cream mb-3">
                 Offers include fees, size limits, locktime bounds, and fidelity proof
               </h2>
               <p className="type-small font-body text-cream/68 mb-3">
@@ -297,7 +297,7 @@ export default function HowItWorks() {
         </section>
 
         <section className="section-rule">
-          <p className="section-label mb-4">Builder Notes</p>
+          <p className="section-label mb-4">// Builder Notes</p>
           <div className="space-y-6">
             <DeepDiveSection heading="Message set">
               <p>
@@ -380,7 +380,7 @@ export default function HowItWorks() {
             href={LINKS.protocol_v2}
             target="_blank"
             rel="noopener noreferrer"
-            className="simple-link text-sm font-body"
+            className="simple-link type-ui font-body"
           >
             Protocol v2 spec ↗
           </a>
@@ -388,7 +388,7 @@ export default function HowItWorks() {
             href={LINKS.protocol_spec}
             target="_blank"
             rel="noopener noreferrer"
-            className="simple-link text-sm font-body"
+            className="simple-link type-ui font-body"
           >
             Full specification repo ↗
           </a>
@@ -396,7 +396,7 @@ export default function HowItWorks() {
             href={LINKS.coinswap_repo}
             target="_blank"
             rel="noopener noreferrer"
-            className="simple-link text-sm font-body"
+            className="simple-link type-ui font-body"
           >
             Core implementation ↗
           </a>

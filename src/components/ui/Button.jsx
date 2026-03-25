@@ -16,15 +16,15 @@ export default function Button({
   const base = 'inline-flex items-center justify-center gap-2 border font-mono font-medium uppercase tracking-[0.14em] text-white transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f2e8]'
 
   const variants = {
-    primary: 'border-black bg-black !text-white hover:bg-black/85 active:bg-black/90',
-    outline: 'border-black bg-black !text-white hover:bg-black/85 active:bg-black/90',
-    ghost:   'border-black bg-black !text-white hover:bg-black/85 active:bg-black/90',
+    primary: 'border-black bg-black !text-white hover:bg-black active:bg-black',
+    outline: 'border-black bg-black !text-white hover:bg-black active:bg-black',
+    ghost:   'border-black bg-black !text-white hover:bg-black active:bg-black',
   }
 
   const sizes = {
-    sm: 'text-xs px-3 py-1.5',
-    md: 'text-sm px-4 py-2.5',
-    lg: 'text-[15px] px-6 py-3.5',
+    sm: 'type-caption px-3 py-1.5',
+    md: 'type-ui px-4 py-2.5',
+    lg: 'type-small px-6 py-3.5',
   }
 
   return (

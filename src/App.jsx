@@ -4,7 +4,7 @@ import Home from './pages/Home'
 import HowItWorks from './pages/HowItWorks'
 import Takers from './pages/Takers'
 import Makers from './pages/Makers'
-import AppsTools from './pages/AppsTools'
+import Docs from './pages/Docs'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
           <Route path="how-it-works" element={<HowItWorks />} />
           <Route path="takers" element={<Takers />} />
           <Route path="makers" element={<Makers />} />
-          <Route path="apps" element={<AppsTools />} />
+          <Route path="docs" element={<Docs />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

@@ -579,7 +579,7 @@ export default function SwapFlowDiagram() {
         </div>
 
         <aside className="rounded-2xl border border-black/10 bg-white/15 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm">
-          <h3 className="mb-3 font-display text-[1.18rem] font-semibold tracking-[0.04em] text-cream">
+          <h3 className="type-card-title mb-3 font-display font-semibold tracking-[0.04em] text-cream">
             Usecases
           </h3>
 
@@ -587,7 +587,7 @@ export default function SwapFlowDiagram() {
             {POINTERS.map(({ label, description, soon }) => (
               <li key={label} className="flex items-start gap-2 rounded-lg border border-black/8 bg-white/12 px-2.5 py-2">
                 <span className="mt-[0.35rem] h-1.5 w-1.5 shrink-0 rounded-full bg-cream/70" />
-                <p className="text-[0.85rem] leading-snug text-cream/80">
+                <p className="type-meta text-cream/80">
                   {label}
                   {soon ? ' (Coming Soon)' : ''}
                 </p>

@@ -3,10 +3,9 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-const faviconVersion = 'coinswap-logo-v2'
+const faviconVersion = 'coinswap-bw-v1'
 const baseUrl = import.meta.env.BASE_URL
-const faviconHref = `${baseUrl}coinswap-tab.png?v=${faviconVersion}`
-const faviconIcoHref = `${baseUrl}coinswap-tab.ico?v=${faviconVersion}`
+const faviconHref = `${baseUrl}coinswap-bw.svg?v=${faviconVersion}`
 
 function applyFavicons() {
   document
@@ -15,14 +14,10 @@ function applyFavicons() {
 
   const icon = document.createElement('link')
   icon.rel = 'icon'
-  icon.type = 'image/png'
+  icon.type = 'image/svg+xml'
   icon.href = faviconHref
 
-  const shortcutIcon = document.createElement('link')
-  shortcutIcon.rel = 'shortcut icon'
-  shortcutIcon.href = faviconIcoHref
-
-  document.head.append(icon, shortcutIcon)
+  document.head.append(icon)
 }
 
 applyFavicons()

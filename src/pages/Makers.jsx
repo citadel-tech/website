@@ -1,109 +1,212 @@
 import { LINKS } from '../constants/links'
 import CodeBlock from '../components/ui/CodeBlock'
 import TabGroup from '../components/ui/TabGroup'
-import Badge from '../components/ui/Badge'
 
-// ─── CLI snippets ─────────────────────────────────────────────────────────────
+// ─── Code snippets ────────────────────────────────────────────────────────────
 
 const CODE_BUILD = `git clone ${LINKS.coinswap_repo}
 cd coinswap
 cargo build --release --bin makerd --bin maker-cli
-
-# Optional: install system-wide
 sudo install ./target/release/makerd /usr/local/bin/
 sudo install ./target/release/maker-cli /usr/local/bin/`
 
-const CODE_START = `# Start maker daemon (uses default ~/.coinswap/maker/ data dir)
+const CODE_MAKERD_HELP = `$ makerd --help
+Coinswap Maker Server
+
+The server requires a Bitcoin Core RPC connection running in Testnet4. It requires some
+starting balance, around 50,000 sats for Fidelity + Swap Liquidity (suggested 50,000 sats).
+So topup with at least 0.001 BTC to start all the node processes. Suggested faucet here:
+https://mempool.space/testnet4/faucet
+
+All server processes will start after the fidelity bond transaction is confirmed. This may
+take some time. Approx: 10 mins. Once the bond is confirmed, the server starts listening
+for incoming swap requests. As it performs swaps for clients, it keeps earning fees.
+
+The server is operated with the maker-cli app, for all basic wallet related operations.
+
+For more detailed usage information, please refer the Maker Doc:
+https://github.com/citadel-tech/coinswap/blob/master/docs/makerd.md
+
+This is early beta, and there are known and unknown bugs. Please report issues in the
+Project Issue Board: https://github.com/citadel-tech/coinswap/issues
+
+USAGE:
+    makerd [OPTIONS]
+
+OPTIONS:
+    -d, --data-directory <DATA_DIRECTORY>  Data directory
+                                           [default: ~/.coinswap/maker]
+    -r, --ADDRESS:PORT <ADDRESS:PORT>      Bitcoin Core RPC address
+                                           [default: 127.0.0.1:38332]
+    -z, --ZMQ <ZMQ>                        Bitcoin Core ZMQ address:port value
+                                           [default: tcp://127.0.0.1:28332]
+    -a, --USER:PASSWORD <USER:PASSWORD>    Bitcoin Core RPC authentication string
+                                           [default: user:password]
+    -t, --tor-auth <TOR_AUTH>
+    -w, --WALLET <WALLET>                  Optional wallet name. If the wallet exists,
+                                           load the wallet, else create a new wallet with
+                                           the given name. Default: maker-wallet
+    -p, --PASSWORD <PASSWORD>              Optional Password for the encryption of the wallet
+    -h, --help                             Print help information
+    -V, --version                          Print version`
+
+const CODE_START = `# Start with defaults
 makerd
 
-# Custom Bitcoin Core RPC endpoint
+# Custom Bitcoin Core RPC
 makerd -r 127.0.0.1:38332 -a user:password`
 
-const CODE_DOCKER = `git clone ${LINKS.coinswap_docker}
-cd coinswap-docker
-./docker-setup configure
-./docker-setup build
-./docker-setup start
-
-# Operate the maker inside docker
-./docker-setup maker-cli send-ping
-./docker-setup maker-cli get-balances`
-
-const CODE_CLI_REF = `maker-cli send-ping              # Health check — returns "success"
-maker-cli get-balances           # Balance by category
-maker-cli get-new-address        # Deposit address
-maker-cli show-fidelity          # Fidelity bond status + outpoint
-maker-cli show-tor-address       # Your .onion address
-maker-cli show-data-dir          # Data directory path
-maker-cli list-utxo              # All UTXOs (including fidelity)
-maker-cli list-utxo-swap         # UTXOs from completed swaps
-maker-cli list-utxo-contract     # Locked HTLC UTXOs
-maker-cli list-utxo-fidelity     # Fidelity bond UTXO
-maker-cli sync-wallet            # Sync wallet with chain state
-maker-cli send-to-address \\
-  --address <addr> \\
-  --amount <sats> \\
-  --fee <sats>                   # Send funds
-maker-cli stop                   # Graceful shutdown`
-
-const CODE_CONFIG = `# ~/.coinswap/maker/config.toml (auto-created on first run)
-network_port = 6102          # Coinswap protocol port (Tor hidden service)
-rpc_port     = 6103          # maker-cli RPC port
-socks_port   = 9050          # Tor SOCKS5 proxy
-control_port = 9051          # Tor control port
-tor_auth_password = ""
-
-min_swap_amount = 10000      # sats — reject swaps below this
-fidelity_amount = 50000      # sats locked in fidelity bond
-fidelity_timelock = 13104    # blocks (~3 months)
-connection_type = "TOR"      # TOR only in production
-
-base_fee = 100               # fixed fee per swap (sats)
-amount_relative_fee_pct = 0.1  # % of forwarded amount`
-
-const CODE_STARTUP_LOG = `INFO coinswap::maker::api  - Wallet created. Backup the mnemonic:
+const CODE_STARTUP_LOG = `INFO coinswap::wallet::api - Backup the Wallet Mnemonics:
 ["harvest","trust","catalog","degree","oxygen","business","crawl","enemy","hamster","music","this","idle"]
 
 INFO coinswap::maker::server - No active Fidelity Bonds found. Creating one.
-INFO coinswap::maker::server - Fund the wallet with at least 0.00051000 BTC at:
-INFO coinswap::maker::server -   bcrt1q...
+INFO coinswap::maker::server - Fidelity value chosen = 0.0005 BTC, Tx fee = 1000 sats
+INFO coinswap::maker::server - Fund the wallet at: bcrt1q...
 
-# After funding (~2 min block time on Mutinynet):
+# After funding (confirm on chain):
 INFO coinswap::wallet::fidelity - Fidelity Transaction confirmed at blockheight: 229349
-INFO coinswap::maker::server   - [6102] Server listening at <onion>.onion:6102
-INFO coinswap::maker::server   - [6102] Server Setup completed!!`
+INFO coinswap::maker::server  - [6102] Server listening at <onion>.onion:6102
+INFO coinswap::maker::server  - [6102] Server Setup completed!!
+INFO coinswap::maker::server  - Swap Liquidity: 950000 sats | Min: 10000 sats | Listening for requests.`
 
-// ─── Deployment tabs ──────────────────────────────────────────────────────────
+const CODE_DOCKER = `git clone ${LINKS.coinswap_repo}
+cd coinswap
+
+# Interactive setup — choose your Bitcoin + Tor mode
+./docker-setup configure
+
+# Build the coinswap image
+./docker-setup build
+
+# (Only needed if using Docker-managed Bitcoin)
+./docker-setup build-bitcoin
+
+# Start
+./docker-setup start`
+
+const CODE_DOCKER_CLI = `# Control the maker via Docker
+./docker-setup maker-cli send-ping
+./docker-setup maker-cli get-balances
+./docker-setup maker-cli show-fidelity
+./docker-setup maker-cli show-tor-address`
+
+const CODE_DASHBOARD = `git clone ${LINKS.maker_dashboard}
+cd maker-dasboard
+make build
+make run
+# Web UI at http://127.0.0.1:3000`
+
+const CODE_MAKER_CLI_HELP = `$ maker-cli --help
+A simple command line app to operate the makerd server.
+
+USAGE:
+    maker-cli [OPTIONS] <SUBCOMMAND>
+
+OPTIONS:
+    -p, --rpc-port <RPC_PORT>    RPC port of makerd  [default: 127.0.0.1:6103]
+
+SUBCOMMANDS:
+    send-ping            Health check — returns "success"
+    get-balances         Balance by category (regular, swap, contract, fidelity, spendable)
+    get-new-address      Generate a deposit address
+    show-fidelity        Fidelity bond status, outpoint, and value
+    show-tor-address     Your .onion address
+    show-data-dir        Data directory path
+    list-utxo            All UTXOs including fidelity
+    list-utxo-swap       UTXOs from completed swaps
+    list-utxo-contract   Locked HTLC UTXOs
+    list-utxo-fidelity   Fidelity bond UTXO
+    sync-wallet          Sync wallet with chain state
+    send-to-address      Send funds to an external address
+    stop                 Graceful shutdown`
+
+// ─── Docker config modes ──────────────────────────────────────────────────────
+
+const DOCKER_MODES = [
+  { bitcoin: 'Docker',      tor: 'Docker',      label: 'Full Docker',    desc: 'Everything containerized — fastest path to running' },
+  { bitcoin: 'Your node',   tor: 'Docker',      label: 'Native Bitcoin', desc: 'Reuse your existing bitcoind; Docker provides Tor' },
+  { bitcoin: 'Docker',      tor: 'Your daemon', label: 'Native Tor',     desc: 'Docker provides Bitcoin; reuse your existing Tor' },
+  { bitcoin: 'Your node',   tor: 'Your daemon', label: 'Native Both',    desc: 'Docker runs only makerd; all deps are native' },
+]
+
+// ─── Deploy tabs ──────────────────────────────────────────────────────────────
 
 const DEPLOY_TABS = [
   {
-    label: 'Native Build',
+    label: 'Docker (Recommended)',
     content: (
-      <div className="space-y-4">
+      <div className="space-y-5">
         <p className="type-small text-cream/70 font-body">
-          Build <code className="inline-code">makerd</code> and{' '}
-          <code className="inline-code">maker-cli</code> from
-          source. Requires Rust toolchain and a running Bitcoin Core node.
+          The <code className="inline-code">./docker-setup configure</code> script detects your
+          existing services and lets you mix native and containerized components. Configuration is
+          saved to <code className="inline-code">.docker-config</code> and reused on subsequent runs.
         </p>
-        <CodeBlock code={CODE_BUILD} language="bash" />
-        <CodeBlock code={CODE_START} language="bash" />
+
+        <div className="overflow-x-auto">
+          <table className="simple-table text-sm font-body">
+            <thead>
+              <tr>
+                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Mode</th>
+                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Bitcoin Core</th>
+                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Tor</th>
+                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {DOCKER_MODES.map(({ label, bitcoin, tor, desc }) => (
+                <tr key={label}>
+                  <td className="px-4 py-3 font-medium text-cream whitespace-nowrap">{label}</td>
+                  <td className="px-4 py-3"><code className="inline-code">{bitcoin}</code></td>
+                  <td className="px-4 py-3"><code className="inline-code">{tor}</code></td>
+                  <td className="px-4 py-3 text-cream/70">{desc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Setup & start</p>
+          <CodeBlock code={CODE_DOCKER} language="bash" />
+        </div>
+        <div>
+          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Operate via Docker</p>
+          <CodeBlock code={CODE_DOCKER_CLI} language="bash" />
+        </div>
+        <p className="type-meta text-cream/50 font-body">
+          Docs:{' '}
+          <a href={LINKS.maker_docker_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
+            docs/docker.md ↗
+          </a>
+        </p>
       </div>
     ),
   },
   {
-    label: 'Docker (Recommended)',
+    label: 'Native Build',
     content: (
-      <div className="space-y-4">
+      <div className="space-y-5">
         <p className="type-small text-cream/70 font-body">
-          One-command stack: bitcoind + Tor + makerd, all pre-configured and connected.
-          The setup script handles interactive configuration of ports, RPC, and Tor.
+          Build <code className="inline-code">makerd</code> and{' '}
+          <code className="inline-code">maker-cli</code> from source. Requires a Rust toolchain
+          and a running Bitcoin Core node.
         </p>
-        <CodeBlock code={CODE_DOCKER} language="bash" />
+        <div>
+          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 1 — Clone & build</p>
+          <CodeBlock code={CODE_BUILD} language="bash" />
+        </div>
+        <div>
+          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 2 — Verify</p>
+          <CodeBlock code={CODE_MAKERD_HELP} language="text" />
+        </div>
+        <div>
+          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 3 — Start</p>
+          <CodeBlock code={CODE_START} language="bash" />
+        </div>
         <p className="type-meta text-cream/50 font-body">
-          Repo:{' '}
-          <a href={LINKS.coinswap_docker} target="_blank" rel="noopener noreferrer"
-            className="simple-link">
-            citadel-tech/coinswap-docker ↗
+          Docs:{' '}
+          <a href={LINKS.makerd_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
+            docs/makerd.md ↗
           </a>
         </p>
       </div>
@@ -114,26 +217,86 @@ const DEPLOY_TABS = [
     content: (
       <div className="space-y-4">
         <p className="type-small text-cream/70 font-body">
-          A web interface to monitor balances, view swap history, and manage your node.
-          Runs alongside a running <code className="inline-code">makerd</code> instance.
+          A browser-based UI for monitoring balances, swap history, and managing your node.
+          Runs alongside a live <code className="inline-code">makerd</code> instance and connects
+          to its RPC port (<code className="inline-code">127.0.0.1:6103</code>).
         </p>
-        <a href={LINKS.maker_dashboard} target="_blank" rel="noopener noreferrer"
-          className="type-small simple-link inline-flex items-center gap-2 px-0 py-0 font-body font-medium">
-          citadel-tech/maker-dashboard ↗
-        </a>
+        <CodeBlock code={CODE_DASHBOARD} language="bash" />
+        <p className="type-meta text-cream/50 font-body">
+          Repo:{' '}
+          <a href={LINKS.maker_dashboard} target="_blank" rel="noopener noreferrer" className="simple-link">
+            citadel-tech/maker-dashboard ↗
+          </a>
+        </p>
       </div>
     ),
   },
 ]
 
-// ─── Balance types ────────────────────────────────────────────────────────────
+// ─── maker-cli subcommands ────────────────────────────────────────────────────
+
+const SUBCOMMANDS = [
+  { cmd: 'send-ping',          desc: 'Health check — returns "success" when server is ready' },
+  { cmd: 'get-balances',       desc: 'Balance by category (regular, swap, contract, fidelity, spendable)' },
+  { cmd: 'get-new-address',    desc: 'Generate a deposit address' },
+  { cmd: 'show-fidelity',      desc: 'Fidelity bond status, outpoint, amount, and value' },
+  { cmd: 'show-tor-address',   desc: 'Your .onion address as seen by takers' },
+  { cmd: 'show-data-dir',      desc: 'Data directory path' },
+  { cmd: 'list-utxo',          desc: 'All UTXOs including fidelity bond' },
+  { cmd: 'list-utxo-swap',     desc: 'UTXOs received from completed swaps' },
+  { cmd: 'list-utxo-contract', desc: 'Locked HTLC UTXOs from in-flight swaps' },
+  { cmd: 'list-utxo-fidelity', desc: 'Fidelity bond UTXO' },
+  { cmd: 'sync-wallet',        desc: 'Sync wallet with current chain state' },
+  { cmd: 'send-to-address',    desc: 'Send funds to an external address' },
+  { cmd: 'stop',               desc: 'Graceful shutdown of makerd' },
+]
+
+// ─── Balance categories ───────────────────────────────────────────────────────
 
 const BALANCE_TYPES = [
-  { type: 'regular',   desc: 'Seed wallet coins — fully spendable' },
-  { type: 'swap',      desc: '2-of-2 multisig coins from completed swaps' },
-  { type: 'contract',  desc: 'Timelocked HTLC outputs — in-flight swap contracts' },
-  { type: 'fidelity',  desc: 'Bond coins — locked until timelock expires, not spendable' },
+  { type: 'regular',   desc: 'Seed wallet coins — single-sig, fully spendable' },
+  { type: 'swap',      desc: '2-of-2 multisig coins received from completed swaps' },
+  { type: 'contract',  desc: 'Timelocked HTLC outputs from in-flight swaps' },
+  { type: 'fidelity',  desc: 'Bond coins — timelocked, not spendable until expiry' },
   { type: 'spendable', desc: 'regular + swap (excludes contract and fidelity)' },
+]
+
+// ─── Maker Dashboard screenshots ─────────────────────────────────────────────
+
+const DASHBOARD_SHOTS = [
+  { src: `${import.meta.env.BASE_URL}maker-db-1.png`, caption: 'maker-db-1.png — dashboard overview' },
+  { src: `${import.meta.env.BASE_URL}maker-db-2.png`, caption: 'maker-db-2.png — balances and status' },
+  { src: `${import.meta.env.BASE_URL}maker-db-3.png`, caption: 'maker-db-3.png — swap activity' },
+  { src: `${import.meta.env.BASE_URL}maker-db-4.png`, caption: 'maker-db-4.png — node management' },
+]
+
+// ─── What is a Maker cards ────────────────────────────────────────────────────
+
+const MAKER_CARDS = [
+  {
+    label: 'Earn Passively',
+    heading: 'Collect fees on every swap routed through you',
+    body: 'Makers earn a fixed base_fee plus a percentage of each swap amount they forward. No interaction required — takers discover you automatically and pay fees directly. Your balance grows as the network grows.',
+  },
+  {
+    label: 'Lock Liquidity',
+    heading: 'Commit capital to unlock swap traffic',
+    body: 'You post a fidelity bond (~50,000 sats, timelocked ~3 months) and keep swap liquidity in your wallet. More capital locked = higher bond value = more takers choose your node. The locked capital is always yours — it just cannot be spent until the timelock expires.',
+  },
+  {
+    label: 'Backbone of the Market',
+    heading: 'Every hop in every swap routes through a maker',
+    body: 'Makers are the infrastructure CoinSwap runs on. No active management needed — makerd handles bond creation, renewal, and directory registration automatically. More makers means stronger privacy guarantees for everyone.',
+  },
+]
+
+// ─── Bond value factors ───────────────────────────────────────────────────────
+
+const BOND_FACTORS = [
+  { factor: 'Larger locked amount',                effect: 'Higher bond value' },
+  { factor: 'Longer remaining locktime',           effect: 'Higher bond value' },
+  { factor: 'Approaching expiry',                  effect: 'Value decays toward zero' },
+  { factor: 'One strong bond vs. many small ones', effect: 'Concentrated capital ranks higher' },
 ]
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -142,55 +305,159 @@ export default function Makers() {
   return (
     <>
       <title>Makers — CoinSwap</title>
-      <meta name="description" content="Run a CoinSwap maker node. Post a fidelity bond, register on the directory, and earn fees passively while strengthening Bitcoin privacy for everyone." />
+      <meta name="description" content="Run a CoinSwap maker node. Post a fidelity bond, earn fees passively on every swap routed through you, and strengthen Bitcoin privacy without active maintenance." />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
+      <div className="site-shell py-8 space-y-7">
 
         {/* ── Hero ── */}
         <section>
-          <div className="flex flex-wrap items-center gap-2 mb-4">
-            <Badge variant="orange">Live on Mutinynet</Badge>
-            <Badge variant="amber">Mainnet: use with caution</Badge>
-          </div>
           <h1 className="type-page-title font-display font-bold text-cream mb-3">
             Earn Fees. Strengthen Privacy.
           </h1>
-          <p className="type-subtitle text-cream/60 font-body max-w-2xl">
-            Run a maker node. Post a fidelity bond. Route swaps passively. You never touch user funds —
-            the protocol is trustless by design.
+          <p className="type-subtitle text-cream/60 font-body max-w-4xl">
+            Run a maker node, post a fidelity bond, and route swaps passively.
+            You never touch user funds — the protocol is trustless by design.
+            Your node earns while you sleep.
           </p>
         </section>
 
         {/* ── What is a Maker ── */}
         <section className="section-rule">
-          <h2 className="type-section-title font-display font-semibold text-cream mb-3">What is a Maker?</h2>
-          <p className="type-body text-cream/70 font-body max-w-2xl mb-4">
-            Makers are always-on servers that route coinswaps for takers and collect fees.
-            They follow the <strong className="text-cream">smart-client-dumb-server</strong> model —
-            the taker handles protocol coordination while makers act as lightweight daemons responding
-            to requests. You lock Bitcoin in a <strong className="text-cream">fidelity bond</strong> to
-            register with the directory, then your node runs passively: takers discover you, route
-            swaps through you, and your balance grows.
-          </p>
-          <div className="inline-block border-l border-dotted border-black/20 pl-4">
-            <p className="type-small text-cream font-body font-medium">
-              The model is: <span className="text-cream">install → fund → forget.</span>
+          <p className="section-label mb-3">// Role</p>
+          <h2 className="type-section-title font-display font-semibold text-cream mb-5">What is a Maker?</h2>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {MAKER_CARDS.map(({ label, heading, body }) => (
+              <div key={label} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+                <p className="mb-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-cream/45">{label}</p>
+                <h3 className="mb-2 font-display text-lg font-semibold text-cream">{heading}</h3>
+                <p className="type-small font-body text-cream/68">{body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── No Active Maintenance ── */}
+        <section className="section-rule">
+          <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+            <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-green/70 mb-2">Install → Fund → Forget</p>
+            <p className="type-body font-body text-cream/75">
+              <code className="inline-code">makerd</code> handles everything automatically: wallet
+              creation, fidelity bond creation and renewal, directory registration, and swap routing.
+              Once running, it listens for swap requests around the clock with no intervention required.
             </p>
           </div>
         </section>
 
-        {/* ── Requirements ── */}
+        {/* ── Fidelity Bonds ── */}
         <section className="section-rule">
-          <h2 className="type-section-title font-display font-semibold text-cream mb-4">Requirements</h2>
+          <p className="section-label mb-3">// Sybil Resistance</p>
+          <h2 className="type-section-title font-display font-semibold text-cream mb-4">Fidelity Bonds</h2>
+
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.9fr)] lg:items-start">
+            <div>
+              <p className="type-body text-cream/70 font-body max-w-2xl mb-5">
+                A fidelity bond is a Bitcoin UTXO time-locked for{' '}
+                <code className="inline-code">fidelity_timelock</code> blocks (default 13,104 ≈ 3 months).
+                Takers rank makers by bond value — the higher your value, the more swap traffic routes
+                through you. Bonds make Sybil attacks expensive: faking multiple maker identities requires
+                real locked capital behind each one.
+              </p>
+
+              <div className="space-y-2">
+                {[
+                  <><code className="inline-code">makerd</code> creates the bond automatically once the wallet is funded</>,
+                  <>Bond value decays as expiry approaches — <code className="inline-code">makerd</code> auto-renews before it drops too low</>,
+                  <><code className="inline-code">directoryd</code> verifies the fidelity proof before listing your <code className="inline-code">.onion</code> address</>,
+                  <>Expired bonds are redeemed and a new bond is created automatically</>,
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="mt-0.5 shrink-0 text-cream font-mono">→</span>
+                    <p className="type-small font-body text-cream/70">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="simple-table text-sm font-body">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Factor</th>
+                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Effect</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {BOND_FACTORS.map(({ factor, effect }) => (
+                    <tr key={factor}>
+                      <td className="px-4 py-3 text-cream/70">{factor}</td>
+                      <td className="px-4 py-3 text-cream/70">{effect}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Choose Your Method ── */}
+        <section className="section-rule">
+          <p className="section-label mb-3">// Get Started</p>
+          <h2 className="type-section-title font-display font-semibold text-cream mb-5">Choose Your Method</h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+              <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-green/70 mb-2">[ DOCKER ]</p>
+              <h3 className="font-display text-xl font-semibold text-cream mb-2">Full Stack</h3>
+              <p className="type-small font-body text-cream/68 mb-4 flex-1">
+                Pre-configured bitcoind + Tor + makerd. Mix native and Docker services to match
+                your existing setup. Recommended for new operators.
+              </p>
+              <p className="type-meta text-cream/45 font-mono">./docker-setup configure</p>
+            </div>
+            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+              <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-orange/70 mb-2">[ NATIVE ]</p>
+              <h3 className="font-display text-xl font-semibold text-cream mb-2">From Source</h3>
+              <p className="type-small font-body text-cream/68 mb-4 flex-1">
+                Build <code className="inline-code">makerd</code> and{' '}
+                <code className="inline-code">maker-cli</code> with cargo.
+                Full control, system-wide binaries, no Docker dependency.
+              </p>
+              <p className="type-meta text-cream/45 font-mono">cargo build --release</p>
+            </div>
+            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+              <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-blue-l/70 mb-2">[ DASHBOARD ]</p>
+              <h3 className="font-display text-xl font-semibold text-cream mb-2">Web UI</h3>
+              <p className="type-small font-body text-cream/68 mb-4 flex-1">
+                Browser-based interface for monitoring balances, swap history, and node management.
+                Runs alongside a live <code className="inline-code">makerd</code> instance.
+              </p>
+              <p className="type-meta text-cream/45 font-mono">make build &amp;&amp; make run</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Prerequisites ── */}
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-4">Prerequisites</h2>
           <ul className="space-y-3">
             {[
-              'A server with stable uptime (VPS or home server with reliable internet)',
-              'Bitcoin Core synced on Mutinynet (custom signet) for testing, mainnet when stable',
-              'Tor installed and running — all maker communication happens over .onion hidden services',
               <>
-                <strong className="text-cream">~75,000 sats</strong> to start: 50,000 sats fidelity bond +
-                1,000 sats bond tx fee + 10,000 sats minimum swap liquidity (suggest 0.001 BTC total)
+                <strong className="text-cream">Bitcoin Core</strong> running on{' '}
+                <a href={LINKS.mutinynet} target="_blank" rel="noopener noreferrer" className="simple-link">Mutinynet</a>
+                {' '}(custom signet) for testing — synced, non-pruned,{' '}
+                <code className="inline-code">-txindex</code> enabled
               </>,
+              <>
+                <strong className="text-cream">Tor</strong> running locally — all maker communication
+                happens over <code className="inline-code">.onion</code> hidden services via SOCKS5.{' '}
+                <a href={LINKS.tor_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
+                  Setup guide ↗
+                </a>
+              </>,
+              <>
+                <strong className="text-cream">~75,000+ sats</strong> to start: 50,000 sats fidelity
+                bond + 1,000 sats bond tx fee + swap liquidity. Suggest funding with at least 0.001 BTC.
+              </>,
+              'Rust toolchain (cargo) — native build path only',
             ].map((item, i) => (
               <li key={i} className="type-small flex items-start gap-3 text-cream/70 font-body">
                 <span className="type-meta mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-black/15 font-semibold text-cream">{i + 1}</span>
@@ -200,83 +467,118 @@ export default function Makers() {
           </ul>
         </section>
 
-        {/* ── Fidelity Bonds ── */}
+        {/* ── Management Options ── */}
         <section className="section-rule">
-          <h2 className="type-section-title font-display font-semibold text-cream mb-3">How Fidelity Bonds Work</h2>
-          <p className="type-body text-cream/70 font-body max-w-2xl mb-4">
-            A fidelity bond is a Bitcoin UTXO time-locked for{' '}
-            <code className="inline-code">fidelity_timelock</code>{' '}
-            blocks (default ~3 months). The longer the lock and the larger the amount, the higher your
-            <strong className="text-cream"> bond value</strong> — the reputation metric takers use to
-            rank and select makers. Higher bond value = more swap traffic. Bonds raise the economic cost
-            of Sybil attacks: faking a maker network requires real, locked capital.
-          </p>
-          <ul className="space-y-2">
-            {[
-              <><code className="inline-code">makerd</code> creates the fidelity bond automatically when the wallet is funded</>,
-              <>Bond value decays as the timelock approaches expiry — <code className="inline-code">makerd</code> auto-renews before it drops too low</>,
-              <><code className="inline-code">directoryd</code> verifies the fidelity proof before registering your <code className="inline-code">.onion</code> address</>,
-              <>Expired bonds can be redeemed using <code className="inline-code">maker-cli</code></>,
-            ].map((item, i) => (
-              <li key={i} className="type-small flex items-start gap-3 text-cream/70 font-body">
-                <span className="mt-0.5 shrink-0 text-cream">→</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* ── Deployment ── */}
-        <section className="section-rule">
-          <h2 className="type-section-title font-display font-semibold text-cream mb-5">Deployment</h2>
+          <h2 className="type-section-title font-display font-semibold text-cream mb-5">Setup &amp; Management</h2>
           <TabGroup tabs={DEPLOY_TABS} />
         </section>
 
-        {/* ── Startup process ── */}
+        {/* ── Maker Dashboard Screenshots ── */}
         <section className="section-rule">
-          <h2 className="type-section-title font-display font-semibold text-cream mb-3">Startup Process</h2>
+          <p className="section-label mb-3">// Web UI</p>
+          <h2 className="type-section-title font-display font-semibold text-cream mb-2">Maker Dashboard</h2>
+          <p className="type-small text-cream/60 font-body mb-5">
+            A browser-based dashboard for tracking balances, swap history, fidelity bond state,
+            and node status while <code className="inline-code">makerd</code> is running.{' '}
+            <a href={LINKS.maker_dashboard} target="_blank" rel="noopener noreferrer" className="simple-link">
+              citadel-tech/maker-dashboard ↗
+            </a>
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            {DASHBOARD_SHOTS.map(({ src, caption }) => (
+              <div key={caption} className="border border-dotted border-cream/15 bg-black/30 rounded overflow-hidden">
+                <img
+                  src={src}
+                  alt={caption}
+                  className="w-full block"
+                  loading="lazy"
+                />
+                <p className="type-caption font-mono text-cream/35 px-3 py-2">{caption}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Startup Process ── */}
+        <section className="section-rule">
+          <p className="section-label mb-3">// Startup Process</p>
+          <h2 className="type-section-title font-display font-semibold text-cream mb-3">Makerd Startup</h2>
           <p className="type-small text-cream/70 font-body mb-4">
-            On first run, <code className="inline-code">makerd</code> creates
-            a wallet, prints the mnemonic for backup, then waits for funding. Once you deposit coins, it
-            automatically creates the fidelity bond transaction, waits for confirmation (~2 min on Mutinynet),
-            and starts listening for swap requests.
+            On first run, <code className="inline-code">makerd</code> creates a wallet and prints
+            the mnemonic. Once you fund the address it provides, it automatically creates the
+            fidelity bond, waits for confirmation, then starts listening for swap requests.
           </p>
           <CodeBlock code={CODE_STARTUP_LOG} language="bash" />
           <p className="type-meta text-cream/40 font-body mt-2">
-            Back up the mnemonic immediately — it's only shown once.
+            Back up the mnemonic immediately — it is only shown once.
           </p>
         </section>
 
-        {/* ── maker-cli Reference ── */}
+        {/* ── makerd & maker-cli Reference ── */}
         <section className="section-rule">
-          <h2 className="type-section-title font-display font-semibold text-cream mb-4">
-            <code className="font-mono text-cream text-2xl">maker-cli</code> Reference
+          <h2 className="type-section-title font-display font-semibold text-cream mb-5">
+            makerd &amp; maker-cli Reference
           </h2>
-          <p className="type-small text-cream/60 font-body mb-3">
-            <code className="inline-code">maker-cli</code> is
-            the RPC client for <code className="inline-code">makerd</code>.
-            It only responds after the server has fully completed setup (fidelity bond confirmed).
-          </p>
-          <CodeBlock code={CODE_CLI_REF} language="bash" />
-          <p className="text-cream/40 text-sm font-body mt-2">
-            Default RPC port: <code className="font-mono">127.0.0.1:6103</code>. Override with <code className="font-mono">-p &lt;port&gt;</code>.
-          </p>
+
+          <div className="mb-6">
+            <p className="section-label mb-3">// makerd help</p>
+            <CodeBlock code={CODE_MAKERD_HELP} language="text" />
+            <p className="type-meta text-cream/40 font-body mt-2">
+              Full docs:{' '}
+              <a href={LINKS.makerd_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
+                docs/makerd.md ↗
+              </a>
+            </p>
+          </div>
+
+          <div>
+            <p className="section-label mb-3">// maker-cli commands</p>
+            <CodeBlock code={CODE_MAKER_CLI_HELP} language="text" />
+            <div className="overflow-x-auto mt-4">
+              <table className="simple-table text-sm font-body">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Subcommand</th>
+                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SUBCOMMANDS.map(({ cmd, desc }) => (
+                    <tr key={cmd}>
+                      <td className="px-4 py-3">
+                        <code className="inline-code whitespace-nowrap">{cmd}</code>
+                      </td>
+                      <td className="px-4 py-3 text-cream/70">{desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="type-meta text-cream/40 font-body mt-2">
+              RPC port default: <code className="inline-code">127.0.0.1:6103</code>. Override with{' '}
+              <code className="inline-code">-p &lt;port&gt;</code>.{' '}
+              Full docs:{' '}
+              <a href={LINKS.maker_cli_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
+                docs/maker-cli.md ↗
+              </a>
+            </p>
+          </div>
         </section>
 
-        {/* ── Balance Types ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-4">Balance Categories</h2>
-          <div className="overflow-x-auto rounded-lg border border-blue/30">
-            <table className="w-full text-sm font-body">
+        {/* ── Balance Categories ── */}
+        <section className="section-rule">
+          <h2 className="type-section-title font-display font-semibold text-cream mb-4">Balance Categories</h2>
+          <div className="overflow-x-auto">
+            <table className="simple-table text-sm font-body">
               <thead>
-                <tr className="border-b border-blue/30 bg-blue/10">
+                <tr>
                   <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Type</th>
                   <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
                 </tr>
               </thead>
               <tbody>
                 {BALANCE_TYPES.map(({ type, desc }) => (
-                  <tr key={type} className="border-b border-blue/10 last:border-0 hover:bg-white/2 transition-colors">
+                  <tr key={type}>
                     <td className="px-4 py-3">
                       <code className="inline-code">{type}</code>
                     </td>
@@ -288,60 +590,40 @@ export default function Makers() {
           </div>
         </section>
 
-        {/* ── Config ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <h2 className="font-display text-2xl font-semibold text-cream mb-3">Config & Data</h2>
-          <div className="grid sm:grid-cols-3 gap-4 mb-4">
-            {[
-              { label: 'Data directory', value: '~/.coinswap/maker/',    note: 'All maker state lives here' },
-              { label: 'Wallet',         value: 'maker-wallet',           note: 'Encrypted — backup the mnemonic on first run' },
-              { label: 'Network port',   value: ':6102',                  note: 'Coinswap protocol — exposed via Tor hidden service' },
-            ].map(({ label, value, note }) => (
-              <div key={label} className="rounded-lg border border-blue/30 bg-blue/5 p-4">
-                <p className="text-cream/40 text-sm font-body uppercase tracking-widest mb-1">{label}</p>
-                <p className="font-mono text-cream text-sm mb-1">{value}</p>
-                <p className="text-cream/50 text-sm font-body">{note}</p>
-              </div>
-            ))}
-          </div>
-          <CodeBlock code={CODE_CONFIG} language="toml" />
-        </section>
-
-        {/* ── Mutinynet ── */}
-        <section className="border-t border-blue/20 pt-8">
-          <div className="border-t border-dotted border-black/15 pt-5">
-            <div className="flex items-start gap-4">
-              <span className="text-2xl">⚡</span>
-              <div>
-                <h2 className="font-display text-xl font-semibold text-cream mb-2">
-                  Test on Mutinynet (Signet)
-                </h2>
-                <p className="text-cream/70 font-body text-sm leading-relaxed mb-4">
-                  Start on Mutinynet — the live coinswap marketplace on custom signet with ~2-min blocks.
-                  Get test coins for your fidelity bond from the faucet. The marketplace is only accessible
-                  on this network (mainnet has no directory yet).
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <a href={LINKS.mutinynet} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
-                    Explorer ↗
-                  </a>
-                  <a href={LINKS.mutinynet_faucet} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
-                    Faucet ↗
-                  </a>
-                </div>
+        {/* ── Test on Mutinynet ── */}
+        <section className="section-rule">
+          <div className="flex items-start gap-4">
+            <span className="text-2xl">⚡</span>
+            <div>
+              <h2 className="font-display text-xl font-semibold text-cream mb-2">
+                Test on Mutinynet (Signet)
+              </h2>
+              <p className="text-cream/70 font-body text-sm leading-relaxed mb-4">
+                Start on Mutinynet — the live CoinSwap marketplace on custom signet with ~2-min blocks.
+                Get test coins from the faucet to fund your fidelity bond and start routing swaps.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a href={LINKS.mutinynet} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
+                  Explorer ↗
+                </a>
+                <a href={LINKS.mutinynet_faucet} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
+                  Faucet ↗
+                </a>
               </div>
             </div>
           </div>
         </section>
 
         {/* ── Footer links ── */}
-        <section className="border-t border-blue/20 pt-6 flex flex-wrap gap-4">
+        <section className="section-rule flex flex-wrap gap-4">
           {[
             { href: LINKS.maker_dashboard,   label: 'Maker Dashboard' },
-            { href: LINKS.coinswap_docker,   label: 'Docker stack' },
-            { href: LINKS.coinswap_repo,     label: 'Coinswap core repo' },
+            { href: LINKS.makerd_docs,       label: 'makerd docs' },
+            { href: LINKS.maker_cli_docs,    label: 'maker-cli docs' },
+            { href: LINKS.maker_docker_docs, label: 'Docker docs' },
+            { href: LINKS.coinswap_repo,     label: 'Coinswap core' },
             { href: LINKS.issues,            label: 'Open an issue' },
           ].map(({ href, label }) => (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer"
@@ -350,6 +632,7 @@ export default function Makers() {
             </a>
           ))}
         </section>
+
       </div>
     </>
   )
