@@ -26,7 +26,7 @@
   - `/how-it-works` -> HowItWorks
   - `/takers` -> Takers
   - `/makers` -> Makers
-  - `/apps` -> AppsTools
+  - `/docs` -> Docs
   - `*` -> NotFound
 - Layout is shared through `src/components/layout/Layout.jsx` and wraps `MotionBackground`, `Header`, `Footer`, and the routed page content.
 
@@ -100,7 +100,7 @@
 - `src/pages/HowItWorks.jsx`
 - `src/pages/Takers.jsx`
 - `src/pages/Makers.jsx`
-- `src/pages/AppsTools.jsx`
+- `src/pages/Docs.jsx`
 
 ## Working Guidance
 - Preserve the current tone: technical, confident, privacy-focused, and builder-friendly.

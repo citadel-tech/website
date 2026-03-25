@@ -43,11 +43,10 @@ src/
 │   ├── layout/    Header.jsx, Footer.jsx, Layout.jsx
 │   ├── ui/        Button, Badge, Card, CodeBlock, TabGroup, Collapsible
 │   └── home/      Hero, StatusBanner, RoleCards, SwapFlowDiagram, QuickLinks
-├── pages/         Home, HowItWorks, Takers, Makers, AppsTools, NotFound
+├── pages/         Home, HowItWorks, Takers, Makers, Docs, NotFound
 ├── constants/     links.js   ← all external URLs live here
 ├── hooks/         useLatestRelease.js
 └── assets/icons/
-docs/              page content source (markdown)
 ```
 
 ## Pages
@@ -58,7 +57,7 @@ docs/              page content source (markdown)
 | `/how-it-works` | How It Works  |
 | `/takers`       | Takers        |
 | `/makers`       | Makers        |
-| `/apps`         | Apps & Tools  |
+| `/docs`         | Docs          |
 
 ## Links
 

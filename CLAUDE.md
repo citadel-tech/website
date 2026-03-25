@@ -43,7 +43,7 @@
 | `/how-it-works` | HowItWorks    |
 | `/takers`       | Takers        |
 | `/makers`       | Makers        |
-| `/apps`         | AppsTools     |
+| `/docs`         | Docs          |
 | `*`             | NotFound      |
 
 ## Project Structure
@@ -57,7 +57,7 @@ src/
 │                  Collapsible.jsx, TabGroup.jsx
 ├── constants/     links.js
 ├── hooks/         useLatestRelease.js
-├── pages/         AppsTools.jsx, Home.jsx, HowItWorks.jsx,
+├── pages/         Docs.jsx, Home.jsx, HowItWorks.jsx,
 │                  Makers.jsx, NotFound.jsx, Takers.jsx
 ├── App.jsx
 ├── index.css

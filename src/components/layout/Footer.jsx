@@ -6,7 +6,7 @@ const INTERNAL = [
   { to: '/how-it-works', label: 'how-it-works' },
   { to: '/takers',       label: 'takers' },
   { to: '/makers',       label: 'makers' },
-  { to: '/apps',         label: 'apps' },
+  { to: '/docs',         label: 'docs' },
 ]
 
 const EXTERNAL = [
