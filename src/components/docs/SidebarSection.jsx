@@ -7,7 +7,7 @@ export default function SidebarSection({ label, children, defaultOpen = false })
     <div className="border-b border-dotted border-black/12">
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex w-full items-center justify-between px-4 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-black/60 transition-colors hover:text-black"
+        className="flex w-full items-center justify-between px-4 py-3 font-mono text-lg font-semibold uppercase tracking-[0.14em] text-black/60 transition-colors hover:text-black"
       >
         {label}
         <svg

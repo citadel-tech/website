@@ -3,6 +3,58 @@ import { marked } from 'marked'
 import CodeBlock from '../ui/CodeBlock.jsx'
 import { useDocContent } from '../../hooks/useDocContent.js'
 
+function resolveDocUrl(baseUrl, target) {
+  if (!target) return target
+
+  try {
+    return new URL(target, baseUrl).toString()
+  } catch {
+    return target
+  }
+}
+
+function shouldResolveUrl(target) {
+  if (!target) return false
+
+  return !/^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(target)
+}
+
+function resolveHtmlAssetUrls(html, baseUrl) {
+  return html.replace(
+    /\b(src|href)=("([^"]*)"|'([^']*)')/gi,
+    (match, attr, quotedValue, doubleQuoted, singleQuoted) => {
+      const value = doubleQuoted ?? singleQuoted ?? ''
+
+      if (!shouldResolveUrl(value)) return match
+
+      const resolved = resolveDocUrl(baseUrl, value)
+      const quote = quotedValue[0]
+      return `${attr}=${quote}${resolved}${quote}`
+    }
+  )
+}
+
+function renderMarkdown(content, baseUrl) {
+  const renderer = new marked.Renderer()
+
+  renderer.image = ({ href, title, text }) => {
+    const src = resolveDocUrl(baseUrl, href)
+    const titleAttr = title ? ` title="${title}"` : ''
+    const alt = text ?? ''
+    return `<img src="${src}" alt="${alt}"${titleAttr} />`
+  }
+
+  renderer.link = function ({ href, title, tokens }) {
+    const resolvedHref = resolveDocUrl(baseUrl, href)
+    const titleAttr = title ? ` title="${title}"` : ''
+    const text = this.parser.parseInline(tokens)
+    return `<a href="${resolvedHref}"${titleAttr}>${text}</a>`
+  }
+
+  const html = marked(content, { gfm: true, breaks: false, renderer })
+  return resolveHtmlAssetUrls(html, baseUrl)
+}
+
 function GitHubLink({ url }) {
   return (
     <a
@@ -122,7 +174,7 @@ function MarkdownContent({ url, repoUrl }) {
   if (error)   return <ErrorMessage message={error} />
   if (!content) return null
 
-  const html = marked(content, { gfm: true, breaks: false })
+  const html = renderMarkdown(content, url)
 
   return (
     <div>
