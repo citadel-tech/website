@@ -6,7 +6,7 @@ export const LINKS = {
   github_org:       "https://github.com/citadel-tech",
   coinswap_repo:    "https://github.com/citadel-tech/coinswap",
   taker_app:        "https://github.com/citadel-tech/taker-app",
-  maker_dashboard:  "https://github.com/citadel-tech/maker-dasboard",
+  maker_dashboard:  "https://github.com/citadel-tech/maker-dashboard",
   coinswap_docker:  "https://github.com/citadel-tech/coinswap-docker",
   coinswap_ffi:     "https://github.com/citadel-tech/coinswap-ffi",
   mill_io:          "https://github.com/citadel-tech/mill-io",
@@ -45,7 +45,7 @@ export const LINKS = {
   docs_spec_base:             'https://raw.githubusercontent.com/citadel-tech/Coinswap-Protocol-Specification/main',
   docs_ffi_base:              'https://raw.githubusercontent.com/citadel-tech/coinswap-ffi/main',
   docs_taker_app_usage:       'https://raw.githubusercontent.com/citadel-tech/taker-app/main/docs/usage.md',
-  docs_maker_dashboard_arch:  'https://raw.githubusercontent.com/citadel-tech/maker-dasboard/main/docs/ARCH.md',
+  docs_maker_dashboard_arch:  'https://raw.githubusercontent.com/citadel-tech/maker-dashboard/main/docs/ARCH.md',
 
   // FFI GitHub repo links (for "view on GitHub" buttons)
   ffi_js_repo:     'https://github.com/citadel-tech/coinswap-ffi/tree/main/coinswap-js',

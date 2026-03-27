@@ -10,7 +10,7 @@ export default function Docs() {
     document.title = 'Docs | CoinSwap'
     const meta = document.querySelector('meta[name="description"]')
     if (meta) {
-      meta.setAttribute('content', 'CoinSwap documentation -- manuals, protocol specifications, code examples, FFI bindings, and GUI guides for the privacy-preserving Bitcoin swap protocol.')
+      meta.setAttribute('content', 'CoinSwap documentation — manuals, protocol specifications, code examples, FFI bindings, and GUI guides for the privacy-preserving Bitcoin swap protocol.')
     }
   }, [])
 

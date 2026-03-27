@@ -11,23 +11,23 @@ sudo install ./target/release/makerd /usr/local/bin/
 sudo install ./target/release/maker-cli /usr/local/bin/`
 
 const CODE_MAKERD_HELP = `$ makerd --help
-Coinswap Maker Server
+CoinSwap Maker Server
 
 The server requires a Bitcoin Core RPC connection running in Testnet4. It requires some
 starting balance, around 50,000 sats for Fidelity + Swap Liquidity (suggested 50,000 sats).
-So topup with at least 0.001 BTC to start all the node processes. Suggested faucet here:
+So top up with at least 0.001 BTC to start all the node processes. Suggested faucet here:
 https://mempool.space/testnet4/faucet
 
 All server processes will start after the fidelity bond transaction is confirmed. This may
-take some time. Approx: 10 mins. Once the bond is confirmed, the server starts listening
+take some time. Approximately 10 minutes. Once the bond is confirmed, the server starts listening
 for incoming swap requests. As it performs swaps for clients, it keeps earning fees.
 
 The server is operated with the maker-cli app, for all basic wallet related operations.
 
-For more detailed usage information, please refer the Maker Doc:
+For more detailed usage information, please refer to the Maker docs:
 https://github.com/citadel-tech/coinswap/blob/master/docs/makerd.md
 
-This is early beta, and there are known and unknown bugs. Please report issues in the
+This is an early beta, and there are known and unknown bugs. Please report issues in the
 Project Issue Board: https://github.com/citadel-tech/coinswap/issues
 
 USAGE:
@@ -91,13 +91,13 @@ const CODE_DOCKER_CLI = `# Control the maker via Docker
 ./docker-setup maker-cli show-tor-address`
 
 const CODE_DASHBOARD = `git clone ${LINKS.maker_dashboard}
-cd maker-dasboard
+cd maker-dashboard
 make build
 make run
 # Web UI at http://127.0.0.1:3000`
 
 const CODE_MAKER_CLI_HELP = `$ maker-cli --help
-A simple command line app to operate the makerd server.
+A simple command-line app for operating the makerd server.
 
 USAGE:
     maker-cli [OPTIONS] <SUBCOMMAND>
@@ -286,7 +286,7 @@ const MAKER_CARDS = [
   {
     label: 'Backbone of the Market',
     heading: 'Every hop in every swap routes through a maker',
-    body: 'Makers are the infrastructure CoinSwap runs on. No active management needed — makerd handles bond creation, renewal, and directory registration automatically. More makers means stronger privacy guarantees for everyone.',
+    body: 'Makers are the infrastructure CoinSwap runs on. No active management needed — makerd handles bond creation, renewal, and directory registration automatically. More makers mean stronger privacy guarantees for everyone.',
   },
 ]
 
@@ -599,7 +599,7 @@ export default function Makers() {
                 Test on Mutinynet (Signet)
               </h2>
               <p className="text-cream/70 font-body text-sm leading-relaxed mb-4">
-                Start on Mutinynet — the live CoinSwap marketplace on custom signet with ~2-min blocks.
+                Start on Mutinynet — the live CoinSwap marketplace on custom signet with ~2-minute blocks.
                 Get test coins from the faucet to fund your fidelity bond and start routing swaps.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -623,7 +623,7 @@ export default function Makers() {
             { href: LINKS.makerd_docs,       label: 'makerd docs' },
             { href: LINKS.maker_cli_docs,    label: 'maker-cli docs' },
             { href: LINKS.maker_docker_docs, label: 'Docker docs' },
-            { href: LINKS.coinswap_repo,     label: 'Coinswap core' },
+            { href: LINKS.coinswap_repo,     label: 'CoinSwap core' },
             { href: LINKS.issues,            label: 'Open an issue' },
           ].map(({ href, label }) => (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer"

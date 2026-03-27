@@ -99,7 +99,7 @@ function GetStartedPanel() {
           CoinSwap Documentation
         </h1>
         <p className="type-body mt-4 max-w-2xl text-black/65">
-          Everything you need to understand, deploy, and build on the CoinSwap protocol --
+          Everything you need to understand, deploy, and build on the CoinSwap protocol —
           a non-custodial, atomic, multi-hop Bitcoin swap system built on Taproot and MuSig2.
         </p>
       </div>

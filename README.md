@@ -1,6 +1,6 @@
-# Coinswap Website
+# CoinSwap Website
 
-Marketing and documentation site for [Coinswap](https://github.com/citadel-tech/coinswap) — a privacy-preserving Bitcoin swap protocol using Taproot + Musig2.
+Marketing and documentation site for [CoinSwap](https://github.com/citadel-tech/coinswap) — an Atomic-Swap protocol using Taproot + MuSig2 over a decentralized censorship-resistant marketplace.
 
 ## Stack
 

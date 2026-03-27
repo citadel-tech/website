@@ -9,13 +9,13 @@ const CARDS = [
     label: 'Discovery',
     value: 'Market Hosted on Bitcoin + Nostr',
     description:
-      'The market is hosted on Bitcoin Blockchain at the most minimal footprint. The market is also discoverkerlable via Nostr. Removing reliance on any central server',
+      'The market is hosted on the Bitcoin blockchain with a minimal footprint. It is also discoverable via Nostr, removing reliance on any central server.',
   },
   {
     label: 'Settlement',
     value: 'HTLC With Recovery',
     description:
-      'Efficient Atomic-Swaps with advanced Taproot HTLC+Musig2 protocol, ensuring atomicity at cheapest cost. Recovery triggers automatically to remove fund loss',
+      'Efficient atomic swaps with Taproot HTLCs and MuSig2, ensuring atomicity at the lowest possible cost. Recovery triggers automatically to prevent fund loss.',
   },
   {
     label: 'Maker fees',
@@ -30,7 +30,7 @@ const CARDS = [
       'The market can be used to hop across other layers and protocols, like Lightning, eCash, Liquid, Ark, etc.',
   },
   {
-    label: 'Cross-Chain Swaps',
+    label: 'Cross-chain swaps',
     value: 'Hop Into BTC',
     description:
       'The same market can be used to hop into Bitcoin from other layers, like Lightning, eCash, Liquid, Ark, etc.',

@@ -21,7 +21,7 @@ const CARDS = [
     role: 'Maker',
     prompt: './makerd --start',
     description:
-      'Light weight minimal maintenance liquidity server earning fees. Create and manage fidelity bonds. Act as a bridge between layers.',
+      'A lightweight, low-maintenance liquidity server that earns fees. Create and manage fidelity bonds, and act as a bridge between layers.',
     highlights: [
       'Fidelity bond = reputation',
       'Auto-renewing bond lifecycle',

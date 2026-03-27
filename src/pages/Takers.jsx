@@ -12,15 +12,15 @@ cargo build --release
 const CODE_CLI_INSTALL = `sudo install ./target/release/taker /usr/local/bin/`
 
 const CODE_TAKER_HELP = `$ taker --help
-A simple command line app to operate as coinswap client.
+A simple command-line app for CoinSwap clients.
 
 Usage: taker [OPTIONS] <COMMAND>
 
 Commands:
-  list-utxo           Lists all utxos we know about along with their spend info
-  list-utxo-regular   Lists all single signature wallet Utxos
-  list-utxo-swap      Lists all utxos received in incoming swaps
-  list-utxo-contract  Lists all utxos that we need to claim via timelock
+  list-utxo           Lists all UTXOs we know about, along with their spend info
+  list-utxo-regular   Lists all single-signature wallet UTXOs
+  list-utxo-swap      Lists all UTXOs received in incoming swaps
+  list-utxo-contract  Lists all UTXOs that we need to claim via timelock
   get-balances        Get total wallet balances of different categories
   get-new-address     Returns a new address
   send-to-address     Send to an external wallet address
@@ -411,7 +411,7 @@ export default function Takers() {
   return (
     <>
       <title>Takers — CoinSwap</title>
-      <meta name="description" content="Run a coinswap as a taker. Install the taker CLI or desktop GUI, route your coins through independent makers, and receive clean UTXOs with no on-chain history." />
+      <meta name="description" content="Run CoinSwap as a taker. Install the taker CLI or desktop GUI, route your coins through independent makers, and receive clean UTXOs with no on-chain history." />
 
       <div className="site-shell py-8 space-y-7">
 
@@ -695,7 +695,7 @@ export default function Takers() {
         <section className="section-rule flex flex-wrap gap-4">
           {[
             { href: LINKS.taker_app,     label: 'Taker App repo' },
-            { href: LINKS.coinswap_repo, label: 'Coinswap core' },
+            { href: LINKS.coinswap_repo, label: 'CoinSwap core' },
             { href: LINKS.coinswap_ffi,  label: 'FFI bindings' },
             { href: LINKS.taker_docs,    label: 'CLI docs' },
             { href: LINKS.issues,        label: 'Open an issue' },

@@ -8,19 +8,19 @@ export default function Hero() {
         <div className="relative mx-auto flex max-w-[72rem] flex-col items-center">
           <h1
             className="type-hero glitch mb-4 max-w-[72rem] font-display font-semibold tracking-[0.03em] text-cream"
-            data-text="An Actually Decentralised Atomic-Swap Marketplace"
+            data-text="An Actually Decentralized Atomic-Swap Marketplace"
           >
-            An Actually Decentralised Atomic-Swap Marketplace
+            An Actually Decentralized Atomic-Swap Marketplace
           </h1>
 
           <p className="type-subtitle mb-5 max-w-[72rem] text-cream/58">
             <span className="font-mono text-cream/50"></span>
-            The CoinSwap Protocol creates a sybil-resistant, decentralized swap market hosted in
+            The CoinSwap protocol creates a sybil-resistant, decentralized swap market hosted in
             the Bitcoin blockchain and discoverable over Nostr, enabling trustless atomic swaps
             over Bitcoin and other protocols.
             <br />
             <span className="block h-3" aria-hidden="true" />
-            The protocol was first conceptualised by{' '}
+            The protocol was first conceptualized by{' '}
             <a
               href="https://bitcointalk.org/index.php?topic=321228.0"
               target="_blank"
