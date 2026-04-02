@@ -4,6 +4,7 @@ const base     = LINKS.docs_manuals_base
 const exBase   = LINKS.docs_examples_base
 const specBase = LINKS.docs_spec_base
 const ffiBase  = LINKS.docs_ffi_base
+const makerDashboardPackagingBase = LINKS.docs_maker_dashboard_packaging_base
 
 export const NAV = [
   {
@@ -86,8 +87,19 @@ export const NAV = [
   },
   {
     id: 'dockers',
-    label: 'Dockers',
-    comingSoon: true,
+    label: 'Docker',
+    items: [
+      {
+        label: 'myNode',
+        url: `${makerDashboardPackagingBase}/mynode/README.md`,
+        repoUrl: LINKS.maker_dashboard_mynode_repo,
+      },
+      {
+        label: 'Umbrel',
+        url: `${makerDashboardPackagingBase}/umbrel/README.md`,
+        repoUrl: LINKS.maker_dashboard_umbrel_repo,
+      },
+    ],
   },
 ]
 
