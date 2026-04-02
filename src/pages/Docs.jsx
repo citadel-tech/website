@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import DocsSidebar from '../components/docs/DocsSidebar.jsx'
 import DocsContent from '../components/docs/DocsContent.jsx'
+import { findDocById } from '../constants/docsNav.js'
 
 export default function Docs() {
-  const [activeDoc, setActiveDoc] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const activeDocId = searchParams.get('doc')
+  const activeDoc = findDocById(activeDocId)
 
   useEffect(() => {
     document.title = 'Docs | CoinSwap'
@@ -16,11 +20,19 @@ export default function Docs() {
 
   // Close mobile sidebar when selecting a doc
   function handleSelect(doc) {
-    setActiveDoc(doc)
+    const nextSearchParams = new URLSearchParams(searchParams)
+
+    if (doc?.docId) {
+      nextSearchParams.set('doc', doc.docId)
+    } else {
+      nextSearchParams.delete('doc')
+    }
+
+    setSearchParams(nextSearchParams)
     setSidebarOpen(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const activeUrl = activeDoc ? activeDoc.url : null
   const currentTitle = activeDoc ? activeDoc.label : 'Get Started'
 
   return (
@@ -50,7 +62,7 @@ export default function Docs() {
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
-        <DocsSidebar activeUrl={activeUrl} onSelect={handleSelect} />
+        <DocsSidebar activeDocId={activeDoc ? activeDoc.docId : null} onSelect={handleSelect} />
       </aside>
 
       {/* Backdrop for mobile sidebar */}

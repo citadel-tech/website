@@ -1,4 +1,4 @@
-import { NAV } from '../../constants/docsNav.js'
+import { getNavWithDocIds } from '../../constants/docsNav.js'
 import SidebarSection from './SidebarSection.jsx'
 
 function SidebarItem({ item, isActive, onSelect }) {
@@ -16,21 +16,23 @@ function SidebarItem({ item, isActive, onSelect }) {
   )
 }
 
-function ItemList({ items, activeUrl, onSelect }) {
+function ItemList({ items, activeDocId, onSelect }) {
   return items.map(item => (
     <SidebarItem
-      key={item.url}
+      key={item.docId}
       item={item}
-      isActive={activeUrl === item.url}
+      isActive={activeDocId === item.docId}
       onSelect={onSelect}
     />
   ))
 }
 
-export default function DocsSidebar({ activeUrl, onSelect }) {
+export default function DocsSidebar({ activeDocId, onSelect }) {
+  const nav = getNavWithDocIds()
+
   return (
     <nav className="overflow-y-auto">
-      {NAV.map(section => {
+      {nav.map(section => {
         // Static entry (Get Started)
         if (section.static) {
           return (
@@ -38,7 +40,7 @@ export default function DocsSidebar({ activeUrl, onSelect }) {
               <button
                 onClick={() => onSelect(null)}
                 className={`w-full px-4 py-3 text-left font-mono text-lg font-semibold uppercase tracking-[0.14em] transition-colors ${
-                  activeUrl === null
+                  activeDocId === null
                     ? 'text-black'
                     : 'text-black/60 hover:text-black'
                 }`}
@@ -67,8 +69,12 @@ export default function DocsSidebar({ activeUrl, onSelect }) {
 
         // Normal sections with items
         return (
-          <SidebarSection key={section.id} label={section.label}>
-            <ItemList items={section.items} activeUrl={activeUrl} onSelect={onSelect} />
+          <SidebarSection
+            key={section.id}
+            label={section.label}
+            defaultOpen={section.items?.some(item => item.docId === activeDocId)}
+          >
+            <ItemList items={section.items} activeDocId={activeDocId} onSelect={onSelect} />
           </SidebarSection>
         )
       })}

@@ -104,6 +104,69 @@ export const NAV = [
   },
 ]
 
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9.-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function attachDocId(section, item, subsection) {
+  const prefix = subsection
+    ? `${section.id}/${slugify(subsection.label)}`
+    : section.id
+
+  return {
+    ...item,
+    docId: `${prefix}/${slugify(item.label)}`,
+  }
+}
+
+export function getNavWithDocIds(nav = NAV) {
+  return nav.map(section => {
+    if (section.items) {
+      return {
+        ...section,
+        items: section.items.map(item => attachDocId(section, item)),
+      }
+    }
+
+    if (section.subsections) {
+      return {
+        ...section,
+        subsections: section.subsections.map(subsection => ({
+          ...subsection,
+          items: subsection.items.map(item => attachDocId(section, item, subsection)),
+        })),
+      }
+    }
+
+    return section
+  })
+}
+
+export function findDocById(docId, nav = NAV) {
+  if (!docId) return null
+
+  for (const section of getNavWithDocIds(nav)) {
+    if (section.items) {
+      const match = section.items.find(item => item.docId === docId)
+      if (match) return match
+    }
+
+    if (section.subsections) {
+      for (const subsection of section.subsections) {
+        const match = subsection.items.find(item => item.docId === docId)
+        if (match) return match
+      }
+    }
+  }
+
+  return null
+}
+
 export function collectAllUrls(nav) {
   const urls = []
   for (const section of nav) {

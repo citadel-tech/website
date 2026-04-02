@@ -1,7 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function SidebarSection({ label, children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen)
+
+  useEffect(() => {
+    if (defaultOpen) {
+      setOpen(true)
+    }
+  }, [defaultOpen])
 
   return (
     <div className="border-b border-dotted border-black/12">
