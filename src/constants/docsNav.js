@@ -25,6 +25,7 @@ export const NAV = [
       { label: 'Taproot',    url: `${base}/taproot.md` },
       { label: 'Demo v1',    url: `${base}/demo-v1.md` },
       { label: 'Demo v2',    url: `${base}/demo-v2.md` },
+      { label: 'Demo v2.1',  url: `${base}/demo-v2.1.md` },
       { label: 'Workshop',   url: `${base}/workshop.md` },
     ],
   },
