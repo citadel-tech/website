@@ -1,6 +1,7 @@
 import { LINKS } from '../constants/links'
-import CodeBlock from '../components/ui/CodeBlock'
-import TabGroup from '../components/ui/TabGroup'
+import CodeBlock from '../components/coinswap-ui/CodeBlock'
+import TabGroup from '../components/coinswap-ui/TabGroup'
+import TerminalWindow from '../components/coinswap-ui/TerminalWindow'
 
 // ─── Code snippets ────────────────────────────────────────────────────────────
 
@@ -307,30 +308,59 @@ export default function Makers() {
       <title>Makers — CoinSwap</title>
       <meta name="description" content="Run a CoinSwap maker node. Post a fidelity bond, earn fees passively on every swap routed through you, and strengthen Bitcoin privacy without active maintenance." />
 
-      <div className="site-shell py-8 space-y-7">
+      <div className="site-shell py-12 md:py-16 space-y-12 md:space-y-16">
 
-        {/* ── Hero ── */}
-        <section>
-          <h1 className="type-page-title font-display font-bold text-cream mb-3">
-            Earn Fees. Strengthen Privacy.
-          </h1>
-          <p className="type-subtitle text-cream/60 font-body max-w-4xl">
-            Run a maker node, post a fidelity bond, and route swaps passively.
-            You never touch user funds — the protocol is trustless by design.
-            Your node earns while you sleep.
-          </p>
+        {/* ── Fancy Hero ── */}
+        <section className="relative flex flex-col lg:flex-row-reverse items-center gap-10 mt-10 mb-16">
+          <div className="flex-1 z-10 lg:pl-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full glass-panel border-orange/30 text-orange type-caption font-mono animate-pulse-glow">
+              <span className="w-2 h-2 rounded-full bg-orange animate-ping"></span>
+              v0.4 Maker Node
+            </div>
+            <h1 className="type-page-title font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-cream via-cream to-orange drop-shadow-[0_0_15px_rgba(255,94,0,0.3)] mb-4">
+              Earn Fees. Strengthen Privacy.
+            </h1>
+            <p className="type-subtitle text-cream/70 font-body max-w-2xl leading-relaxed mb-8">
+              Become the backbone of the CoinSwap protocol. Run a maker node, post a fidelity bond, and route swaps completely passively. You never touch user funds — the protocol is trustless by design. Your node earns while you sleep.
+            </p>
+            <div className="flex gap-4">
+              <a href="#install" className="inline-flex items-center justify-center px-6 py-3 font-mono text-sm font-bold text-white bg-orange rounded-lg shadow-[0_0_0_1px_rgba(255,94,0,0.4),0_8px_32px_rgba(255,94,0,0.2)] hover:shadow-[0_0_40px_rgba(255,94,0,0.45)] transition-all hover:-translate-y-0.5">BECOME A MAKER</a>
+            </div>
+          </div>
+          <div className="flex-1 w-full relative z-10">
+            <div className="absolute -inset-10 bg-gradient-to-br from-orange/20 via-transparent to-transparent blur-3xl opacity-50 rounded-full"></div>
+            <TerminalWindow accent="orange" commands={[
+              { type: 'input', text: 'makerd' },
+              { type: 'info', text: 'Initializing Maker Server...', delay: 300 },
+              { type: 'success', text: 'Fidelity Bond Transaction confirmed: 4x2b...9a' },
+              { type: 'info', text: 'Binding to Tor Onion Hidden Service...' },
+              { type: 'success', text: 'Node reachable at: xyz123...onion:6102' },
+              { type: 'input', text: 'maker-cli get-balances' },
+              { type: 'info', text: 'Fetching balances...', delay: 200 },
+              { type: 'success', text: 'Fidelity Bond: 50,000 sats' },
+              { type: 'success', text: 'Swap Liquidity: 3,500,000 sats' },
+              { type: 'info', text: 'Waiting for swap requests...' }
+            ]} title="MAKERD SERVER" />
+          </div>
         </section>
 
         {/* ── What is a Maker ── */}
-        <section className="section-rule">
-          <p className="section-label mb-3">// Role</p>
-          <h2 className="type-section-title font-display font-semibold text-cream mb-5">What is a Maker?</h2>
-          <div className="grid gap-4 lg:grid-cols-3">
-            {MAKER_CARDS.map(({ label, heading, body }) => (
-              <div key={label} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="mb-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-cream/45">{label}</p>
-                <h3 className="mb-2 font-display text-lg font-semibold text-cream">{heading}</h3>
-                <p className="type-small font-body text-cream/68">{body}</p>
+        <section className="section-rule relative z-10">
+          <p className="section-label mb-3 text-orange">// Role Definition</p>
+          <h2 className="type-section-title font-display font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cream to-cream/70 mb-6 drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">What is a Maker?</h2>
+          <div className="grid gap-6 lg:grid-cols-3 relative">
+            <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange/20 to-transparent -translate-y-1/2 pointer-events-none hidden lg:block"></div>
+            {MAKER_CARDS.map(({ label, heading, body }, i) => (
+              <div key={label} className="glass-panel p-6 hover:-translate-y-2 hover:border-orange/50 hover:shadow-[0_0_25px_rgba(255,94,0,0.2)] transition-all duration-300 animate-float" style={{ animationDelay: `${i * 0.2}s` }}>
+                <div className="w-10 h-10 rounded-full bg-orange/10 flex items-center justify-center border border-orange/30 mb-4 shadow-[0_0_15px_rgba(255,94,0,0.2)]">
+                  <span className="text-orange font-mono font-bold">{i+1}</span>
+                </div>
+                <p className="type-caption mb-3 font-mono uppercase tracking-[0.18em] text-orange/80 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange animate-pulse"></span>
+                  {label}
+                </p>
+                <h3 className="type-card-title mb-3 font-display font-semibold text-cream drop-shadow-[0_0_4px_rgba(255,255,255,0.1)]">{heading}</h3>
+                <p className="type-small font-body text-cream/70 leading-relaxed">{body}</p>
               </div>
             ))}
           </div>
@@ -338,7 +368,7 @@ export default function Makers() {
 
         {/* ── No Active Maintenance ── */}
         <section className="section-rule">
-          <div className="border border-dotted border-black/20 bg-black/[0.02] p-5">
+          <div className="border border-dotted border-cream/20 bg-cream/[0.02] p-5">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-green/70 mb-2">Install → Fund → Forget</p>
             <p className="type-body font-body text-cream/75">
               <code className="inline-code">makerd</code> handles everything automatically: wallet
@@ -404,7 +434,7 @@ export default function Makers() {
           <p className="section-label mb-3">// Get Started</p>
           <h2 className="type-section-title font-display font-semibold text-cream mb-5">Choose Your Method</h2>
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+            <div className="border border-dotted border-cream/20 bg-cream/[0.02] p-5 flex flex-col">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-green/70 mb-2">[ DOCKER ]</p>
               <h3 className="font-display text-xl font-semibold text-cream mb-2">Full Stack</h3>
               <p className="type-small font-body text-cream/68 mb-4 flex-1">
@@ -413,7 +443,7 @@ export default function Makers() {
               </p>
               <p className="type-meta text-cream/45 font-mono">./docker-setup configure</p>
             </div>
-            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+            <div className="border border-dotted border-cream/20 bg-cream/[0.02] p-5 flex flex-col">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-orange/70 mb-2">[ NATIVE ]</p>
               <h3 className="font-display text-xl font-semibold text-cream mb-2">From Source</h3>
               <p className="type-small font-body text-cream/68 mb-4 flex-1">
@@ -423,7 +453,7 @@ export default function Makers() {
               </p>
               <p className="type-meta text-cream/45 font-mono">cargo build --release</p>
             </div>
-            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+            <div className="border border-dotted border-cream/20 bg-cream/[0.02] p-5 flex flex-col">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-blue-l/70 mb-2">[ DASHBOARD ]</p>
               <h3 className="font-display text-xl font-semibold text-cream mb-2">Web UI</h3>
               <p className="type-small font-body text-cream/68 mb-4 flex-1">
@@ -460,7 +490,7 @@ export default function Makers() {
               'Rust toolchain (cargo) — native build path only',
             ].map((item, i) => (
               <li key={i} className="type-small flex items-start gap-3 text-cream/70 font-body">
-                <span className="type-meta mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-black/15 font-semibold text-cream">{i + 1}</span>
+                <span className="type-meta mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-cream/15 font-semibold text-cream">{i + 1}</span>
                 <span>{item}</span>
               </li>
             ))}
@@ -486,7 +516,7 @@ export default function Makers() {
           </p>
           <div className="grid gap-4 md:grid-cols-2">
             {DASHBOARD_SHOTS.map(({ src, caption }) => (
-              <div key={caption} className="border border-dotted border-cream/15 bg-black/30 rounded overflow-hidden">
+              <div key={caption} className="border border-dotted border-cream/15 bg-cream/30 rounded overflow-hidden">
                 <img
                   src={src}
                   alt={caption}
@@ -604,11 +634,11 @@ export default function Makers() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href={LINKS.mutinynet} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
+                  className="inline-flex items-center gap-1.5 border border-cream/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-cream/4">
                   Explorer ↗
                 </a>
                 <a href={LINKS.mutinynet_faucet} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-black/4">
+                  className="inline-flex items-center gap-1.5 border border-cream/20 px-4 py-2 text-sm font-body font-medium text-cream transition-colors hover:bg-cream/4">
                   Faucet ↗
                 </a>
               </div>

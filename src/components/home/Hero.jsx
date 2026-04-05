@@ -1,25 +1,29 @@
 import { Link } from 'react-router-dom'
-import Button from '../ui/Button'
+import Button from '../coinswap-ui/Button'
 
 export default function Hero() {
   return (
-    <section className="relative pt-8 pb-0">
-      <div className="px-0 py-4 text-center lg:py-8">
-        <div className="relative mx-auto flex max-w-[72rem] flex-col items-center">
-          <h1
-            className="type-hero glitch mb-4 max-w-[72rem] font-display font-semibold tracking-[0.03em] text-cream"
-            data-text="An Actually Decentralized Atomic-Swap Marketplace"
-          >
+    <section className="relative pt-24 pb-16 sm:pt-44 sm:pb-32">
+      <div className="px-0 py-10 text-center lg:py-16">
+        <div className="relative mx-auto flex max-w-[76rem] flex-col items-center">
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-green/20 bg-green/5 px-4 py-2 text-xs font-mono uppercase tracking-[0.15em] text-green backdrop-blur-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green"></span>
+            </span>
+            Protocol Active
+          </div>
+
+          <h1 className="type-hero mb-8 max-w-[72rem] font-display font-bold tracking-tight text-cream">
             An Actually Decentralized Atomic-Swap Marketplace
           </h1>
 
-          <p className="type-subtitle mb-5 max-w-[72rem] text-cream/58">
-            <span className="font-mono text-cream/50"></span>
+          <p className="type-subtitle mb-14 max-w-[58rem] text-cream/55 leading-relaxed">
             The CoinSwap protocol creates a sybil-resistant, decentralized swap market hosted in
             the Bitcoin blockchain and discoverable over Nostr, enabling trustless atomic swaps
             over Bitcoin and other protocols.
             <br />
-            <span className="block h-3" aria-hidden="true" />
+            <span className="block h-4" aria-hidden="true" />
             The protocol was first conceptualized by{' '}
             <a
               href="https://bitcointalk.org/index.php?topic=321228.0"
@@ -42,23 +46,11 @@ export default function Hero() {
             </span>.
           </p>
 
-          <div className="mb-4 flex flex-wrap items-center justify-center gap-x-15 gap-y-3">
-            <Button
-              as={Link}
-              to="/takers"
-              variant="primary"
-              size="lg"
-              className="hover:shadow-[0_16px_34px_rgba(247,147,26,0.34),0_0_26px_rgba(247,147,26,0.2)] hover:-translate-y-0.5"
-            >
+          <div className="mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
+            <Button as={Link} to="/takers" variant="primary" size="lg">
               ./Taker --SWAP
             </Button>
-            <Button
-              as={Link}
-              to="/makers"
-              variant="outline"
-              size="lg"
-              className="hover:shadow-[0_16px_34px_rgba(247,147,26,0.34),0_0_26px_rgba(247,147,26,0.2)] hover:-translate-y-0.5"
-            >
+            <Button as={Link} to="/makers" variant="outline" size="lg">
               ./Maker --RUN
             </Button>
           </div>

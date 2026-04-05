@@ -1,6 +1,7 @@
 import { LINKS } from '../constants/links'
-import CodeBlock from '../components/ui/CodeBlock'
-import TabGroup from '../components/ui/TabGroup'
+import CodeBlock from '../components/coinswap-ui/CodeBlock'
+import TabGroup from '../components/coinswap-ui/TabGroup'
+import TerminalWindow from '../components/coinswap-ui/TerminalWindow'
 
 // ─── CLI snippets ─────────────────────────────────────────────────────────────
 
@@ -413,29 +414,58 @@ export default function Takers() {
       <title>Takers — CoinSwap</title>
       <meta name="description" content="Run CoinSwap as a taker. Install the taker CLI or desktop GUI, route your coins through independent makers, and receive clean UTXOs with no on-chain history." />
 
-      <div className="site-shell py-8 space-y-7">
+      <div className="site-shell py-12 md:py-16 space-y-12 md:space-y-16">
 
-        {/* ── Hero ── */}
-        <section>
-          <h1 className="type-page-title font-display font-bold text-cream mb-3">
-            Swap Bitcoin Trustlessly
-          </h1>
-          <p className="type-subtitle text-cream/60 font-body max-w-4xl">
-            You send one set of coins. You receive a different set with no shared on-chain history.
-            No custodian, no mixer, no trust required — just a taker-driven protocol with atomic recovery at every hop.
-          </p>
+        {/* ── Fancy Hero ── */}
+        <section className="relative flex flex-col lg:flex-row items-center gap-10 mt-10 mb-16">
+          <div className="flex-1 z-10 lg:pl-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-lg border border-green/35 bg-green/[0.06] text-green type-caption font-mono shadow-[inset_0_1px_0_rgba(0,255,157,0.12)]">
+              <span className="w-2 h-2 rounded-full bg-green"></span>
+              v0.4 Taker CLI
+            </div>
+            <h1 className="type-page-title font-display font-bold text-cream mb-4">
+              Swap Bitcoin Trustlessly
+            </h1>
+            <p className="type-subtitle text-cream/70 font-body max-w-2xl leading-relaxed mb-8">
+              Take control of your privacy. You send one set of coins, and you receive a perfectly clean set with absolutely no on-chain link. The protocol is fully taker-driven, requiring zero trust and zero custodians.
+            </p>
+            <div className="flex gap-4">
+              <a href="#install" className="inline-flex items-center justify-center rounded-lg px-6 py-3 font-mono text-sm font-bold text-white bg-green shadow-[0_0_0_1px_rgba(0,255,157,0.35),0_8px_32px_rgba(0,255,157,0.18)] hover:brightness-110 transition-all">INSTALL TAKER</a>
+            </div>
+          </div>
+          <div className="flex-1 w-full relative z-10">
+            <TerminalWindow accent="green" commands={[
+              { type: 'input', text: 'taker get-balances' },
+              { type: 'info', text: 'Connecting to wallet...', delay: 300 },
+              { type: 'success', text: 'Spendable Balance: 1,500,000 sats' },
+              { type: 'input', text: 'taker fetch-offers' },
+              { type: 'info', text: 'Syncing market data over Tor...' },
+              { type: 'success', text: 'Found 14 available makers with sufficient fidelity bonds.' },
+              { type: 'input', text: 'taker coinswap --amount 500000 --hops 3' },
+              { type: 'info', text: 'Building P2TR contracts...', delay: 500 },
+              { type: 'info', text: 'Broadcasting transactions...', delay: 400 },
+              { type: 'success', text: 'Swap Complete! TxID: a8f9...4b12' }
+            ]} title="TAKER CLI" />
+          </div>
         </section>
 
         {/* ── What is a Taker ── */}
-        <section className="section-rule">
-          <p className="section-label mb-3">// Role</p>
-          <h2 className="type-section-title font-display font-semibold text-cream mb-5">What is a Taker?</h2>
-          <div className="grid gap-4 lg:grid-cols-3">
-            {TAKER_CARDS.map(({ label, heading, body }) => (
-              <div key={label} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="type-caption mb-2 font-mono uppercase tracking-[0.18em] text-cream/45">{label}</p>
-                <h3 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h3>
-                <p className="type-small font-body text-cream/68">{body}</p>
+        <section className="section-rule relative z-10">
+          <p className="section-label mb-3 text-green">// Role Definition</p>
+          <h2 className="type-section-title font-display font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cream to-cream/70 mb-6 drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">What is a Taker?</h2>
+          <div className="grid gap-6 lg:grid-cols-3 relative">
+            <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green/20 to-transparent -translate-y-1/2 pointer-events-none hidden lg:block"></div>
+            {TAKER_CARDS.map(({ label, heading, body }, i) => (
+              <div key={label} className="glass-panel p-6 hover:-translate-y-2 hover:border-green/50 hover:shadow-[0_0_25px_rgba(0,255,157,0.2)] transition-all duration-300 animate-float" style={{ animationDelay: `${i * 0.2}s` }}>
+                <div className="w-10 h-10 rounded-full bg-green/10 flex items-center justify-center border border-green/30 mb-4 shadow-[0_0_15px_rgba(0,255,157,0.2)]">
+                  <span className="text-green font-mono font-bold">{i+1}</span>
+                </div>
+                <p className="type-caption mb-3 font-mono uppercase tracking-[0.18em] text-green/80 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse"></span>
+                  {label}
+                </p>
+                <h3 className="type-card-title mb-3 font-display font-semibold text-cream drop-shadow-[0_0_4px_rgba(255,255,255,0.1)]">{heading}</h3>
+                <p className="type-small font-body text-cream/70 leading-relaxed">{body}</p>
               </div>
             ))}
           </div>
@@ -446,7 +476,7 @@ export default function Takers() {
           <p className="section-label mb-3">// Get Started</p>
           <h2 className="type-section-title font-display font-semibold text-cream mb-5">Choose Your Method</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+            <div className="border border-dotted border-cream/20 bg-cream/[0.02] p-5 flex flex-col">
               <p className="type-caption font-mono uppercase tracking-[0.18em] text-green/70 mb-2">[ GUI ]</p>
               <h3 className="type-card-title font-display font-semibold text-cream mb-2">Taker App</h3>
               <p className="type-small font-body text-cream/68 mb-4 flex-1">
@@ -455,7 +485,7 @@ export default function Takers() {
               </p>
               <p className="type-meta text-cream/45 font-mono">npm install → npm run dev</p>
             </div>
-            <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
+            <div className="border border-dotted border-cream/20 bg-cream/[0.02] p-5 flex flex-col">
               <p className="type-caption font-mono uppercase tracking-[0.18em] text-orange/70 mb-2">[ CLI ]</p>
               <h3 className="type-card-title font-display font-semibold text-cream mb-2">taker binary</h3>
               <p className="type-small font-body text-cream/68 mb-4 flex-1">
@@ -486,7 +516,7 @@ export default function Takers() {
               'Rust toolchain (cargo) — only needed for the CLI build path',
             ].map((item, i) => (
               <li key={i} className="type-small flex items-start gap-3 text-cream/70 font-body">
-                <span className="type-meta mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-black/15 font-semibold text-cream">{i + 1}</span>
+                <span className="type-meta mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-cream/15 font-semibold text-cream">{i + 1}</span>
                 <span>{item}</span>
               </li>
             ))}
@@ -514,7 +544,7 @@ export default function Takers() {
           </p>
           <div className="grid gap-4 md:grid-cols-2">
             {SCREENSHOTS.map(({ src, caption }) => (
-              <div key={caption} className="border border-dotted border-cream/15 bg-black/30 rounded overflow-hidden">
+              <div key={caption} className="border border-dotted border-cream/15 bg-cream/30 rounded overflow-hidden">
                 <img
                   src={src}
                   alt={caption}
@@ -581,7 +611,7 @@ export default function Takers() {
               </tbody>
             </table>
           </div>
-          <div className="border-t border-dotted border-black/15 pt-4">
+          <div className="border-t border-dotted border-cream/15 pt-4">
             <p className="type-meta text-cream/50 font-body font-medium uppercase tracking-widest mb-2">If contract balance is non-zero</p>
             <p className="type-small text-cream/70 font-body mb-3">
               A non-zero <code className="inline-code">contract</code> balance means funds are locked in timelocked HTLC outputs from a failed or in-progress swap.
@@ -610,7 +640,7 @@ export default function Takers() {
                 {FEES.map(({ participant, received, forwarded, fee, mining, total, highlight }) => (
                   <tr key={participant}
                     className={`border-b border-blue/10 last:border-0 transition-colors ${
-                      highlight ? 'bg-black text-[#f7f2e8] font-semibold' : 'text-cream/70 hover:bg-white/2'
+                      highlight ? 'bg-cream text-[#f7f2e8] font-semibold' : 'text-cream/70 hover:bg-white/2'
                     }`}
                   >
                     <td className="px-4 py-3 font-medium">{participant}</td>
@@ -640,11 +670,11 @@ export default function Takers() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href={LINKS.mutinynet} target="_blank" rel="noopener noreferrer"
-                  className="type-ui inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 font-body font-medium text-cream transition-colors hover:bg-black/4">
+                  className="type-ui inline-flex items-center gap-1.5 border border-cream/20 px-4 py-2 font-body font-medium text-cream transition-colors hover:bg-cream/4">
                   Explorer ↗
                 </a>
                 <a href={LINKS.mutinynet_faucet} target="_blank" rel="noopener noreferrer"
-                  className="type-ui inline-flex items-center gap-1.5 border border-black/20 px-4 py-2 font-body font-medium text-cream transition-colors hover:bg-black/4">
+                  className="type-ui inline-flex items-center gap-1.5 border border-cream/20 px-4 py-2 font-body font-medium text-cream transition-colors hover:bg-cream/4">
                   Faucet ↗
                 </a>
               </div>
@@ -665,7 +695,7 @@ export default function Takers() {
           </p>
 
           {/* Requirements callout */}
-          <div className="border border-dotted border-black/20 bg-black/[0.02] p-4 mb-6">
+          <div className="border border-dotted border-cream/20 bg-cream/[0.02] p-4 mb-6">
             <p className="type-meta text-cream/50 font-body font-medium uppercase tracking-widest mb-3">Common requirements</p>
             <div className="grid sm:grid-cols-3 gap-3">
                 {[

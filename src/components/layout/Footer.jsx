@@ -18,24 +18,24 @@ const EXTERNAL = [
 
 export default function Footer() {
   return (
-    <footer className="mt-auto border-t border-dotted border-black/15 bg-transparent">
-      <div className="site-shell py-8">
+    <footer className="mt-auto border-t border-cream/8 bg-navy/60 backdrop-blur-sm">
+      <div className="site-shell py-12">
 
-        <p className="type-small mb-5 font-mono text-black/35">
-          <span className="text-black/60">user@coinswap</span>
-          <span className="text-black/30">:~$</span>
-          <span className="text-black/50"> cat ./network-footer.sys</span>
+        <p className="type-small mb-8 font-mono text-cream/30">
+          <span className="text-green/70">user@coinswap</span>
+          <span className="text-cream/20">:~$</span>
+          <span className="text-cream/40"> cat ./network-footer.sys</span>
         </p>
 
-        <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div className="mb-10 grid grid-cols-1 gap-10 sm:grid-cols-3">
           <div>
             <Link to="/" className="group flex items-center gap-3">
-              <CoinSwapLogo className="h-10 w-10 shrink-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.12)]" />
+              <CoinSwapLogo className="h-10 w-10 shrink-0 transition-transform duration-300 group-hover:scale-110" />
               <span className="leading-none">
-                <span className="type-brand block font-display font-semibold tracking-[0.04em] text-black">
-                  <span className="text-black">CoinSwap</span>
+                <span className="type-brand block font-display font-semibold tracking-[0.04em] text-cream">
+                  CoinSwap
                 </span>
-                <span className="type-caption mt-2 block font-mono uppercase tracking-[0.18em] text-black/42">
+                <span className="type-caption mt-2 block font-mono uppercase tracking-[0.18em] text-cream/40">
                   Make Bitcoin Fungible Again
                 </span>
               </span>
@@ -43,11 +43,11 @@ export default function Footer() {
           </div>
 
           <div>
-          <p className="type-ui mb-3 font-mono uppercase tracking-[0.2em] text-black/45">// routes</p>
-            <ul className="space-y-2">
+            <p className="type-ui mb-4 font-mono uppercase tracking-[0.2em] text-green/50">// routes</p>
+            <ul className="space-y-3">
               {INTERNAL.map(({ to, label }) => (
                 <li key={to}>
-                  <Link to={to} className="type-small font-mono text-black/52 transition-colors hover:text-black">
+                  <Link to={to} className="type-small font-mono text-cream/40 transition-all duration-200 hover:text-green hover:pl-1">
                     &gt; {label}
                   </Link>
                 </li>
@@ -56,8 +56,8 @@ export default function Footer() {
           </div>
 
           <div>
-          <p className="type-ui mb-3 font-mono uppercase tracking-[0.2em] text-black/45">// external</p>
-            <ul className="space-y-2">
+            <p className="type-ui mb-4 font-mono uppercase tracking-[0.2em] text-green/50">// external</p>
+            <ul className="space-y-3">
               {EXTERNAL.map(({ href, label }) => (
                 href && (
                   <li key={label}>
@@ -65,7 +65,7 @@ export default function Footer() {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="type-small font-mono text-black/52 transition-colors hover:text-black"
+                      className="type-small font-mono text-cream/40 transition-all duration-200 hover:text-green hover:pl-1"
                     >
                       &gt; {label} ↗
                     </a>
@@ -76,8 +76,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-2 border-t border-dotted border-black/15 pt-4 sm:flex-row">
-          <p className="type-ui font-mono text-black/28">
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-dotted border-cream/8 pt-6 sm:flex-row">
+          <p className="type-ui font-mono text-cream/25">
             // Built by Citadel Tech. Open source under MIT.
           </p>
         </div>

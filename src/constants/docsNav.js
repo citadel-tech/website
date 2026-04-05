@@ -1,4 +1,4 @@
-import { LINKS } from './links.js'
+import { LINKS } from './links'
 
 const base     = LINKS.docs_manuals_base
 const exBase   = LINKS.docs_examples_base

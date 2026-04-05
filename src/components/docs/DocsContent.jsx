@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { marked } from 'marked'
-import CodeBlock from '../ui/CodeBlock.jsx'
-import { useDocContent } from '../../hooks/useDocContent.js'
+import CodeBlock from '../coinswap-ui/CodeBlock'
+import { useDocContent } from '../../hooks/useDocContent'
 
 function resolveDocUrl(baseUrl, target) {
   if (!target) return target
@@ -61,7 +61,7 @@ function GitHubLink({ url }) {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1.5 font-mono text-sm text-black/65 underline decoration-black/20 underline-offset-[0.18em] transition-colors hover:text-black hover:decoration-black/50"
+      className="inline-flex items-center gap-1.5 font-mono text-sm text-cream/70 underline decoration-cream/20 underline-offset-[0.18em] transition-colors hover:text-green hover:decoration-green/50"
     >
       View on GitHub
       <span aria-hidden="true">&rarr;</span>
@@ -71,7 +71,7 @@ function GitHubLink({ url }) {
 
 function LoadingSpinner() {
   return (
-    <div className="flex items-center gap-3 py-16 text-black/45">
+    <div className="flex items-center gap-3 py-16 text-cream/50">
       <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -93,41 +93,41 @@ function ErrorMessage({ message }) {
 
 function GetStartedPanel() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <div>
-        <h1 className="type-page-title font-display font-semibold text-black">
+        <h1 className="type-page-title font-display font-semibold text-cream mb-6">
           CoinSwap Documentation
         </h1>
-        <p className="type-body mt-4 max-w-2xl text-black/65">
+        <p className="type-body max-w-2xl text-cream/70 leading-relaxed">
           Everything you need to understand, deploy, and build on the CoinSwap protocol —
           a non-custodial, atomic, multi-hop Bitcoin swap system built on Taproot and MuSig2.
         </p>
       </div>
 
-      <div className="border-t border-dotted border-black/15 pt-6">
-        <h2 className="type-section-title font-display font-semibold text-black">
+      <div className="border-t border-dotted border-cream/15 pt-8">
+        <h2 className="type-section-title font-display font-semibold text-cream mb-6">
           Core Concepts
         </h2>
-        <dl className="mt-4 space-y-4 type-body text-black/70">
+        <dl className="space-y-6 type-body text-cream/80">
           <div>
-            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/50">Takers</dt>
-            <dd className="mt-1">
+            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-green/80 mb-2">Takers</dt>
+            <dd className="leading-relaxed">
               Users who initiate swaps. The <code className="inline-code">taker</code> binary connects
               to makers over Tor, negotiates fees, and executes atomic multi-hop swaps.{' '}
               <Link to="/takers" className="simple-link">Learn more</Link>
             </dd>
           </div>
           <div>
-            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/50">Makers</dt>
-            <dd className="mt-1">
+            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-green/80 mb-2">Makers</dt>
+            <dd className="leading-relaxed">
               Liquidity providers that run <code className="inline-code">makerd</code> as a Tor hidden service.
               Makers post fidelity bonds and earn fees for providing swap liquidity.{' '}
               <Link to="/makers" className="simple-link">Learn more</Link>
             </dd>
           </div>
           <div>
-            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/50">Directory Server</dt>
-            <dd className="mt-1">
+            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-green/80 mb-2">Directory Server</dt>
+            <dd className="leading-relaxed">
               The <code className="inline-code">directoryd</code> binary maintains a public list of
               registered makers and their fidelity bonds. Takers query the directory to discover available makers.
             </dd>
@@ -135,11 +135,11 @@ function GetStartedPanel() {
         </dl>
       </div>
 
-      <div className="border-t border-dotted border-black/15 pt-6">
-        <h2 className="type-section-title font-display font-semibold text-black">
+      <div className="border-t border-dotted border-cream/15 pt-8">
+        <h2 className="type-section-title font-display font-semibold text-cream mb-6">
           Getting Started
         </h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-2">
           {[
             { label: 'Run a Taker', desc: 'Start swapping with the CLI', section: 'manuals', item: 'Taker' },
             { label: 'Deploy a Maker', desc: 'Provide liquidity and earn fees', section: 'manuals', item: 'Makerd' },
@@ -148,17 +148,17 @@ function GetStartedPanel() {
           ].map(card => (
             <div
               key={card.label}
-              className="border border-dotted border-black/12 bg-white/30 px-5 py-4 transition-colors hover:border-black/25"
+              className="glass-panel px-6 py-5 transition-all hover:border-green/40 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(0,255,157,0.15)]"
             >
-              <p className="font-mono text-sm font-semibold text-black">{card.label}</p>
-              <p className="mt-1 text-sm text-black/55">{card.desc}</p>
+              <p className="font-mono text-sm font-semibold text-green">{card.label}</p>
+              <p className="mt-2 text-sm text-cream/70 leading-relaxed">{card.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="border-t border-dotted border-black/15 pt-6">
-        <p className="type-small text-black/50">
+      <div className="border-t border-dotted border-cream/15 pt-6 pb-12">
+        <p className="type-small text-cream/50">
           Use the sidebar to navigate through manuals, protocol specifications, code examples,
           FFI bindings, and GUI documentation.
         </p>
@@ -206,7 +206,7 @@ function CodeContent({ url, lang, repoUrl, label }) {
         </div>
       )}
       {label && (
-        <h2 className="type-card-title mb-4 font-display font-semibold text-black">{label}</h2>
+        <h2 className="type-card-title mb-6 font-display font-semibold text-cream">{label}</h2>
       )}
       <CodeBlock code={content} language={lang} />
     </div>

@@ -3,6 +3,14 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
+try {
+  const stored = localStorage.getItem('coinswap-theme')
+  if (stored === 'light') document.documentElement.setAttribute('data-theme', 'light')
+  else document.documentElement.removeAttribute('data-theme')
+} catch {
+  /* ignore */
+}
+
 const faviconVersion = 'coinswap-bw-v1'
 const baseUrl = import.meta.env.BASE_URL
 const faviconHref = `${baseUrl}coinswap-bw.svg?v=${faviconVersion}`
