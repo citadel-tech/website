@@ -1,5 +1,5 @@
-import { getNavWithDocIds } from '../../constants/docsNav.js'
-import SidebarSection from './SidebarSection.jsx'
+import { getNavWithDocIds } from '../../constants/docsNav'
+import SidebarSection from './SidebarSection'
 
 function SidebarItem({ item, isActive, onSelect }) {
   return (
@@ -7,8 +7,8 @@ function SidebarItem({ item, isActive, onSelect }) {
       onClick={() => onSelect(item)}
       className={`block w-full text-left px-4 py-1.5 font-mono text-lg transition-colors ${
         isActive
-          ? 'border-l-2 border-black font-semibold text-black'
-          : 'border-l-2 border-transparent text-black/55 hover:text-black hover:border-black/25'
+          ? 'border-l-2 border-cream font-semibold text-cream'
+          : 'border-l-2 border-transparent text-cream/55 hover:text-cream hover:border-cream/25'
       }`}
     >
       {item.label}
@@ -36,13 +36,13 @@ export default function DocsSidebar({ activeDocId, onSelect }) {
         // Static entry (Get Started)
         if (section.static) {
           return (
-            <div key={section.id} className="border-b border-dotted border-black/12">
+            <div key={section.id} className="border-b border-dotted border-cream/12">
               <button
                 onClick={() => onSelect(null)}
                 className={`w-full px-4 py-3 text-left font-mono text-lg font-semibold uppercase tracking-[0.14em] transition-colors ${
                   activeDocId === null
-                    ? 'text-black'
-                    : 'text-black/60 hover:text-black'
+                    ? 'text-cream'
+                    : 'text-cream/60 hover:text-cream'
                 }`}
               >
                 {section.label}
@@ -54,12 +54,12 @@ export default function DocsSidebar({ activeDocId, onSelect }) {
         // Coming soon
         if (section.comingSoon) {
           return (
-            <div key={section.id} className="border-b border-dotted border-black/12">
+            <div key={section.id} className="border-b border-dotted border-cream/12">
               <div className="flex items-center gap-2 px-4 py-3">
-                <span className="font-mono text-lg font-semibold uppercase tracking-[0.14em] text-black/35">
+                <span className="font-mono text-lg font-semibold uppercase tracking-[0.14em] text-cream/35">
                   {section.label}
                 </span>
-                <span className="rounded bg-black/8 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-black/35">
+                <span className="rounded bg-cream/8 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-cream/35">
                   soon
                 </span>
               </div>

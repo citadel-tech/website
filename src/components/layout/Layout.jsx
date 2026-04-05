@@ -12,7 +12,7 @@ export default function Layout() {
   }, [pathname])
 
   return (
-    <div className="relative isolate flex min-h-screen flex-col bg-navy text-black">
+    <div className="relative isolate flex min-h-screen flex-col bg-navy text-cream">
       <MotionBackground />
       <Header />
       <main className="relative z-10 flex-1">

@@ -1,5 +1,5 @@
 import { LINKS } from '../constants/links'
-import CodeBlock from '../components/ui/CodeBlock'
+import CodeBlock from '../components/coinswap-ui/CodeBlock'
 
 const CONTRACT_TEMPLATE = `P2TR Output:
 ├── Internal Key: MuSig2_KeyAgg(sender_pk, receiver_pk)
@@ -128,27 +128,30 @@ export default function HowItWorks() {
       />
 
       <div className="site-shell py-8 space-y-7">
-        <section>
-          <p className="section-label mb-3">// Protocol V2</p>
-          <h1 className="type-page-title font-display font-bold text-cream mb-3">
+        <section className="relative mt-12 mb-16 text-center max-w-4xl mx-auto z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full glass-panel border-blue-400/30 text-blue-400 type-caption font-mono animate-pulse-glow">
+             <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+             Deep Dive
+          </div>
+          <h1 className="type-page-title font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-cream via-cream to-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.3)] mb-4">
             How CoinSwap V2 Actually Runs
           </h1>
-          <p className="type-subtitle text-cream/60 font-body max-w-4xl">
+          <p className="type-subtitle text-cream/70 font-body leading-relaxed mx-auto">
             CoinSwap v2 is a taker-coordinated, multi-hop atomic swap protocol built around Taproot
             contracts and MuSig2. You route value through independent makers, receive different
             coins back, and keep a recovery path if anyone disappears mid-swap.
           </p>
         </section>
 
-        <section className="section-rule">
-          <div className="grid gap-4 lg:grid-cols-3">
-            {V2_HIGHLIGHTS.map(({ label, heading, body }) => (
-              <div key={heading} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="type-caption mb-2 font-mono uppercase tracking-[0.18em] text-cream/45">
+        <section className="section-rule relative z-10">
+          <div className="grid gap-6 lg:grid-cols-3">
+            {V2_HIGHLIGHTS.map(({ label, heading, body }, i) => (
+              <div key={heading} className="glass-panel p-6 hover:-translate-y-2 hover:border-blue-400/50 hover:shadow-[0_0_25px_rgba(96,165,250,0.2)] transition-all duration-300 animate-float" style={{ animationDelay: `${i * 0.2}s` }}>
+                <p className="type-caption mb-3 font-mono uppercase tracking-[0.18em] text-blue-400/80">
                   {label}
                 </p>
-                <h2 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h2>
-                <p className="type-small font-body text-cream/68">{body}</p>
+                <h2 className="type-card-title mb-3 font-display font-semibold text-cream drop-shadow-[0_0_4px_rgba(255,255,255,0.1)]">{heading}</h2>
+                <p className="type-small font-body text-cream/70 leading-relaxed">{body}</p>
               </div>
             ))}
           </div>
@@ -186,17 +189,21 @@ export default function HowItWorks() {
           </div>
         </section>
 
-        <section className="section-rule">
-          <p className="section-label mb-3">// Lifecycle</p>
-          <h2 className="type-section-title font-display font-semibold text-cream mb-5">
+        <section className="section-rule relative z-10">
+          <p className="section-label mb-3 text-blue-400">// Lifecycle</p>
+          <h2 className="type-section-title font-display font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cream to-cream/70 mb-8 drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
             The protocol in four phases
           </h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {PHASES.map(({ step, heading, body }) => (
-              <div key={step} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="type-meta mb-2 font-mono text-cream/45">{step}</p>
-                <h3 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h3>
-                <p className="type-small font-body text-cream/68">{body}</p>
+          <div className="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-px before:bg-gradient-to-b before:from-blue-400 before:via-blue-400/50 before:to-transparent">
+            {PHASES.map(({ step, heading, body }, i) => (
+              <div key={step} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-blue-400 bg-navy shadow-[0_0_15px_rgba(96,165,250,0.5)] text-blue-400 font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 group-hover:scale-110 transition-transform z-10 relative left-0 md:left-1/2 transform -translate-x-1/2">
+                  <span className="font-mono text-sm">{step}</span>
+                </div>
+                <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] glass-panel p-6 group-hover:-translate-y-1 group-hover:border-blue-400/30 transition-all duration-300">
+                  <h3 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h3>
+                  <p className="type-small font-body text-cream/70 leading-relaxed">{body}</p>
+                </div>
               </div>
             ))}
           </div>
