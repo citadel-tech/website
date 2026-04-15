@@ -7,6 +7,7 @@ export default function CyberBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
     
     let animationFrameId;
     let particles = [];
@@ -85,10 +86,9 @@ export default function CyberBackground() {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color === '#00ff9d' ? '0,255,157' : '255,94,0'}, ${p.baseAlpha + pulse * 0.3})`;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = p.color;
+        // Avoid per-particle shadow assignments for performance. If glow is needed,
+        // consider a separate glow pass or fewer shadowed particles.
         ctx.fill();
-        ctx.shadowBlur = 0;
       }
 
       animationFrameId = window.requestAnimationFrame(render);

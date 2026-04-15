@@ -31,10 +31,48 @@ export default function CodeBlock({ code, language = 'bash', className = '', wra
   const [copied, setCopied] = useState(false)
 
   function handleCopy() {
-    navigator.clipboard.writeText(code).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    })
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code)
+        .then(() => {
+          setCopied(true)
+          setTimeout(() => setCopied(false), 2000)
+        })
+        .catch(() => {
+          // Clipboard write failed — attempt fallback
+          try {
+            const ta = document.createElement('textarea')
+            ta.value = code
+            ta.setAttribute('readonly', '')
+            ta.style.position = 'absolute'
+            ta.style.left = '-9999px'
+            document.body.appendChild(ta)
+            ta.select()
+            document.execCommand('copy')
+            document.body.removeChild(ta)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+          } catch (e) {
+            console.warn('Clipboard copy failed', e)
+          }
+        })
+    } else {
+      // Fallback for older browsers
+      try {
+        const ta = document.createElement('textarea')
+        ta.value = code
+        ta.setAttribute('readonly', '')
+        ta.style.position = 'absolute'
+        ta.style.left = '-9999px'
+        document.body.appendChild(ta)
+        ta.select()
+        document.execCommand('copy')
+        document.body.removeChild(ta)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      } catch (e) {
+        console.warn('Clipboard API not available', e)
+      }
+    }
   }
 
   return (

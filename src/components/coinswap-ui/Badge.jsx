@@ -2,7 +2,7 @@ export default function Badge({ children, variant = 'orange' }) {
   const styles = {
     orange: 'border-orange/30 text-orange',
     amber: 'border-amber/30 text-amber',
-    blue: 'border-cream/20 text-cream/80',
+    cream: 'border-cream/20 text-cream/80',
     green: 'border-green/30 text-green',
   }
 
