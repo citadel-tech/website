@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
-
 @import "tailwindcss";
 
 :root {
@@ -211,7 +209,7 @@ a {
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(23, 23, 23, 0.48);
+  color: rgba(23, 23, 23, 0.65);
 }
 
 .inline-code {
@@ -250,7 +248,7 @@ a {
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(23, 23, 23, 0.48);
+  color: rgba(23, 23, 23, 0.65);
 }
 
 .simple-table td {
@@ -298,7 +296,7 @@ a {
   font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(23,23,23,0.5);
+  color: rgba(23,23,23,0.65);
   margin: 1.5rem 0 0.4rem;
 }
 .prose-content p {
@@ -368,7 +366,7 @@ a {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(23,23,23,0.48);
+  color: rgba(23,23,23,0.65);
 }
 .prose-content td {
   padding: 0.8rem 0.75rem 0.8rem 0;

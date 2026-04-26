@@ -71,7 +71,7 @@ function GitHubLink({ url }) {
 
 function LoadingSpinner() {
   return (
-    <div className="flex items-center gap-3 py-16 text-black/45">
+    <div className="flex items-center gap-3 py-16 text-black/65">
       <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -110,7 +110,7 @@ function GetStartedPanel() {
         </h2>
         <dl className="mt-4 space-y-4 type-body text-black/70">
           <div>
-            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/50">Takers</dt>
+            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/65">Takers</dt>
             <dd className="mt-1">
               Users who initiate swaps. The <code className="inline-code">taker</code> binary connects
               to makers over Tor, negotiates fees, and executes atomic multi-hop swaps.{' '}
@@ -118,7 +118,7 @@ function GetStartedPanel() {
             </dd>
           </div>
           <div>
-            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/50">Makers</dt>
+            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/65">Makers</dt>
             <dd className="mt-1">
               Liquidity providers that run <code className="inline-code">makerd</code> as a Tor hidden service.
               Makers post fidelity bonds and earn fees for providing swap liquidity.{' '}
@@ -126,7 +126,7 @@ function GetStartedPanel() {
             </dd>
           </div>
           <div>
-            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/50">Directory Server</dt>
+            <dt className="font-mono text-sm font-semibold uppercase tracking-wider text-black/65">Directory Server</dt>
             <dd className="mt-1">
               The <code className="inline-code">directoryd</code> binary maintains a public list of
               registered makers and their fidelity bonds. Takers query the directory to discover available makers.
@@ -158,7 +158,7 @@ function GetStartedPanel() {
       </div>
 
       <div className="border-t border-dotted border-black/15 pt-6">
-        <p className="type-small text-black/50">
+        <p className="type-small text-black/65">
           Use the sidebar to navigate through manuals, protocol specifications, code examples,
           FFI bindings, and GUI documentation.
         </p>

@@ -230,15 +230,15 @@ const INSTALL_TABS = [
     content: (
       <div className="space-y-5">
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 1 — Clone & build</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 1 — Clone & build</p>
           <CodeBlock code={CODE_CLI_BUILD} language="bash" />
         </div>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 2 — Install binary</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 2 — Install binary</p>
           <CodeBlock code={CODE_CLI_INSTALL} language="bash" />
         </div>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 3 — Verify</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 3 — Verify</p>
           <CodeBlock code={CODE_TAKER_HELP} language="text" />
         </div>
       </div>
@@ -253,14 +253,14 @@ const INSTALL_TABS = [
           No terminal required for day-to-day use. Initial install compiles a Rust native module — allow 2–3 minutes.
         </p>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 1 — Clone & install</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 1 — Clone & install</p>
           <CodeBlock code={CODE_GUI_CLONE} language="bash" />
         </div>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 2 — Run or build</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 2 — Run or build</p>
           <CodeBlock code={CODE_GUI_RUN} language="bash" />
         </div>
-        <p className="type-meta text-cream/50 font-body">
+        <p className="type-meta text-cream/65 font-body">
           Repo:{' '}
           <a href={LINKS.taker_app} target="_blank" rel="noopener noreferrer" className="simple-link">
             citadel-tech/taker-app ↗
@@ -294,7 +294,7 @@ const FFI_TABS = [
         <p className="type-small text-cream/70 font-body">
           UniFFI bindings for Android (API 24+) and JVM. Supports arm64-v8a, armeabi-v7a, and x86_64 architectures.
         </p>
-        <p className="type-meta text-cream/50 font-body uppercase tracking-widest">Generate bindings</p>
+        <p className="type-meta text-cream/65 font-body uppercase tracking-widest">Generate bindings</p>
         <CodeBlock code={CODE_FFI_KOTLIN_BUILD} language="bash" />
         <CodeBlock code={CODE_FFI_KOTLIN} language="kotlin" />
       </div>
@@ -307,7 +307,7 @@ const FFI_TABS = [
         <p className="type-small text-cream/70 font-body">
           UniFFI bindings for iOS and macOS (Swift 5.7+, Xcode 14+). Builds an xcframework targeting all Apple platforms.
         </p>
-        <p className="type-meta text-cream/50 font-body uppercase tracking-widest">Build xcframework</p>
+        <p className="type-meta text-cream/65 font-body uppercase tracking-widest">Build xcframework</p>
         <CodeBlock code={CODE_FFI_SWIFT_BUILD} language="bash" />
         <CodeBlock code={CODE_FFI_SWIFT} language="swift" />
       </div>
@@ -320,7 +320,7 @@ const FFI_TABS = [
         <p className="type-small text-cream/70 font-body">
           UniFFI bindings for Python 3.8+. Cross-platform: Linux (.so), macOS (.dylib), Windows (.dll).
         </p>
-        <p className="type-meta text-cream/50 font-body uppercase tracking-widest">Build & install</p>
+        <p className="type-meta text-cream/65 font-body uppercase tracking-widest">Build & install</p>
         <CodeBlock code={CODE_FFI_PYTHON_BUILD} language="bash" />
         <CodeBlock code={CODE_FFI_PYTHON} language="python" />
       </div>
@@ -334,7 +334,7 @@ const FFI_TABS = [
           UniFFI bindings for Ruby 2.7+. Works standalone or as a Rails gem via the FFI gem.
           Use a mutex when accessing the taker from multiple threads.
         </p>
-        <p className="type-meta text-cream/50 font-body uppercase tracking-widest">Build & install</p>
+        <p className="type-meta text-cream/65 font-body uppercase tracking-widest">Build & install</p>
         <CodeBlock code={CODE_FFI_RUBY_BUILD} language="bash" />
         <CodeBlock code={CODE_FFI_RUBY} language="ruby" />
       </div>
@@ -433,7 +433,7 @@ export default function Takers() {
           <div className="grid gap-4 lg:grid-cols-3">
             {TAKER_CARDS.map(({ label, heading, body }) => (
               <div key={label} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="type-caption mb-2 font-mono uppercase tracking-[0.18em] text-cream/45">{label}</p>
+                <p className="type-caption mb-2 font-mono uppercase tracking-[0.18em] text-cream/65">{label}</p>
                 <h3 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h3>
                 <p className="type-small font-body text-cream/68">{body}</p>
               </div>
@@ -453,7 +453,7 @@ export default function Takers() {
                 Electron desktop application. No terminal required for day-to-day use.
                 Built on <code className="inline-code">coinswap-ffi</code> — the same library powering all language bindings.
               </p>
-              <p className="type-meta text-cream/45 font-mono">npm install → npm run dev</p>
+              <p className="type-meta text-cream/65 font-mono">npm install → npm run dev</p>
             </div>
             <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
               <p className="type-caption font-mono uppercase tracking-[0.18em] text-orange/70 mb-2">[ CLI ]</p>
@@ -462,7 +462,7 @@ export default function Takers() {
                 Terminal-first, full control. Build from source with cargo, install system-wide,
                 and run swaps from the command line with full access to all subcommands.
               </p>
-              <p className="type-meta text-cream/45 font-mono">cargo build --release → taker --help</p>
+              <p className="type-meta text-cream/65 font-mono">cargo build --release → taker --help</p>
             </div>
           </div>
         </section>
@@ -521,7 +521,7 @@ export default function Takers() {
                   className="w-full block"
                   loading="lazy"
                 />
-                <p className="type-caption font-mono text-cream/35 px-3 py-2">{caption}</p>
+                <p className="type-caption font-mono text-cream/65 px-3 py-2">{caption}</p>
               </div>
             ))}
           </div>
@@ -534,8 +534,8 @@ export default function Takers() {
             <table className="simple-table type-ui font-body">
               <thead>
                 <tr>
-                  <th className="type-ui px-4 py-3 text-left text-cream/50 font-medium tracking-wide uppercase">Subcommand</th>
-                  <th className="type-ui px-4 py-3 text-left text-cream/50 font-medium tracking-wide uppercase">Description</th>
+                  <th className="type-ui px-4 py-3 text-left text-cream/65 font-medium tracking-wide uppercase">Subcommand</th>
+                  <th className="type-ui px-4 py-3 text-left text-cream/65 font-medium tracking-wide uppercase">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -550,7 +550,7 @@ export default function Takers() {
               </tbody>
             </table>
           </div>
-          <p className="type-meta text-cream/40 font-body mt-2">
+          <p className="type-meta text-cream/65 font-body mt-2">
             Full docs:{' '}
             <a href={LINKS.taker_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
               docs/taker.md ↗
@@ -565,8 +565,8 @@ export default function Takers() {
             <table className="simple-table type-ui font-body">
               <thead>
                 <tr>
-                  <th className="type-ui px-4 py-3 text-left text-cream/50 font-medium tracking-wide uppercase">Type</th>
-                  <th className="type-ui px-4 py-3 text-left text-cream/50 font-medium tracking-wide uppercase">Description</th>
+                  <th className="type-ui px-4 py-3 text-left text-cream/65 font-medium tracking-wide uppercase">Type</th>
+                  <th className="type-ui px-4 py-3 text-left text-cream/65 font-medium tracking-wide uppercase">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -582,7 +582,7 @@ export default function Takers() {
             </table>
           </div>
           <div className="border-t border-dotted border-black/15 pt-4">
-            <p className="type-meta text-cream/50 font-body font-medium uppercase tracking-widest mb-2">If contract balance is non-zero</p>
+            <p className="type-meta text-cream/65 font-body font-medium uppercase tracking-widest mb-2">If contract balance is non-zero</p>
             <p className="type-small text-cream/70 font-body mb-3">
               A non-zero <code className="inline-code">contract</code> balance means funds are locked in timelocked HTLC outputs from a failed or in-progress swap.
               Run <code className="inline-code">taker recover</code> to claim them back.
@@ -602,7 +602,7 @@ export default function Takers() {
               <thead>
                 <tr className="border-b border-blue/30 bg-blue/10">
                   {['Participant', 'Received (sat)', 'Forwarded (sat)', 'Fee (sat)', 'Mining (sat)', 'Total cost'].map(h => (
-                    <th key={h} className="type-ui px-4 py-3 text-left text-cream/50 font-medium tracking-wide uppercase whitespace-nowrap">{h}</th>
+                    <th key={h} className="type-ui px-4 py-3 text-left text-cream/65 font-medium tracking-wide uppercase whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -666,7 +666,7 @@ export default function Takers() {
 
           {/* Requirements callout */}
           <div className="border border-dotted border-black/20 bg-black/[0.02] p-4 mb-6">
-            <p className="type-meta text-cream/50 font-body font-medium uppercase tracking-widest mb-3">Common requirements</p>
+            <p className="type-meta text-cream/65 font-body font-medium uppercase tracking-widest mb-3">Common requirements</p>
             <div className="grid sm:grid-cols-3 gap-3">
                 {[
                   { label: 'Rust', value: '≥ 1.75.0' },
@@ -674,7 +674,7 @@ export default function Takers() {
                   { label: 'Tor', value: 'daemon running' },
                 ].map(({ label, value }) => (
                   <div key={label}>
-                    <p className="type-meta text-cream/40 font-body uppercase tracking-widest mb-0.5">{label}</p>
+                    <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-0.5">{label}</p>
                   <p className="type-ui font-mono text-cream/80">{value}</p>
                   </div>
                 ))}
@@ -683,7 +683,7 @@ export default function Takers() {
 
           <TabGroup tabs={FFI_TABS} />
 
-          <p className="type-meta text-cream/40 font-body mt-4">
+          <p className="type-meta text-cream/65 font-body mt-4">
             Full repo:{' '}
             <a href={LINKS.coinswap_ffi} target="_blank" rel="noopener noreferrer" className="simple-link">
               citadel-tech/coinswap-ffi ↗
