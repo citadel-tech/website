@@ -56,10 +56,10 @@ export default function DocsSidebar({ activeDocId, onSelect }) {
           return (
             <div key={section.id} className="border-b border-dotted border-black/12">
               <div className="flex items-center gap-2 px-4 py-3">
-                <span className="font-mono text-lg font-semibold uppercase tracking-[0.14em] text-black/35">
+                <span className="font-mono text-lg font-semibold uppercase tracking-[0.14em] text-black/65">
                   {section.label}
                 </span>
-                <span className="rounded bg-black/8 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-black/35">
+                <span className="rounded bg-black/8 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-black/65">
                   soon
                 </span>
               </div>

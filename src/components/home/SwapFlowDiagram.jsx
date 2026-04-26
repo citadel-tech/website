@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 const SVG_W = 860
 const SVG_H = 470
@@ -229,8 +229,7 @@ function interpolatePoint(from, to, progress) {
 }
 
 export default function SwapFlowDiagram() {
-  const [flowDotPoint, setFlowDotPoint] = useState(() => SEGMENT_PATHS[0].from)
-  const segmentPathRefs = useRef([])
+  const flowDotRef = useRef(null)
 
   useEffect(() => {
     let frameId = 0
@@ -247,15 +246,17 @@ export default function SwapFlowDiagram() {
         SEGMENT_PATHS.length - 1
       )
       const segmentProgress = (elapsedSeconds % FLOW_DOT_STEP_DURATION) / FLOW_DOT_STEP_DURATION
-      const path = segmentPathRefs.current[segmentIndex]
+      const segment = SEGMENT_PATHS[segmentIndex]
 
-      if (path) {
-        const length = path.getTotalLength()
-        setFlowDotPoint(path.getPointAtLength(length * segmentProgress))
-      } else {
-        const segment = SEGMENT_PATHS[segmentIndex]
-        setFlowDotPoint(interpolatePoint(segment.from, segment.to, segmentProgress))
+      // All segments are straight lines — use pure math, no DOM geometry reads
+      const point = interpolatePoint(segment.from, segment.to, segmentProgress)
+
+      // Update the SVG circle directly to avoid React reconciliation on every frame
+      if (flowDotRef.current) {
+        flowDotRef.current.setAttribute('cx', point.x)
+        flowDotRef.current.setAttribute('cy', point.y)
       }
+
       frameId = window.requestAnimationFrame(animate)
     }
 
@@ -336,15 +337,6 @@ export default function SwapFlowDiagram() {
 
             return (
               <g key={id}>
-                <path
-                  ref={el => {
-                    segmentPathRefs.current[segmentIndex] = el
-                  }}
-                  d={`M ${from.x} ${from.y} L ${to.x} ${to.y}`}
-                  fill="none"
-                  stroke="transparent"
-                  strokeWidth="1"
-                />
                 <line
                   x1={from.x}
                   y1={from.y}
@@ -446,8 +438,9 @@ export default function SwapFlowDiagram() {
 
           <g aria-hidden="true" pointerEvents="none">
             <circle
-              cx={flowDotPoint.x}
-              cy={flowDotPoint.y}
+              ref={flowDotRef}
+              cx={SEGMENT_PATHS[0].from.x}
+              cy={SEGMENT_PATHS[0].from.y}
               r="8.5"
               fill="#ffd84d"
               stroke="#fff2a8"

@@ -144,7 +144,7 @@ export default function HowItWorks() {
           <div className="grid gap-4 lg:grid-cols-3">
             {V2_HIGHLIGHTS.map(({ label, heading, body }) => (
               <div key={heading} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="type-caption mb-2 font-mono uppercase tracking-[0.18em] text-cream/45">
+                <p className="type-caption mb-2 font-mono uppercase tracking-[0.18em] text-cream/65">
                   {label}
                 </p>
                 <h2 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h2>
@@ -194,7 +194,7 @@ export default function HowItWorks() {
           <div className="grid gap-4 md:grid-cols-2">
             {PHASES.map(({ step, heading, body }) => (
               <div key={step} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="type-meta mb-2 font-mono text-cream/45">{step}</p>
+                <p className="type-meta mb-2 font-mono text-cream/65">{step}</p>
                 <h3 className="type-card-title mb-2 font-display font-semibold text-cream">{heading}</h3>
                 <p className="type-small font-body text-cream/68">{body}</p>
               </div>

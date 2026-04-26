@@ -13,8 +13,8 @@ export default function Hero() {
             An Actually Decentralized Atomic-Swap Marketplace
           </h1>
 
-          <p className="type-subtitle mb-5 max-w-[72rem] text-cream/58">
-            <span className="font-mono text-cream/50"></span>
+          <p className="type-subtitle mb-5 max-w-[72rem] text-cream/75">
+            <span className="font-mono text-cream/65"></span>
             The CoinSwap protocol creates a sybil-resistant, decentralized swap market hosted in
             the Bitcoin blockchain and discoverable over Nostr, enabling trustless atomic swaps
             over Bitcoin and other protocols.

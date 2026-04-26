@@ -82,13 +82,13 @@ export default function QuickLinks() {
 
           const content = (
             <>
-              <span className="inline-flex rounded-lg border border-black/10 bg-black/[0.04] p-2 text-cream/45 transition-colors group-hover:border-black/15 group-hover:text-cream">
+              <span className="inline-flex rounded-lg border border-black/10 bg-black/[0.04] p-2 text-cream/65 transition-colors group-hover:border-black/15 group-hover:text-cream">
                 {icon}
               </span>
               <span className="type-small mt-4 font-mono font-medium uppercase tracking-[0.12em] text-cream/80 transition-colors group-hover:text-cream">
                 {label}
               </span>
-              <span className="type-meta mt-1 font-mono uppercase tracking-[0.08em] text-cream/38 transition-colors group-hover:text-cream/72">
+              <span className="type-meta mt-1 font-mono uppercase tracking-[0.08em] text-cream/65 transition-colors group-hover:text-cream/80">
                 {sub}
               </span>
             </>

@@ -62,11 +62,11 @@ export default function RoleCards() {
               </div>
             </div>
 
-            <p className="type-body mb-4 text-cream/55 font-body">{description}</p>
+            <p className="type-body mb-4 text-cream/70 font-body">{description}</p>
 
             <ul className="mb-5 flex-1 space-y-1.5">
               {highlights.map(h => (
-                <li key={h} className="type-small flex items-center gap-2 font-mono text-cream/50">
+                <li key={h} className="type-small flex items-center gap-2 font-mono text-cream/65">
                   <span className="shrink-0 text-cream">&gt;</span>
                   {h}
                 </li>

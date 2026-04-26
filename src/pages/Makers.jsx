@@ -146,10 +146,10 @@ const DEPLOY_TABS = [
           <table className="simple-table text-sm font-body">
             <thead>
               <tr>
-                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Mode</th>
-                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Bitcoin Core</th>
-                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Tor</th>
-                <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
+                <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Mode</th>
+                <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Bitcoin Core</th>
+                <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Tor</th>
+                <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Description</th>
               </tr>
             </thead>
             <tbody>
@@ -166,14 +166,14 @@ const DEPLOY_TABS = [
         </div>
 
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Setup & start</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Setup & start</p>
           <CodeBlock code={CODE_DOCKER} language="bash" />
         </div>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Operate via Docker</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Operate via Docker</p>
           <CodeBlock code={CODE_DOCKER_CLI} language="bash" />
         </div>
-        <p className="type-meta text-cream/50 font-body">
+        <p className="type-meta text-cream/65 font-body">
           Docs:{' '}
           <a href={LINKS.maker_docker_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
             docs/docker.md ↗
@@ -192,18 +192,18 @@ const DEPLOY_TABS = [
           and a running Bitcoin Core node.
         </p>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 1 — Clone & build</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 1 — Clone & build</p>
           <CodeBlock code={CODE_BUILD} language="bash" />
         </div>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 2 — Verify</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 2 — Verify</p>
           <CodeBlock code={CODE_MAKERD_HELP} language="text" />
         </div>
         <div>
-          <p className="type-meta text-cream/50 font-body uppercase tracking-widest mb-2">Step 3 — Start</p>
+          <p className="type-meta text-cream/65 font-body uppercase tracking-widest mb-2">Step 3 — Start</p>
           <CodeBlock code={CODE_START} language="bash" />
         </div>
-        <p className="type-meta text-cream/50 font-body">
+        <p className="type-meta text-cream/65 font-body">
           Docs:{' '}
           <a href={LINKS.makerd_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
             docs/makerd.md ↗
@@ -222,7 +222,7 @@ const DEPLOY_TABS = [
           to its RPC port (<code className="inline-code">127.0.0.1:6103</code>).
         </p>
         <CodeBlock code={CODE_DASHBOARD} language="bash" />
-        <p className="type-meta text-cream/50 font-body">
+        <p className="type-meta text-cream/65 font-body">
           Repo:{' '}
           <a href={LINKS.maker_dashboard} target="_blank" rel="noopener noreferrer" className="simple-link">
             citadel-tech/maker-dashboard ↗
@@ -328,7 +328,7 @@ export default function Makers() {
           <div className="grid gap-4 lg:grid-cols-3">
             {MAKER_CARDS.map(({ label, heading, body }) => (
               <div key={label} className="border border-dotted border-black/20 bg-black/[0.02] p-5">
-                <p className="mb-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-cream/45">{label}</p>
+                <p className="mb-2 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-cream/65">{label}</p>
                 <h3 className="mb-2 font-display text-lg font-semibold text-cream">{heading}</h3>
                 <p className="type-small font-body text-cream/68">{body}</p>
               </div>
@@ -382,8 +382,8 @@ export default function Makers() {
               <table className="simple-table text-sm font-body">
                 <thead>
                   <tr>
-                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Factor</th>
-                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Effect</th>
+                    <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Factor</th>
+                    <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Effect</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -411,7 +411,7 @@ export default function Makers() {
                 Pre-configured bitcoind + Tor + makerd. Mix native and Docker services to match
                 your existing setup. Recommended for new operators.
               </p>
-              <p className="type-meta text-cream/45 font-mono">./docker-setup configure</p>
+              <p className="type-meta text-cream/65 font-mono">./docker-setup configure</p>
             </div>
             <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-orange/70 mb-2">[ NATIVE ]</p>
@@ -421,7 +421,7 @@ export default function Makers() {
                 <code className="inline-code">maker-cli</code> with cargo.
                 Full control, system-wide binaries, no Docker dependency.
               </p>
-              <p className="type-meta text-cream/45 font-mono">cargo build --release</p>
+              <p className="type-meta text-cream/65 font-mono">cargo build --release</p>
             </div>
             <div className="border border-dotted border-black/20 bg-black/[0.02] p-5 flex flex-col">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-blue-l/70 mb-2">[ DASHBOARD ]</p>
@@ -430,7 +430,7 @@ export default function Makers() {
                 Browser-based interface for monitoring balances, swap history, and node management.
                 Runs alongside a live <code className="inline-code">makerd</code> instance.
               </p>
-              <p className="type-meta text-cream/45 font-mono">make build &amp;&amp; make run</p>
+              <p className="type-meta text-cream/65 font-mono">make build &amp;&amp; make run</p>
             </div>
           </div>
         </section>
@@ -493,7 +493,7 @@ export default function Makers() {
                   className="w-full block"
                   loading="lazy"
                 />
-                <p className="type-caption font-mono text-cream/35 px-3 py-2">{caption}</p>
+                <p className="type-caption font-mono text-cream/65 px-3 py-2">{caption}</p>
               </div>
             ))}
           </div>
@@ -509,7 +509,7 @@ export default function Makers() {
             fidelity bond, waits for confirmation, then starts listening for swap requests.
           </p>
           <CodeBlock code={CODE_STARTUP_LOG} language="bash" />
-          <p className="type-meta text-cream/40 font-body mt-2">
+          <p className="type-meta text-cream/65 font-body mt-2">
             Back up the mnemonic immediately — it is only shown once.
           </p>
         </section>
@@ -523,7 +523,7 @@ export default function Makers() {
           <div className="mb-6">
             <p className="section-label mb-3">// makerd help</p>
             <CodeBlock code={CODE_MAKERD_HELP} language="text" />
-            <p className="type-meta text-cream/40 font-body mt-2">
+            <p className="type-meta text-cream/65 font-body mt-2">
               Full docs:{' '}
               <a href={LINKS.makerd_docs} target="_blank" rel="noopener noreferrer" className="simple-link">
                 docs/makerd.md ↗
@@ -538,8 +538,8 @@ export default function Makers() {
               <table className="simple-table text-sm font-body">
                 <thead>
                   <tr>
-                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Subcommand</th>
-                    <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
+                    <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Subcommand</th>
+                    <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Description</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -554,7 +554,7 @@ export default function Makers() {
                 </tbody>
               </table>
             </div>
-            <p className="type-meta text-cream/40 font-body mt-2">
+            <p className="type-meta text-cream/65 font-body mt-2">
               RPC port default: <code className="inline-code">127.0.0.1:6103</code>. Override with{' '}
               <code className="inline-code">-p &lt;port&gt;</code>.{' '}
               Full docs:{' '}
@@ -572,8 +572,8 @@ export default function Makers() {
             <table className="simple-table text-sm font-body">
               <thead>
                 <tr>
-                  <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Type</th>
-                  <th className="px-4 py-3 text-left text-cream/50 font-medium tracking-wide text-sm uppercase">Description</th>
+                  <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Type</th>
+                  <th className="px-4 py-3 text-left text-cream/65 font-medium tracking-wide text-sm uppercase">Description</th>
                 </tr>
               </thead>
               <tbody>

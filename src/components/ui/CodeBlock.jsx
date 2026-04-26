@@ -1,5 +1,20 @@
 import { useState } from 'react'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-light'
+import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash'
+import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript'
+import python from 'react-syntax-highlighter/dist/esm/languages/prism/python'
+import ruby from 'react-syntax-highlighter/dist/esm/languages/prism/ruby'
+import kotlin from 'react-syntax-highlighter/dist/esm/languages/prism/kotlin'
+import swift from 'react-syntax-highlighter/dist/esm/languages/prism/swift'
+import ini from 'react-syntax-highlighter/dist/esm/languages/prism/ini'
+
+SyntaxHighlighter.registerLanguage('bash', bash)
+SyntaxHighlighter.registerLanguage('typescript', typescript)
+SyntaxHighlighter.registerLanguage('python', python)
+SyntaxHighlighter.registerLanguage('ruby', ruby)
+SyntaxHighlighter.registerLanguage('kotlin', kotlin)
+SyntaxHighlighter.registerLanguage('swift', swift)
+SyntaxHighlighter.registerLanguage('ini', ini)
 
 // Minimal dark theme using design tokens
 const theme = {

@@ -55,13 +55,13 @@ export default function SwapMarket() {
             key={label}
             className="section-rule flex h-full flex-col rounded-2xl border border-black/10 bg-white/15 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm"
           >
-            <p className="type-meta mb-3 font-mono uppercase tracking-[0.16em] text-cream/48">
+            <p className="type-meta mb-3 font-mono uppercase tracking-[0.16em] text-cream/65">
               {label}
             </p>
             <h3 className="type-section-title mb-3 font-display font-semibold tracking-[0.03em] text-cream">
               {value}
             </h3>
-            <p className="type-body text-cream/58 font-body">{description}</p>
+            <p className="type-body text-cream/75 font-body">{description}</p>
           </article>
         ))}
       </div>
