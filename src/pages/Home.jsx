@@ -30,8 +30,8 @@ export default function Home() {
 
       <StatusBanner releaseTag={tag} releaseUrl={url} />
 
-      <div className="relative overflow-hidden">
-        <div className="site-shell relative space-y-7 pb-16">
+      <div className="home-page relative overflow-hidden">
+        <div className="home-page__inner site-shell relative pb-20">
           <Hero />
           <SwapFlowDiagram />
           <SwapMarket />

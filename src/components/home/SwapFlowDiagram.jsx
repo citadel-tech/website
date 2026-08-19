@@ -36,17 +36,6 @@ function cornerPoint(from, to, width, height) {
   }
 }
 
-function edgePoint(from, to, width, height) {
-  const dx = to.x - from.x
-  const dy = to.y - from.y
-  const scale = 1 / Math.max(Math.abs(dx) / (width / 2), Math.abs(dy) / (height / 2))
-
-  return {
-    x: from.x + dx * scale,
-    y: from.y + dy * scale,
-  }
-}
-
 const NODES = [
   { id: 'taker', label: 'Taker', sublabel: 'Initiate Swap', angle: 270, type: 'taker' },
   { id: 'maker1', label: 'Maker 1', sublabel: 'Earn Fees', angle: 30, type: 'maker' },
@@ -260,7 +249,7 @@ export default function SwapFlowDiagram() {
   }, [])
 
   return (
-    <section className="section-rule px-0 py-0">
+    <section className="home-section home-flow section-rule px-0 py-0">
       <div className="mb-3 flex items-end justify-between gap-4">
           <div>
             <p className="section-label mb-2">// protocol layer</p>
@@ -270,7 +259,7 @@ export default function SwapFlowDiagram() {
           </div>
         </div>
 
-      <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_467px] lg:items-start">
+      <div className="home-flow__panel grid gap-2 lg:grid-cols-[minmax(0,1fr)_467px] lg:items-start">
         <div className="overflow-x-auto pl-0 pr-0 py-1">
           <svg
             viewBox={`0 0 ${SVG_W} ${SVG_H}`}
@@ -324,7 +313,7 @@ export default function SwapFlowDiagram() {
             strokeDasharray="6 8"
           />
 
-          {SEGMENTS.map((segment, segmentIndex) => {
+          {SEGMENTS.map((segment) => {
             const { id, hopIndex, txid, from, to } = segment
             const callout = buildHopCallout(segment)
             const displayTxid = trimMiddle(txid)
@@ -384,7 +373,7 @@ export default function SwapFlowDiagram() {
                         textAnchor={callout.align}
                         fill="#111111"
                         fontSize="11.5"
-                        fontFamily="'Chakra Petch', sans-serif"
+                        fontFamily="'Fredoka', cursive"
                         fontWeight="700"
                         letterSpacing="0.06em"
                       >
@@ -403,7 +392,7 @@ export default function SwapFlowDiagram() {
                         y="45"
                         fill="#111111"
                         fontSize="8.9"
-                        fontFamily="'JetBrains Mono', monospace"
+                        fontFamily="'IBM Plex Mono', monospace"
                         fontWeight="700"
                         letterSpacing="0.06em"
                         textAnchor="start"
@@ -416,7 +405,7 @@ export default function SwapFlowDiagram() {
                         y="61"
                         fill="#111111"
                         fontSize="8.9"
-                        fontFamily="'JetBrains Mono', monospace"
+                        fontFamily="'IBM Plex Mono', monospace"
                         fontWeight="700"
                         letterSpacing="0.06em"
                         textAnchor="start"
@@ -525,7 +514,7 @@ export default function SwapFlowDiagram() {
                   textAnchor="middle"
                   fill="#f7f7f7"
                   fontSize="14.2"
-                  fontFamily="'Chakra Petch', sans-serif"
+                  fontFamily="'Fredoka', cursive"
                   fontWeight="600"
                   letterSpacing="0.03em"
                 >
@@ -537,7 +526,7 @@ export default function SwapFlowDiagram() {
                   textAnchor="middle"
                   fill={isTaker ? '#8fb6ff' : '#f3cc67'}
                   fontSize="9.2"
-                  fontFamily="'JetBrains Mono', monospace"
+                  fontFamily="'IBM Plex Mono', monospace"
                   fontWeight="700"
                   letterSpacing="0.08em"
                 >
@@ -557,7 +546,7 @@ export default function SwapFlowDiagram() {
             strokeWidth="1.4"
             paintOrder="stroke"
             fontSize="14.2"
-            fontFamily="'Chakra Petch', sans-serif"
+            fontFamily="'Fredoka', cursive"
             fontWeight="600"
             letterSpacing="0.03em"
           >
@@ -573,7 +562,7 @@ export default function SwapFlowDiagram() {
           </h3>
 
           <ul className="space-y-2">
-            {POINTERS.map(({ label, description, soon }) => (
+            {POINTERS.map(({ label, soon }) => (
               <li key={label} className="flex items-start gap-2 rounded-lg border border-black/8 bg-white/12 px-2.5 py-2">
                 <span className="mt-[0.35rem] h-1.5 w-1.5 shrink-0 rounded-full bg-cream/70" />
                 <p className="type-meta text-cream/80">

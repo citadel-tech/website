@@ -39,7 +39,7 @@ const CARDS = [
 
 export default function SwapMarket() {
   return (
-    <section>
+    <section className="home-section home-market">
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
           <p className="section-label mb-2">// market layer</p>
@@ -49,11 +49,11 @@ export default function SwapMarket() {
         </div>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="home-market__grid grid gap-4 lg:grid-cols-3">
         {CARDS.map(({ label, value, description }) => (
           <article
-            key={label}
-            className="section-rule flex h-full flex-col rounded-2xl border border-black/10 bg-white/15 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm"
+            key={`${label}-${value}`}
+            className="home-market__card section-rule flex h-full flex-col rounded-2xl border border-black/10 bg-white/15 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm"
           >
             <p className="type-meta mb-3 font-mono uppercase tracking-[0.16em] text-cream/65">
               {label}

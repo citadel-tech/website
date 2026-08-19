@@ -540,12 +540,12 @@ const SUBCOMMANDS = [
   { cmd: 'verify-deniability', desc: 'Verify the deniability proof for a specific swap' },
 ]
 
-// ─── Fee table (1% maker fee, 250 sat mining per hop) ─────────────────────────
+// ─── Fee table (current maker default quote schedule) ─────────────────────────
 
 const FEES = [
-  { participant: 'Maker 1', received: '500,000', forwarded: '494,750', fee: '5,000', mining: '250', total: '5,250',  highlight: false },
-  { participant: 'Maker 2', received: '494,750', forwarded: '489,552', fee: '4,948', mining: '250', total: '5,198',  highlight: false },
-  { participant: 'You',     received: '—',        forwarded: '489,552', fee: '—',     mining: '—',   total: '~10,448', highlight: true },
+  { participant: 'Maker 1', received: '500,000', locktime: '40', forwarded: '499,467', quote: '533',   total: '533',    highlight: false },
+  { participant: 'Maker 2', received: '499,467', locktime: '20', forwarded: '498,944', quote: '523',   total: '1,056',  highlight: false },
+  { participant: 'You',     received: '—',       locktime: '—',  forwarded: '~498,944', quote: '—',    total: '~1,056 + mining', highlight: true },
 ]
 
 // ─── What is a Taker cards ────────────────────────────────────────────────────
@@ -777,19 +777,22 @@ export default function Takers() {
         <section className="section-rule">
           <h2 className="type-section-title font-display font-semibold text-cream mb-2">Fee Expectations</h2>
           <p className="type-ui text-cream/60 font-body mb-4">
-            Example: 2 makers, 3 tx splits, 500,000 sat input. Maker fee = 1% of received amount, mining fee = 250 sat per hop.
+            Example maker quote: 2 makers, 3 tx splits, 500,000 sat input. Current defaults are
+            500 sat base + 0.0025% of received amount + 0.0001% per refund-locktime block.
+            Mining fees are dynamic; the current 2-maker Taproot path is about 1,634 sats total
+            taker spendable change.
           </p>
           <div className="overflow-x-auto rounded-lg border border-blue/30">
             <table className="w-full type-ui font-body">
               <thead>
                 <tr className="border-b border-blue/30 bg-blue/10">
-                  {['Participant', 'Received (sat)', 'Forwarded (sat)', 'Fee (sat)', 'Mining (sat)', 'Total cost'].map(h => (
+                  {['Participant', 'Received (sat)', 'Locktime', 'Forwarded (sat)', 'Maker quote', 'Cumulative quote'].map(h => (
                     <th key={h} className="type-ui px-4 py-3 text-left text-cream/65 font-medium tracking-wide uppercase whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {FEES.map(({ participant, received, forwarded, fee, mining, total, highlight }) => (
+                {FEES.map(({ participant, received, locktime, forwarded, quote, total, highlight }) => (
                   <tr key={participant}
                     className={`border-b border-blue/10 last:border-0 transition-colors ${
                       highlight ? 'bg-black text-[#f7f2e8] font-semibold' : 'text-cream/70 hover:bg-white/2'
@@ -797,9 +800,9 @@ export default function Takers() {
                   >
                     <td className="px-4 py-3 font-medium">{participant}</td>
                     <td className="type-ui px-4 py-3 font-mono">{received}</td>
+                    <td className="type-ui px-4 py-3 font-mono">{locktime}</td>
                     <td className={`type-ui px-4 py-3 font-mono ${highlight ? 'text-[#f7f2e8]' : 'text-cream'}`}>{forwarded}</td>
-                    <td className="type-ui px-4 py-3 font-mono">{fee}</td>
-                    <td className="type-ui px-4 py-3 font-mono">{mining}</td>
+                    <td className="type-ui px-4 py-3 font-mono">{quote}</td>
                     <td className="type-ui px-4 py-3 font-mono">{total}</td>
                   </tr>
                 ))}

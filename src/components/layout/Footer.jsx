@@ -7,8 +7,11 @@ const INTERNAL = [
   { to: '/how-it-works', label: 'how-it-works' },
   { to: '/takers',       label: 'takers' },
   { to: '/makers',       label: 'makers' },
+  { to: '/market',       label: 'market' },
   { to: '/docs',         label: 'docs' },
 ]
+
+const CITADEL_FOSS_LOGO = `${import.meta.env.BASE_URL}citadel-foss.png`
 
 const EXTERNAL = [
   { href: LINKS.openswap_repo,  label: 'github' },
@@ -19,8 +22,9 @@ const EXTERNAL = [
 
 export default function Footer() {
   return (
-    <footer className="mt-auto border-t border-dotted border-black/15 bg-transparent">
-      <div className="site-shell py-8">
+    <footer className="site-footer mt-auto border-t border-dotted border-black/15 bg-transparent">
+      <div className="site-footer__beam" aria-hidden="true" />
+      <div className="site-shell py-10">
 
         <p className="type-small mb-5 font-mono text-black/65">
           <span className="text-black/80">user@openswap</span>
@@ -28,7 +32,7 @@ export default function Footer() {
           <span className="text-black/65"> cat ./network-footer.sys</span>
         </p>
 
-        <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-[1.2fr_0.7fr_0.7fr_1fr]">
           <div>
             <Link to="/" className="group flex items-center gap-3">
               <OpenSwapLogo className="h-10 w-10 shrink-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.12)]" />
@@ -76,11 +80,27 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+
+          <a
+            href={LINKS.github_org}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="citadel-credit md:col-start-4 md:row-start-1"
+          >
+            <span className="citadel-credit__eyebrow">Developed by</span>
+            <span className="citadel-credit__logo-wrap">
+              <img src={CITADEL_FOSS_LOGO} alt="Citadel FOSS" className="citadel-credit__logo" />
+            </span>
+            <span className="citadel-credit__link">citadel-foss <ExternalLink size={12} /></span>
+          </a>
         </div>
 
         <div className="flex flex-col items-center justify-between gap-2 border-t border-dotted border-black/15 pt-4 sm:flex-row">
           <p className="type-ui font-mono text-black/65">
-            // Built by Citadel Tech. Open source under MIT.
+            // Built by Citadel FOSS. Open source under MIT.
+          </p>
+          <p className="type-caption font-mono uppercase tracking-[0.14em] text-black/45">
+            Non-custodial · Atomic · Multi-hop
           </p>
         </div>
       </div>

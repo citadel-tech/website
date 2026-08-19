@@ -36,7 +36,7 @@ const CARDS = [
 
 export default function RoleCards() {
   return (
-    <section>
+    <section className="home-section home-roles">
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
           <p className="section-label mb-2">// choose your runtime</p>
@@ -46,11 +46,11 @@ export default function RoleCards() {
         </div>
       </div>
 
-      <div className="grid gap-8 sm:grid-cols-2">
+      <div className="home-roles__grid grid gap-8 sm:grid-cols-2">
         {CARDS.map(({ role, prompt, description, highlights, cta, borderClass, promptColor }) => (
           <div
             key={role}
-            className={`section-rule flex flex-col ${borderClass}`}
+            className={`home-role-card section-rule flex flex-col ${borderClass}`}
           >
             <div className="mb-3 flex items-center gap-2 pb-1">
               <span className={`type-meta ml-2 font-mono uppercase tracking-[0.14em] ${promptColor}`}>{prompt}</span>

@@ -27,10 +27,6 @@ export default function Docs() {
     }
   }, [sidebarOpen])
 
-  useEffect(() => {
-    setSidebarOpen(false)
-  }, [activeDocId])
-
   // Close mobile sidebar when selecting a doc
   function handleSelect(doc) {
     const nextSearchParams = new URLSearchParams(searchParams)
@@ -49,9 +45,9 @@ export default function Docs() {
   const currentTitle = activeDoc ? activeDoc.label : 'Get Started'
 
   return (
-    <div className="flex min-h-[calc(100vh-4.5rem)]">
+    <div className="docs-layout site-shell flex min-h-[calc(100vh-5.75rem)] md:gap-10">
       {/* Mobile sidebar toggle */}
-      <div className="app-docs-mobile-toggle fixed top-18 left-0 right-0 z-30 border-b border-dotted border-black/12 backdrop-blur-sm md:hidden">
+      <div className="app-docs-mobile-toggle fixed top-[5.75rem] left-2 right-2 z-30 border border-black/12 backdrop-blur-sm md:hidden">
         <button
           onClick={() => setSidebarOpen(o => !o)}
           aria-expanded={sidebarOpen}
@@ -71,11 +67,11 @@ export default function Docs() {
       <aside
         id="docs-sidebar"
         className={`
-          app-docs-sidebar fixed left-0 z-20 w-65 shrink-0
-          top-31 h-[calc(100vh-7.75rem)]
-          overflow-hidden border-r border-dotted border-black/12
+          app-docs-sidebar fixed left-2 z-20 w-65 shrink-0
+          top-[9rem] h-[calc(100vh-9.5rem)]
+          overflow-hidden border border-black/12
           transition-transform duration-200
-          md:sticky md:top-18 md:h-[calc(100vh-4.5rem)] md:translate-x-0
+          md:sticky md:top-[5.75rem] md:left-auto md:h-[calc(100vh-6.75rem)] md:w-72 md:translate-x-0
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
@@ -91,7 +87,7 @@ export default function Docs() {
       )}
 
       {/* Content */}
-      <div className="mt-13 flex-1 min-w-0 px-6 py-8 md:mt-0 md:px-10 md:py-10">
+      <div className="mt-15 flex-1 min-w-0 px-2 py-8 md:mt-0 md:px-0 md:py-10">
         <div className="mx-auto max-w-3xl">
           <DocsContent activeDoc={activeDoc} />
         </div>

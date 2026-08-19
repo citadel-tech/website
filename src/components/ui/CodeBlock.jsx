@@ -20,7 +20,7 @@ SyntaxHighlighter.registerLanguage('ini', ini)
 const theme = {
   'code[class*="language-"]': {
     color: '#edf3ff',
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: "'IBM Plex Mono', monospace",
     fontSize: '0.875rem',
     lineHeight: '1.6',
     background: 'none',
@@ -53,7 +53,7 @@ export default function CodeBlock({ code, language = 'bash', className = '', wra
   }
 
   return (
-    <div className={`relative overflow-hidden border border-dotted border-[#00ff66]/24 bg-[#05080d] ${className}`}>
+    <div className={`code-block relative overflow-hidden border border-dotted border-[#00ff66]/24 bg-[#05080d] ${className}`}>
       <div className="flex items-center justify-between border-b border-dotted border-[#00ff66]/18 bg-[linear-gradient(90deg,rgba(0,255,102,0.05),rgba(247,147,26,0.03))] px-4 py-2">
         <span className="type-ui text-[#00ff66]/78 font-mono uppercase tracking-widest">{language}</span>
         <button

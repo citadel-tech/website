@@ -65,7 +65,7 @@ const ITEMS = [
 
 export default function QuickLinks() {
   return (
-    <section className="mt-10">
+    <section className="home-section home-links mt-10">
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
           <p className="section-label mb-2">// Cypherpunk&apos;s Den</p>
@@ -75,10 +75,10 @@ export default function QuickLinks() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 rounded-2xl border border-black/12 bg-white/20 p-3 shadow-[0_14px_40px_rgba(0,0,0,0.05)] backdrop-blur-sm sm:grid-cols-3 sm:gap-4 sm:p-4 lg:grid-cols-5">
+      <div className="home-links__grid grid grid-cols-2 gap-3 rounded-2xl border border-black/12 bg-white/20 p-3 shadow-[0_14px_40px_rgba(0,0,0,0.05)] backdrop-blur-sm sm:grid-cols-3 sm:gap-4 sm:p-4 lg:grid-cols-5">
         {ITEMS.map(({ label, sub, href, to, icon }) => {
           const className =
-            'group flex min-h-[8.5rem] flex-col items-start justify-between rounded-xl border border-black/10 bg-[rgba(255,255,255,0.18)] p-4 text-left transition-all duration-200 hover:-translate-y-1 hover:border-[#f7931a]/60 hover:bg-white/30 hover:shadow-[0_18px_42px_rgba(247,147,26,0.32)]'
+            'home-link-card group flex min-h-[8.5rem] flex-col items-start justify-between rounded-xl border border-black/10 bg-[rgba(255,255,255,0.18)] p-4 text-left transition-all duration-200 hover:-translate-y-1 hover:border-[#f7931a]/60 hover:bg-white/30 hover:shadow-[0_18px_42px_rgba(247,147,26,0.32)]'
 
           const content = (
             <>

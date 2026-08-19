@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { LINKS } from '../constants/links'
+import MakerGraph from '../components/market/MakerGraph'
 
 const STATUS_TABS = [
   { id: 'good', label: 'Good Makers' },
@@ -263,7 +264,7 @@ export default function Market() {
       />
 
       <div className="site-shell py-8">
-        <section className="overflow-hidden rounded-[1.5rem] border border-black/15 bg-white/20 shadow-[0_24px_80px_rgba(0,0,0,0.16)] backdrop-blur-sm">
+        <section className="market-terminal overflow-hidden rounded-[1.5rem] border border-black/15 bg-white/20 shadow-[0_24px_80px_rgba(0,0,0,0.16)] backdrop-blur-sm">
           <div className="flex items-center justify-between border-b border-dotted border-black/15 px-5 py-4">
             <div className="flex items-center gap-2" aria-hidden="true">
               <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -317,6 +318,12 @@ export default function Market() {
                 note={`${stats.counts.good} good - ${stats.counts.unresponsive} unresponsive in this window.`}
               />
             </div>
+
+            <MakerGraph
+              makers={displayedOffers}
+              statusLabel={activeTab.label}
+              loading={loading}
+            />
 
             <section className="rounded-[1.25rem] border border-black/15 bg-black/[0.025]">
               <div className="flex flex-col gap-4 border-b border-dotted border-black/15 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">

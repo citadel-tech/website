@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import OpenSwapLogo from '../brand/OpenSwapLogo'
-
-const THEME_STORAGE_KEY = 'openswap-theme'
 
 const NAV_LINKS = [
   { to: '/',             label: 'home' },
@@ -13,80 +11,25 @@ const NAV_LINKS = [
   { to: '/docs',         label: 'docs' },
 ]
 
-function resolveInitialTheme() {
-  if (typeof window === 'undefined') return 'light'
-
-  const stored = window.localStorage.getItem(THEME_STORAGE_KEY)
-  if (stored === 'light' || stored === 'dark') return stored
-
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
-function SunIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <circle cx="12" cy="12" r="4" />
-      <line x1="12" y1="2" x2="12" y2="5" />
-      <line x1="12" y1="19" x2="12" y2="22" />
-      <line x1="4.93" y1="4.93" x2="7.05" y2="7.05" />
-      <line x1="16.95" y1="16.95" x2="19.07" y2="19.07" />
-      <line x1="2" y1="12" x2="5" y2="12" />
-      <line x1="19" y1="12" x2="22" y2="12" />
-      <line x1="4.93" y1="19.07" x2="7.05" y2="16.95" />
-      <line x1="16.95" y1="7.05" x2="19.07" y2="4.93" />
-    </svg>
-  )
-}
-
-function MoonIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-      <path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" />
-    </svg>
-  )
-}
-
-function ThemeToggle({ theme, onToggle }) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-      className="theme-toggle inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/15 text-black/70 transition-colors hover:text-black"
-    >
-      {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-    </button>
-  )
-}
-
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const [theme, setTheme] = useState(resolveInitialTheme)
-  const location = useLocation()
-
-  useEffect(() => { setOpen(false) }, [location.pathname])
-
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [open])
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-    window.localStorage.setItem(THEME_STORAGE_KEY, theme)
-  }, [theme])
-
-  function toggleTheme() {
-    setTheme(current => (current === 'dark' ? 'light' : 'dark'))
-  }
+    document.documentElement.removeAttribute('data-theme')
+    document.documentElement.classList.remove('dark')
+    window.localStorage.removeItem('openswap-theme')
+  }, [])
 
   return (
     <header className="app-header sticky top-0 z-50 border-b border-dotted border-black/15 backdrop-blur-sm">
+      <div className="header-signal" aria-hidden="true" />
       <div className="site-shell flex min-h-18 items-center justify-between gap-6">
 
-        <NavLink to="/" className="group flex items-center gap-3">
+        <NavLink to="/" onClick={() => setOpen(false)} className="brand-lockup group flex items-center gap-3">
           <OpenSwapLogo className="h-10 w-10 shrink-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.12)]" />
           <span className="leading-none">
             <span className="type-brand block font-display font-semibold tracking-[0.04em] text-black">
@@ -98,15 +41,16 @@ export default function Header() {
           </span>
         </NavLink>
 
-        <div className="ml-auto hidden items-center gap-3 md:flex lg:gap-4">
-          <nav className="flex items-center justify-end gap-8 lg:gap-10 xl:gap-12">
+        <div className="ml-auto hidden items-center md:flex">
+          <nav className="primary-nav flex items-center justify-end gap-1 lg:gap-2">
             {NAV_LINKS.map(({ to, label }) => (
               <NavLink
                 key={to}
                 to={to}
                 end={to === '/'}
+                onClick={() => setOpen(false)}
                 className={({ isActive }) =>
-                  `type-ui inline-flex rounded-lg px-3 py-2 font-mono font-semibold uppercase tracking-[0.12em] transition duration-200 hover:-translate-y-0.5 hover:bg-[#f7931a]/12 hover:shadow-[0_16px_34px_rgba(247,147,26,0.22)] underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
+                  `type-ui primary-nav__link inline-flex px-3 py-2 font-mono font-semibold uppercase tracking-[0.12em] transition duration-200 ${
                     isActive
                       ? 'text-black decoration-black/45'
                       : 'text-black/65 hover:text-black hover:decoration-[#f7931a]'
@@ -118,12 +62,9 @@ export default function Header() {
             ))}
           </nav>
 
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
         </div>
 
-        <div className="ml-auto flex items-center gap-2 md:hidden">
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
-
+        <div className="ml-auto flex items-center md:hidden">
           <button
             onClick={() => setOpen(o => !o)}
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -154,6 +95,7 @@ export default function Header() {
                 key={to}
                 to={to}
                 end={to === '/'}
+                onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `type-ui inline-flex rounded-lg px-3 py-3 font-mono font-semibold uppercase tracking-[0.12em] transition duration-200 hover:-translate-y-0.5 hover:bg-[#f7931a]/12 hover:shadow-[0_16px_34px_rgba(247,147,26,0.22)] underline decoration-transparent underline-offset-[0.35em] decoration-2 ${
                     isActive

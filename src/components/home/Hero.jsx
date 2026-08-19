@@ -3,8 +3,13 @@ import Button from '../ui/Button'
 
 export default function Hero() {
   return (
-    <section className="relative pt-8 pb-0">
-      <div className="px-0 py-4 text-center lg:py-8">
+    <section className="hero-observatory relative pt-8 pb-0">
+      <div className="hero-observatory__radar" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+      <div className="hero-observatory__content px-0 py-4 text-center lg:py-8">
         <div className="relative mx-auto flex max-w-[72rem] flex-col items-center">
           <h1
             className="type-hero glitch mb-4 max-w-[72rem] font-display font-semibold tracking-[0.03em] text-cream"
@@ -42,7 +47,7 @@ export default function Hero() {
             </span>.
           </p>
 
-          <div className="mb-4 flex flex-wrap items-center justify-center gap-x-15 gap-y-3">
+          <div className="hero-observatory__actions mb-4 flex flex-wrap items-center justify-center gap-3">
             <Button
               as={Link}
               to="/takers"

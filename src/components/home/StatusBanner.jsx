@@ -4,7 +4,7 @@ import { LINKS } from '../../constants/links'
 
 export default function StatusBanner({ releaseTag, releaseUrl }) {
   return (
-    <div className="border-b border-dotted border-black/15 bg-gradient-to-r from-black/[0.04] via-white/25 to-black/[0.04]">
+    <div className="status-rail border-b border-dotted border-black/15 bg-gradient-to-r from-black/[0.04] via-white/25 to-black/[0.04]">
       <div className="site-shell flex flex-wrap items-center gap-x-6 gap-y-3 py-3">
         <div className="type-caption flex flex-wrap items-center gap-3 font-mono uppercase tracking-[0.14em]">
           {releaseTag && releaseUrl && (
